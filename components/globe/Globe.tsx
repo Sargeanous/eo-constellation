@@ -43,7 +43,7 @@ export function Globe({
     >
       <Canvas
         camera={{ position: [0, 0, 2.6], fov: 38 }}
-        dpr={[1, 2]}
+        dpr={[1, 1.5]}
         gl={{
           antialias: true,
           alpha: true,

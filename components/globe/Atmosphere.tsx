@@ -43,7 +43,7 @@ export function Atmosphere({ scale = 1.025 }: { scale?: number }) {
 
   return (
     <mesh scale={scale}>
-      <sphereGeometry args={[1, 96, 96]} />
+      <sphereGeometry args={[1, 48, 48]} />
       <shaderMaterial
         vertexShader={VERTEX}
         fragmentShader={FRAGMENT}

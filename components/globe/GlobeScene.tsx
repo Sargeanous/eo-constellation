@@ -60,7 +60,7 @@ export default function GlobeScene({
       {/* Star-field: drei's Stars, faded out at the limit. PRD §3
           says background should be deep-space navy not pure black; we
           set the canvas clear color separately in <Globe>. */}
-      <Stars radius={80} depth={30} count={3500} factor={3.5} fade />
+      <Stars radius={80} depth={30} count={1500} factor={3.5} fade />
 
       {/* Lighting: one warm key light from over the Gulf, plus a cool
           fill from the opposite side, plus low ambient so the night-side
@@ -79,7 +79,7 @@ export default function GlobeScene({
       <group rotation={[-Math.PI / 2, 0, 0]}>
         <group ref={earthRef} rotation={[0, computeMenaYaw(), 0]}>
           <mesh>
-            <sphereGeometry args={[1, 96, 96]} />
+            <sphereGeometry args={[1, 64, 64]} />
             <meshStandardMaterial
               map={dayMap}
               metalness={0.0}
@@ -137,11 +137,10 @@ export function GlobeBloom() {
   return (
     <EffectComposer>
       <Bloom
-        intensity={0.9}
-        luminanceThreshold={0.55}
+        intensity={0.6}
+        luminanceThreshold={0.6}
         luminanceSmoothing={0.2}
-        kernelSize={KernelSize.LARGE}
-        mipmapBlur
+        kernelSize={KernelSize.MEDIUM}
       />
     </EffectComposer>
   );

@@ -9,7 +9,7 @@ import { buildOrbitPlanes } from "@/lib/orbit";
 // (drei's <Line> wraps a fatlines material we don't need here).
 
 export function OrbitTracks() {
-  const planes = useMemo(() => buildOrbitPlanes(192), []);
+  const planes = useMemo(() => buildOrbitPlanes(96), []);
 
   const objects = useMemo(() => {
     const mat = new THREE.LineBasicMaterial({
