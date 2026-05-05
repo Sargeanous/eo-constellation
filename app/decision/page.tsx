@@ -1,23 +1,31 @@
 "use client";
 import Link from "next/link";
+import { useState } from "react";
 import { motion } from "framer-motion";
+import { Shield, Shuffle, Cpu, Link2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CHILD_RISE, STAGGER_CHILDREN } from "@/components/motion/variants";
 import { DIFFERENTIATORS } from "@/lib/data";
 import { useDemoStore } from "@/lib/store";
 import { Card, CardContent } from "@/components/ui/card";
-
-// Phase 1 placeholder. Phase 4 replaces with the theatrical close
-// modal + the 4 differentiator tiles laid out cinematically. Honours
-// the ctaMode toggle from the rehearsal menu (PRD §13.4).
+import { DecisionModal } from "@/components/decision/DecisionModal";
 
 const CTA_LABELS: Record<"theatrical" | "neutral", string> = {
   theatrical: "Approve & Begin Mobilization",
   neutral: "Begin Conversation",
 };
 
+const ICON_MAP = {
+  shield: Shield,
+  shuffle: Shuffle,
+  cpu: Cpu,
+  link: Link2,
+} as const;
+
 export default function DecisionPage() {
   const ctaMode = useDemoStore((s) => s.ctaMode);
+  const [modalOpen, setModalOpen] = useState(false);
+
   return (
     <main className="min-h-screen px-8 py-16 pb-32">
       <motion.div
@@ -49,20 +57,33 @@ export default function DecisionPage() {
           variants={CHILD_RISE}
           className="mt-10 grid w-full gap-4 md:grid-cols-2"
         >
-          {DIFFERENTIATORS.map((d) => (
-            <Card key={d.id} className="text-left">
-              <CardContent className="pt-6">
-                <p className="font-display text-lg font-semibold">{d.title}</p>
-                <p className="mt-2 text-sm text-muted-foreground">{d.body}</p>
-              </CardContent>
-            </Card>
-          ))}
+          {DIFFERENTIATORS.map((d) => {
+            const Icon = ICON_MAP[d.icon];
+            return (
+              <Card key={d.id} className="text-left">
+                <CardContent className="flex items-start gap-4 pt-6">
+                  <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-gold/40 bg-gold/10 text-gold">
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="font-display text-lg font-semibold">
+                      {d.title}
+                    </p>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      {d.body}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
         </motion.div>
 
         <motion.div variants={CHILD_RISE} className="mt-10 flex gap-3">
           <Button
             size="lg"
-            className="bg-gold text-primary-foreground hover:bg-gold/90 px-10"
+            className="bg-gold px-10 text-primary-foreground hover:bg-gold/90"
+            onClick={() => setModalOpen(true)}
           >
             {CTA_LABELS[ctaMode]}
           </Button>
@@ -71,6 +92,8 @@ export default function DecisionPage() {
           </Button>
         </motion.div>
       </motion.div>
+
+      <DecisionModal open={modalOpen} onOpenChange={setModalOpen} />
     </main>
   );
 }
