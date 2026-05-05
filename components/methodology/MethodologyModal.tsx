@@ -5,16 +5,17 @@ import { X } from "lucide-react";
 import { OrbitTab } from "./OrbitTab";
 import { SlewTab } from "./SlewTab";
 import { ClusteringTab } from "./ClusteringTab";
+import { ReferenceTab } from "./ReferenceTab";
 import { cn } from "@/lib/utils";
 
-// Full-screen modal (Q1 confirmed). Sovereign Black surface, three
+// Full-screen modal (Q1 confirmed). Sovereign Black surface, four
 // underlined gold tabs along the top, X close top-right.
 //
 // We use Radix dialog primitives directly rather than the constrained
 // shadcn <DialogContent> wrapper because that wrapper caps the modal
 // at sm:max-w-lg, which is incompatible with "full-screen".
 
-type TabId = "orbit" | "slew" | "clustering";
+type TabId = "orbit" | "slew" | "clustering" | "reference";
 
 const TABS: { id: TabId; label: string; render: () => React.ReactNode }[] = [
   { id: "orbit", label: "Orbit", render: () => <OrbitTab /> },
@@ -24,6 +25,7 @@ const TABS: { id: TabId; label: string; render: () => React.ReactNode }[] = [
     label: "Target Clustering",
     render: () => <ClusteringTab />,
   },
+  { id: "reference", label: "Reference", render: () => <ReferenceTab /> },
 ];
 
 interface MethodologyModalProps {

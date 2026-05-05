@@ -2,11 +2,12 @@
 import Link from "next/link";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Globe as Globe3D, Layers, Map as MapIcon } from "lucide-react";
+import { Globe as Globe3D, Layers, MapPin, Map as MapIcon } from "lucide-react";
 import { Globe } from "@/components/globe/Globe";
 import { MissionVideo } from "@/components/video/MissionVideo";
 import { ConfigSandbox } from "@/components/sandbox/ConfigSandbox";
 import { MethodologyModal } from "@/components/methodology/MethodologyModal";
+import { AOIReferenceDialog } from "@/components/constellation/AOIReferenceDialog";
 import { Button } from "@/components/ui/button";
 import {
   ToggleGroup,
@@ -19,6 +20,7 @@ type Surface = "globe" | "flat";
 export default function ConstellationPage() {
   const [surface, setSurface] = useState<Surface>("globe");
   const [methodOpen, setMethodOpen] = useState(false);
+  const [aoiRefOpen, setAoiRefOpen] = useState(false);
 
   return (
     <main className="relative min-h-screen overflow-hidden">
@@ -108,16 +110,27 @@ export default function ConstellationPage() {
       {/* "How was this designed?" entry — opens the full-screen
           methodology modal (Q1 confirmed: full-screen modal, Q2: text
           button, Q3: static SVG only). */}
-      <button
-        className="cinematic-surface group fixed bottom-24 left-6 z-40 inline-flex items-center gap-2 rounded-full border border-gold/40 bg-background/80 px-4 py-2 font-display text-sm text-gold backdrop-blur-md hover:border-gold"
-        aria-label="How was this designed?"
-        onClick={() => setMethodOpen(true)}
-      >
-        <Layers className="h-4 w-4" />
-        How was this designed?
-      </button>
+      <div className="cinematic-surface fixed bottom-24 left-6 z-40 flex flex-col items-start gap-2">
+        <button
+          className="group inline-flex items-center gap-2 rounded-full border border-gold/40 bg-background/80 px-4 py-2 font-display text-sm text-gold backdrop-blur-md hover:border-gold"
+          aria-label="How was this designed?"
+          onClick={() => setMethodOpen(true)}
+        >
+          <Layers className="h-4 w-4" />
+          How was this designed?
+        </button>
+        <button
+          className="group inline-flex items-center gap-2 rounded-full border border-border bg-background/80 px-4 py-2 font-display text-xs text-muted-foreground backdrop-blur-md hover:text-foreground"
+          aria-label="Tehran reference pass"
+          onClick={() => setAoiRefOpen(true)}
+        >
+          <MapPin className="h-3.5 w-3.5" />
+          Tehran reference pass
+        </button>
+      </div>
 
       <MethodologyModal open={methodOpen} onOpenChange={setMethodOpen} />
+      <AOIReferenceDialog open={aoiRefOpen} onOpenChange={setAoiRefOpen} />
     </main>
   );
 }
