@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+body {
+  overscroll-behavior-y: contain;
+}
+
+@layer base {
+  :root {
+    /* <DOMAIN_PLACEHOLDER>: Sovereign Black palette.
+       Replace HSL stops in CLAUDE.md once the brand is locked. */
+    --bg-deep: 222 35% 6%;
+    --bg-card: 222 30% 9%;
+    --bg-raised: 222 26% 12%;
+    --gold-500: 42 92% 56%;
+    --gold-300: 42 92% 72%;
+    --sky-500: 206 90% 60%;
+    --sky-300: 206 90% 76%;
+    --ink-50: 0 0% 98%;
+    --ink-200: 220 12% 80%;
+    --ink-400: 220 8% 55%;
+
+    --background: var(--bg-deep);
+    --foreground: var(--ink-50);
+    --card: var(--bg-card);
+    --card-foreground: var(--ink-50);
+    --popover: var(--bg-card);
+    --popover-foreground: var(--ink-50);
+    --primary: var(--gold-500);
+    --primary-foreground: var(--bg-deep);
+    --secondary: var(--bg-raised);
+    --secondary-foreground: var(--ink-50);
+    --muted: var(--bg-raised);
+    --muted-foreground: var(--ink-400);
+    --accent: var(--sky-500);
+    --accent-foreground: var(--bg-deep);
+    --destructive: 0 75% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 222 18% 18%;
+    --input: 222 18% 18%;
+    --ring: var(--gold-500);
+    --radius: 0.875rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+.cinematic-surface {
+  user-select: none;
+  -webkit-user-select: none;
+}
