@@ -9,7 +9,7 @@ import { formatStopwatch } from "@/lib/utils";
 
 // Stopwatch with a thin gold progress ring (PRD §10).
 // Mono digits, tabular-nums so the digits don't shift width while
-// ticking. Reads missionElapsedMs and missionPhase from the store —
+// ticking. Reads missionElapsedMs and missionPhase from the store,
 // owns no time of its own.
 
 interface StopwatchProps {
@@ -52,7 +52,7 @@ export function Stopwatch({ size = 180, forceDisplay }: StopwatchProps) {
 
   const progress = Math.min(1, elapsed / MISSION_TOTAL_DEMO_MS);
 
-  // Ring geometry — leave 8px on every side for stroke + breathing room.
+  // Ring geometry: leave 8px on every side for stroke + breathing room.
   const r = size / 2 - 6;
   const circumference = 2 * Math.PI * r;
   const offset = circumference * (1 - progress);

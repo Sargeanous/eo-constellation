@@ -17,7 +17,7 @@ import { Step4Report } from "./Step4Report";
 import { FinalBeat } from "./FinalBeat";
 import { chime } from "@/lib/audio";
 
-// Phase 2 — the centrepiece. Single button drives a 60s compressed
+// Phase 2: the centrepiece. Single button drives a 60s compressed
 // timeline that animates four steps in sequence and lands on a frozen
 // 58:42 with a status-quo comparison. PRD §4.
 //
@@ -27,7 +27,7 @@ import { chime } from "@/lib/audio";
 //     != delivered.
 //   - Step components mount/unmount via AnimatePresence keyed on the
 //     active step id, so each step gets a clean enter/exit.
-//   - chime() is best-effort — gated behind audioEnabled in the store.
+//   - chime() is best-effort: gated behind audioEnabled in the store.
 //   - Haptic is via the Web Vibration API; no-op on unsupported.
 
 type StepId = (typeof SLA_STEPS)[number]["id"];
@@ -53,7 +53,7 @@ export function MissionRunner() {
 
   const isRunning = phase !== "idle" && phase !== "delivered";
 
-  // RAF loop — only ticks while running.
+  // RAF loop: only ticks while running.
   useEffect(() => {
     if (!isRunning) {
       lastRef.current = null;
@@ -72,7 +72,7 @@ export function MissionRunner() {
     };
   }, [isRunning, tickMission]);
 
-  // Phase bookkeeping — flip the store phase as we cross step boundaries.
+  // Phase bookkeeping: flip the store phase as we cross step boundaries.
   // Map step id → store phase string; we don't strictly need the store
   // phase to drive the rail (rail reads elapsed directly), but the
   // store phase is what gates the RAF loop and the dock highlights.
@@ -94,13 +94,13 @@ export function MissionRunner() {
     if (target && target !== phase) setMissionPhase(target);
   }, [elapsed, phase, setMissionPhase]);
 
-  // Completion chime — fires once when we transition into delivered.
+  // Completion chime: fires once when we transition into delivered.
   useEffect(() => {
     if (phase === "delivered" && !chimedRef.current) {
       chimedRef.current = true;
       if (audioEnabled) {
         chime().catch(() => {
-          /* swallow — chime is non-essential */
+          /* swallow: chime is non-essential */
         });
       }
     }
@@ -110,7 +110,7 @@ export function MissionRunner() {
   }, [phase, audioEnabled]);
 
   function onRun() {
-    // Web Vibration API — graceful no-op on unsupported (iPad Safari
+    // Web Vibration API: graceful no-op on unsupported (iPad Safari
     // currently lacks it; that's fine).
     if (typeof navigator !== "undefined" && "vibrate" in navigator) {
       try {
@@ -154,7 +154,7 @@ export function MissionRunner() {
         </div>
       </div>
 
-      {/* Active-step body — fixed min height so the layout doesn't jump. */}
+      {/* Active-step body: fixed min height so the layout doesn't jump. */}
       <div className="min-h-[420px]">
         <AnimatePresence mode="wait">
           {phase === "idle" && <IdleHero key="idle" />}
@@ -191,7 +191,7 @@ function IdleHero() {
       </p>
       <p className="max-w-lg text-sm text-muted-foreground">
         ~60 seconds of demo represents ~60 minutes of mission time. The
-        revisit beat is the long one — that&apos;s the wait MoD has been told
+        revisit beat is the long one: that&apos;s the wait MoD has been told
         for years takes 48+ hours.
       </p>
     </motion.div>

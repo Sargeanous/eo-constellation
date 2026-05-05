@@ -124,7 +124,7 @@ export function CostWaterfall() {
       </svg>
 
       <p className="rounded-md border border-border bg-card/40 px-4 py-3 text-sm italic text-muted-foreground">
-        {COST_USD.marketComparisonNote} The 350 km altitude is the lever —
+        {COST_USD.marketComparisonNote} The 350 km altitude is the lever:
         lower mass, lower launch cost, faster iteration.
       </p>
     </div>

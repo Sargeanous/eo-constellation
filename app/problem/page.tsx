@@ -13,7 +13,7 @@ import {
   palette,
 } from "@/lib/data";
 
-// PRD §6 — the side-by-side comparison. Both timelines share a 0-80h
+// PRD §6: the side-by-side comparison. Both timelines share a 0-80h
 // horizontal scale so the EO-CONSTELLATION row reads as a sliver
 // against the status quo's full bar. That sliver is the screenshot
 // MoD remembers.
@@ -64,7 +64,7 @@ export default function ProblemPage() {
             EO-CONSTELLATION.
           </h1>
           <p className="mt-4 max-w-3xl text-lg text-muted-foreground">
-            You&apos;ve tried this before. Here&apos;s why it failed — and why
+            You&apos;ve tried this before. Here&apos;s why it failed: and why
             this time is different.
           </p>
         </motion.header>
@@ -104,7 +104,7 @@ export default function ProblemPage() {
         >
           <div className="flex items-baseline justify-between">
             <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
-              Same scale · 0–{SCALE_H}h
+              Same scale · 0-{SCALE_H}h
             </p>
             <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
               hours →
@@ -260,7 +260,7 @@ export default function ProblemPage() {
                   <div className="flex-1">
                     <p className="text-sm">
                       <span className="font-mono text-xs text-sovred">
-                        {f.hours[0]}–{f.hours[1]}h
+                        {f.hours[0]}-{f.hours[1]}h
                       </span>
                       <span className="ml-3">{f.label}</span>
                     </p>
@@ -290,7 +290,7 @@ export default function ProblemPage() {
                     <div className="flex-1">
                       <p className="text-sm">
                         <span className="font-mono text-xs text-sovgreen">
-                          {start}–{end} min
+                          {start}-{end} min
                         </span>
                         <span className="ml-3">{seg.label}</span>
                       </p>

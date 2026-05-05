@@ -52,7 +52,7 @@ export function DebugMenu() {
         );
       });
     } catch {
-      /* ignore — texture preload is best-effort */
+      /* ignore: texture preload is best-effort */
     } finally {
       setPreWarming(false);
     }

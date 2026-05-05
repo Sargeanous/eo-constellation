@@ -2,7 +2,7 @@
 import { ORBITAL_GEOMETRY, CONSTELLATION } from "@/lib/data";
 import { palette } from "@/lib/data";
 
-// Walker-Delta 11P/2S illustration — oblique-2D view of Earth with 11
+// Walker-Delta 11P/2S illustration: oblique-2D view of Earth with 11
 // orbital planes, each rotated by 360/11° around the polar axis, all
 // inclined at 38°. Two satellites per plane sit 180° apart.
 //
@@ -19,7 +19,7 @@ export function OrbitTab() {
   const cy = 240;
   const earthR = 70;
   const orbitRx = 220; // along the orbital plane "in plane" axis
-  const orbitRy = 70; // perpendicular — projection of inclination
+  const orbitRy = 70; // perpendicular: projection of inclination
 
   // 11 planes, RAAN evenly spaced around the polar axis.
   const planes = Array.from({ length: totalPlanes }, (_, i) => {

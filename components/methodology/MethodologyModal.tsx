@@ -78,7 +78,7 @@ export function MethodologyModal({
             </DialogPrimitive.Close>
           </header>
 
-          {/* Tab strip — underlined gold for active. */}
+          {/* Tab strip: underlined gold for active. */}
           <nav
             aria-label="Methodology tabs"
             className="flex gap-2 border-b border-border bg-card/40 px-8"
@@ -111,7 +111,7 @@ export function MethodologyModal({
             })}
           </nav>
 
-          {/* Content — scrolls if it overflows on smaller iPad screens. */}
+          {/* Content: scrolls if it overflows on smaller iPad screens. */}
           <section className="flex-1 overflow-y-auto px-8 py-10">
             <div className="mx-auto max-w-6xl">
               {TABS.find((t) => t.id === tab)?.render()}

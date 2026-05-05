@@ -3,7 +3,7 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Check, X } from "lucide-react";
 import { useDemoStore } from "@/lib/store";
 
-// Theatrical close (PRD §13.4). The decision CTA opens this modal —
+// Theatrical close (PRD §13.4). The decision CTA opens this modal,
 // "Thank you. Origen will be in touch." Dressed-up so it lands as a
 // closing beat and not just a modal. The CTA copy reflects ctaMode
 // from the store ("theatrical" default, "neutral" via rehearsal).

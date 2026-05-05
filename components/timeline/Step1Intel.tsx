@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import { AlertTriangle, Cpu, MapPin } from "lucide-react";
 
-// Step 1 — Situation Awareness & Intel Generation. PRD §4.
+// Step 1: Situation Awareness & Intel Generation. PRD §4.
 // Alert card slides in, AI agent icon pulses processing, caption
 // reads "OSINT + GEOINT fusion. AI agent classifies and prioritizes."
 
@@ -32,7 +32,7 @@ export function Step1Intel() {
               Priority alert · INTEL fusion
             </p>
             <p className="mt-2 font-display text-xl font-semibold">
-              Vessel of interest — Strait of Hormuz
+              Vessel of interest: Strait of Hormuz
             </p>
             <p className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
               <MapPin className="h-3.5 w-3.5" />
@@ -55,7 +55,7 @@ export function Step1Intel() {
           </div>
         </div>
 
-        {/* Scan-line sweep — gives the alert card a "live feed" feel. */}
+        {/* Scan-line sweep: gives the alert card a "live feed" feel. */}
         <motion.div
           aria-hidden
           className="pointer-events-none absolute inset-x-0 top-0 h-px bg-sovred/60"

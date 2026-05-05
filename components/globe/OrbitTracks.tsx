@@ -6,7 +6,7 @@ import { buildOrbitPlanes } from "@/lib/orbit";
 
 // One thin polyline per orbital plane. Semi-transparent so 11 of them
 // don't overwhelm the Earth. Plain THREE.Line with a buffer geometry
-// — drei's <Line> wraps a fatlines material we don't need here.
+// (drei's <Line> wraps a fatlines material we don't need here).
 
 export function OrbitTracks() {
   const planes = useMemo(() => buildOrbitPlanes(192), []);

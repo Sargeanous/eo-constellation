@@ -3,7 +3,7 @@ import { useDemoStore } from "@/lib/store";
 import { SLA_STEPS } from "@/lib/data";
 
 // Side-on 2D globe inset for Step 2's revisit beat. We deliberately
-// don't reuse the 3D globe — too heavy to mount inside an animated
+// don't reuse the 3D globe: too heavy to mount inside an animated
 // step, and it's the wrong viewpoint anyway. A 2D limb-on view with
 // a curved orbit overlay reads cleanly at a small size.
 //
@@ -24,7 +24,7 @@ function lerp(a: number, b: number, t: number): number {
 export function GlobeInset() {
   const elapsed = useDemoStore((s) => s.missionElapsedMs);
 
-  // Clamp t into the revisit window — the inset is mounted only during
+  // Clamp t into the revisit window: the inset is mounted only during
   // step 2, but the satellite stays valid during tasking + capture too.
   const tRaw =
     (elapsed - REVISIT.startDemoMs) /

@@ -26,7 +26,7 @@ export function SatelliteTooltip() {
   const selected = useDemoStore((s) => s.selectedSatId);
   const setSelected = useDemoStore((s) => s.setSelectedSat);
 
-  // Recompute the constellation memoised — same call as Satellites.
+  // Recompute the constellation memoised: same call as Satellites.
   const sats = useMemo(() => buildConstellation(), []);
   const sat = sats.find((s) => s.id === selected);
 

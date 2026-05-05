@@ -1,11 +1,11 @@
-// EO-CONSTELLATION — single source of truth for all rendered content.
+// EO-CONSTELLATION: single source of truth for all rendered content.
 // No network. No backend. Editable in the IDE, hot-reload-friendly.
 // Numbers trace to the source deck:
 // reference/source_deck.pptx (Sovereign Constellation Plan, Cost
 // Optimization with Sub-Hour Revisit Capability).
 
 // ────────────────────────────────────────────────────────────────────
-// 6-screen narrative — used by the bottom dock.
+// 6-screen narrative: used by the bottom dock.
 // ────────────────────────────────────────────────────────────────────
 
 export type ScreenId =
@@ -42,7 +42,7 @@ export const SCREENS: Screen[] = [
   {
     id: "mission",
     index: 2,
-    title: "The 1-Hour SLA — Live",
+    title: "The 1-Hour SLA: Live",
     subtitle: "Watch this.",
     href: "/mission",
   },
@@ -70,7 +70,7 @@ export const SCREENS: Screen[] = [
 ];
 
 // ────────────────────────────────────────────────────────────────────
-// Palette — mirror of the CSS tokens for code that needs raw hex
+// Palette: mirror of the CSS tokens for code that needs raw hex
 // (Three.js materials, Recharts strokes, Tone.js debug overlays).
 // ────────────────────────────────────────────────────────────────────
 
@@ -89,7 +89,7 @@ export const palette = {
 } as const;
 
 // ────────────────────────────────────────────────────────────────────
-// Constellation — the canonical 22-SAR config (cost slide).
+// Constellation: the canonical 22-SAR config (cost slide).
 // ────────────────────────────────────────────────────────────────────
 
 export const CONSTELLATION = {
@@ -131,7 +131,7 @@ export const COST_USD = {
 } as const;
 
 // ────────────────────────────────────────────────────────────────────
-// SLA — the 1-hour mission, broken into 4 narrated steps.
+// SLA: the 1-hour mission, broken into 4 narrated steps.
 // demoSeconds defines the compressed-time budget on screen 3.
 // Sum of demoSeconds is 60 (per §13.1, locked).
 // ────────────────────────────────────────────────────────────────────
@@ -161,10 +161,10 @@ export interface SLAStep {
 
 // Real timing (mission seconds, integer):
 // Step 1 ends at 0:42 (42s)
-// Step 2 ends at 58:00 (3480s)  — internal: tasking 0:42→3:00, revisit 3:00→48:00, capture/downlink 48:00→58:00
+// Step 2 ends at 58:00 (3480s) : internal: tasking 0:42→3:00, revisit 3:00→48:00, capture/downlink 48:00→58:00
 // Step 3 ends at 58:30 (3510s)
 // Step 4 ends at 58:42 (3522s)
-// Demo timing (demo ms): step 1 = 4s, step 2 = 50s, step 3 = 4s, step 4 = 2s — total 60s.
+// Demo timing (demo ms): step 1 = 4s, step 2 = 50s, step 3 = 4s, step 4 = 2s: total 60s.
 
 export const SLA_STEPS: SLAStep[] = [
   {
@@ -188,7 +188,7 @@ export const SLA_STEPS: SLAStep[] = [
     endMissionSeconds: 3_480,
     startDemoMs: 4_000,
     endDemoMs: 54_000,
-    // Substep demoMs windows total to step 2's 4_000–54_000 demo range.
+    // Substep demoMs windows total to step 2's 4_000-54_000 demo range.
     // Tasking is short (~3s); revisit is the long beat the Chairman wants
     // MoD to feel (38s); capture+downlink lands the SAR + bytes (9s).
     substeps: [
@@ -522,11 +522,11 @@ export const EOC_TIMELINE: StatusQuoFriction[] = [
 // Report PDF header/footer (per §13.3, decided 2026-05-05).
 // ────────────────────────────────────────────────────────────────────
 
-export const REPORT_HEADER = "EDGE Sovereign EO Constellation — Mission Report";
+export const REPORT_HEADER = "EDGE Sovereign EO Constellation: Mission Report";
 export const REPORT_FOOTER = "Powered by Origen | A TACTICA Capability";
 
 // ────────────────────────────────────────────────────────────────────
-// Methodology depth — sourced from the partner (STAR.VISION) simulation
+// Methodology depth: sourced from the partner (STAR.VISION) simulation
 // deck and applied to the canonical 22 SAR config. These power the
 // "How was this designed?" modal on /constellation.
 // ────────────────────────────────────────────────────────────────────
@@ -535,8 +535,8 @@ export interface SatelliteCapability {
   /** ±N° off-nadir tilt enabling multi-target imaging in a single pass. */
   slewAngleDeg: number;
   /** SAR-mode-specific swath. Spotlight and StripMap differ; we won't
-   *  invent a value — the partner spec sheet (STAR.VISION) lands these.
-   *  null → render "—" in the UI. */
+   *  invent a value: the partner spec sheet (STAR.VISION) lands these.
+   *  null → render "-" in the UI. */
   swathKm: {
     spotlight: number | null;
     stripmap: number | null;

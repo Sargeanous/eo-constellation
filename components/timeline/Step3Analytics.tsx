@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Cpu, ShieldCheck } from "lucide-react";
 import { SARScene, SAR_VESSELS } from "./SARScene";
 
-// Step 3 — Automated Analytics & Validation. PRD §4.
+// Step 3: Automated Analytics & Validation. PRD §4.
 // Bounding boxes around each detected vessel, classifications appear,
 // caption: "Onboard CV models. No human in the loop. No foreign cloud."
 
@@ -19,7 +19,7 @@ export function Step3Analytics() {
     >
       <div className="relative">
         <SARScene steady />
-        {/* Bounding boxes overlay — viewBox 600x400 in scene units; we
+        {/* Bounding boxes overlay: viewBox 600x400 in scene units; we
             render absolute-positioned boxes converted to %. */}
         <div className="pointer-events-none absolute inset-0">
           {SAR_VESSELS.map((v, i) => (

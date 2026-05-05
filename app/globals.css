@@ -13,7 +13,7 @@ body {
 
 @layer base {
   :root {
-    /* Sovereign Black palette — PRD §10. HSL because shadcn primitives
+    /* Sovereign Black palette: PRD §10. HSL because shadcn primitives
        consume tokens as hsl(var(--token)).
        Hex anchors:
          #020617 deep space    #0F172A panel       #1E293B raised
@@ -72,7 +72,7 @@ body {
   }
 }
 
-/* Numeric displays — stopwatch, cost waterfall — must not shift width. */
+/* Numeric displays: stopwatch, cost waterfall: must not shift width. */
 .tabular {
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum" 1;
@@ -88,7 +88,7 @@ body {
   -webkit-user-select: none;
 }
 
-/* MissionVideo placeholder loop — used until partner MP4s arrive. */
+/* MissionVideo placeholder loop: used until partner MP4s arrive. */
 @keyframes placeholder-drift {
   from {
     transform: scale(1) translate(0, 0);

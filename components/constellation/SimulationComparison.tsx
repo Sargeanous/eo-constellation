@@ -3,7 +3,7 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X, CheckCircle2 } from "lucide-react";
 import { SIMULATION_CONFIGS, POI_REVISITS } from "@/lib/data";
 
-// PRD §5 — the 4-config simulation comparison. Centred dialog (not
+// PRD §5: the 4-config simulation comparison. Centred dialog (not
 // full-screen) since it's reference data, not narrative content. The
 // winning row glows gold.
 
@@ -43,7 +43,7 @@ export function SimulationComparison({
                 Why this geometry
               </p>
               <DialogPrimitive.Title className="mt-1 font-display text-xl font-semibold">
-                Simulation results — 4 configurations tested
+                Simulation results: 4 configurations tested
               </DialogPrimitive.Title>
               <DialogPrimitive.Description className="sr-only">
                 Comparison of the four orbital configurations evaluated. The

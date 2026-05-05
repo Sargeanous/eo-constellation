@@ -214,7 +214,7 @@ export function Timeline27() {
                       <span>{t.name}</span>
                       <span className="tabular font-mono text-xs text-muted-foreground">
                         M{start}
-                        {end !== null ? `–M${end}` : "+"}
+                        {end !== null ? `-M${end}` : "+"}
                       </span>
                     </li>
                   );

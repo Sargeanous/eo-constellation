@@ -3,10 +3,10 @@ import { motion } from "framer-motion";
 import { REPORT_HEADER, REPORT_FOOTER, FINAL_MISSION_TIME } from "@/lib/data";
 import { SARScene, SAR_VESSELS } from "./SARScene";
 
-// Step 4 — Report on Desk/Screen. PRD §4.
+// Step 4: Report on Desk/Screen. PRD §4.
 // 1-page A-aspect preview slides up. Header + cover image + summary +
 // recommended action + footer. Branded per §13.3 (locked):
-//   header: "EDGE Sovereign EO Constellation — Mission Report"
+//   header: "EDGE Sovereign EO Constellation: Mission Report"
 //   footer: "Powered by Origen | A TACTICA Capability"
 
 export function Step4Report() {
@@ -57,14 +57,14 @@ export function Step4Report() {
                 Subject
               </p>
               <p className="font-display text-[14px] font-semibold">
-                Strait of Hormuz — vessel of interest
+                Strait of Hormuz: vessel of interest
               </p>
               <p className="mt-0.5 font-mono text-[8px] text-[#0F172A]/60">
                 26.57°N · 56.25°E · EDGE-SAR-07 · spotlight 0.3 m
               </p>
             </div>
 
-            {/* Cover image — the SAR scene with bounding boxes baked in */}
+            {/* Cover image: the SAR scene with bounding boxes baked in */}
             <div className="relative">
               <div className="overflow-hidden rounded">
                 <SARScene steady />

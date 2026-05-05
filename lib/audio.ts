@@ -1,5 +1,5 @@
 // Tone.js wrappers, gated by the audioEnabled store flag.
-// Tone requires a user gesture before AudioContext can start — call
+// Tone requires a user gesture before AudioContext can start: call
 // `enableAudio()` from inside a tap handler.
 
 import type * as ToneNS from "tone";

@@ -16,7 +16,7 @@ interface GlobeSceneProps {
   /** Slow auto-rotation around the Earth's polar axis. Disable on
    *  /constellation where the user is meant to drag. */
   autoRotate?: boolean;
-  /** Allow drag/pinch to inspect — true on /constellation, false on
+  /** Allow drag/pinch to inspect: true on /constellation, false on
    *  the cover screen where the globe is purely scenic. */
   interactive?: boolean;
   /** Whether to render orbit polylines + AOI markers + satellite
@@ -46,7 +46,7 @@ export default function GlobeScene({
   // MENA_CENTRE in our orbit frame is (x, y, z); after the world rotation
   // we want it visible roughly centred in front of the camera.
 
-  // Slow auto-rotation — Apple-flavoured, never instant. Roughly one
+  // Slow auto-rotation: Apple-flavoured, never instant. Roughly one
   // revolution per 80 seconds. Disabled when interactive (so OrbitControls
   // can drive rotation manually).
   useFrame((_state, delta) => {
@@ -57,12 +57,12 @@ export default function GlobeScene({
 
   return (
     <>
-      {/* Star-field — drei's Stars, faded out at the limit. PRD §3
+      {/* Star-field: drei's Stars, faded out at the limit. PRD §3
           says background should be deep-space navy not pure black; we
           set the canvas clear color separately in <Globe>. */}
       <Stars radius={80} depth={30} count={3500} factor={3.5} fade />
 
-      {/* Lighting — one warm key light from over the Gulf, plus a cool
+      {/* Lighting: one warm key light from over the Gulf, plus a cool
           fill from the opposite side, plus low ambient so the night-side
           isn't pitch black. */}
       <ambientLight intensity={0.18} />

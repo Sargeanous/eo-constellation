@@ -19,7 +19,7 @@ export default function MissionPage() {
             02 / Mission
           </p>
           <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
-            The 1-Hour SLA — Live.
+            The 1-Hour SLA: Live.
           </h1>
           <p className="mt-4 max-w-3xl text-lg text-muted-foreground">
             Watch this. ~60 seconds of demo represents ~60 minutes of mission

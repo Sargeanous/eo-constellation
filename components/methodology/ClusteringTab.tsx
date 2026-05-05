@@ -142,7 +142,7 @@ export function ClusteringTab() {
             </linearGradient>
           </defs>
 
-          {/* Stripes — alternating ascending (sky) and descending (green) */}
+          {/* Stripes: alternating ascending (sky) and descending (green) */}
           {Array.from({ length: stripeCount }, (_, i) => {
             const isAsc = i % 2 === 0;
             const y = padTop + i * stripeH;
@@ -179,7 +179,7 @@ export function ClusteringTab() {
             const x = padX + t.x * stripeW;
             let y: number;
             if (t.strip < 0) {
-              // Outlier — sits below all stripes
+              // Outlier: sits below all stripes
               y = padTop + stripeCount * stripeH - 6;
             } else {
               y =
@@ -262,7 +262,7 @@ export function ClusteringTab() {
           targeting because it doesn&apos;t align with any orbital track.
         </p>
         <p className="text-xs italic">
-          Slew + clustering compound: each pass typically images 2–3 POIs, so
+          Slew + clustering compound: each pass typically images 2-3 POIs, so
           the apparent revisit gain is ≈3× the satellite count alone would
           suggest.
         </p>

@@ -24,7 +24,7 @@ import { VIDEOS, type VideoId } from "@/lib/videos";
 interface MissionVideoProps {
   videoId: VideoId;
   className?: string;
-  /** "none" | "metadata" | "auto" — defaults to "none". */
+  /** "none" | "metadata" | "auto": defaults to "none". */
   preload?: "none" | "metadata" | "auto";
   /** Apply low opacity for use as a background layer. */
   background?: boolean;

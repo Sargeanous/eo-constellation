@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 
 // Procedural SAR scene. PRD §4 step 2c calls for a "0.5m SAR scene"
-// placeholder that "looks SAR-like — high contrast, speckle-textured".
+// placeholder that "looks SAR-like: high contrast, speckle-textured".
 // We do this with stacked SVG feTurbulence layers over a dark base,
 // plus three vessel-shaped bright pixels in the sea portion of the
 // frame that step 3 puts bounding boxes around.
@@ -41,7 +41,7 @@ export function SARScene({ steady }: SARSceneProps) {
     >
       <svg viewBox="0 0 600 400" className="h-full w-full">
         <defs>
-          {/* Fine speckle — high frequency, low octave for crispness */}
+          {/* Fine speckle: high frequency, low octave for crispness */}
           <filter id="sarSpeckle" x="0%" y="0%" width="100%" height="100%">
             <feTurbulence
               type="fractalNoise"
@@ -57,7 +57,7 @@ export function SARScene({ steady }: SARSceneProps) {
                       0 0 0 0.55 0"
             />
           </filter>
-          {/* Coarse cloud — gives a "land vs sea" macro pattern */}
+          {/* Coarse cloud: gives a "land vs sea" macro pattern */}
           <filter id="sarCoarse" x="0%" y="0%" width="100%" height="100%">
             <feTurbulence
               type="fractalNoise"
@@ -96,7 +96,7 @@ export function SARScene({ steady }: SARSceneProps) {
           style={{ mixBlendMode: "screen" }}
         />
 
-        {/* Vessels — bright pixels in the lower half. Each is a small
+        {/* Vessels: bright pixels in the lower half. Each is a small
             rectangle with a soft halo simulating SAR return. */}
         {SAR_VESSELS.map((v, i) => (
           <g key={i}>
@@ -123,7 +123,7 @@ export function SARScene({ steady }: SARSceneProps) {
         {/* Vignette */}
         <rect width="600" height="400" fill="url(#sarVignette)" />
 
-        {/* Crosshair — a tiny graticule at the centre */}
+        {/* Crosshair: a tiny graticule at the centre */}
         <g
           stroke="#38BDF8"
           strokeWidth="0.5"
@@ -136,7 +136,7 @@ export function SARScene({ steady }: SARSceneProps) {
         </g>
       </svg>
 
-      {/* Frame metadata strip — reads as ground-station HUD */}
+      {/* Frame metadata strip: reads as ground-station HUD */}
       <div className="pointer-events-none absolute inset-x-0 top-0 flex items-center justify-between px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-sovsky/80">
         <span>EDGE-SAR-07 · 0.5 m GSD</span>
         <span>26.57°N 56.25°E</span>

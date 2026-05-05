@@ -25,7 +25,7 @@ export default function ConstellationPage() {
 
   return (
     <main className="relative min-h-screen overflow-hidden">
-      {/* Background surface — 3D globe (canonical platform output) or
+      {/* Background surface: 3D globe (canonical platform output) or
           flat ground-tracks loop (partner reference). The flat-map
           mode renders an explicit attribution chip and a header bar so
           the video reads as supporting evidence, never as a platform
@@ -87,7 +87,7 @@ export default function ConstellationPage() {
         </motion.div>
       </motion.div>
 
-      {/* Surface toggle — globe vs flat ground tracks. Bottom-right
+      {/* Surface toggle: globe vs flat ground tracks. Bottom-right
           so it doesn't collide with the methodology + simulation
           buttons (bottom-left). */}
       <div className="cinematic-surface fixed bottom-24 right-6 z-40 rounded-full border border-border bg-background/80 p-1 backdrop-blur-md">
@@ -108,7 +108,7 @@ export default function ConstellationPage() {
         </ToggleGroup>
       </div>
 
-      {/* Bottom-left button stack — methodology (gold) + simulation
+      {/* Bottom-left button stack: methodology (gold) + simulation
           comparison (muted). AOI inspection happens via tap on the
           globe markers themselves. */}
       <div className="cinematic-surface fixed bottom-24 left-6 z-40 flex flex-col items-start gap-2">

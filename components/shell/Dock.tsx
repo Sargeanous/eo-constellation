@@ -3,7 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SCREENS } from "@/lib/data";
 
-// Persistent bottom dock — six dots, one per screen. Active dot is
+// Persistent bottom dock: six dots, one per screen. Active dot is
 // gold (PRD §10) and stretches; inactive dots are muted slate.
 // Hit-target is 44pt minimum even though the visible dot is small.
 

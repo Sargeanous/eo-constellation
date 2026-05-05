@@ -113,7 +113,7 @@ export function buildOrbitPlanes(segments = 192): OrbitPlane[] {
  * Place AOI markers on the Earth surface. lat/lng in degrees → scene
  * unit vector on a unit sphere. Conventional mapping for an
  * equirectangular Blue Marble texture (lng 0 at +X, north pole at +Y
- * for Three.js scenes — but our orbit math has +Z up. We rotate to
+ * for Three.js scenes: but our orbit math has +Z up. We rotate to
  * match the scene convention applied by `EarthMesh` below.)
  */
 export function aoiToVector(lat: number, lng: number): THREE.Vector3 {
@@ -139,7 +139,7 @@ export const MENA_CENTRE = aoiToVector(25, 50);
 // Tap-to-inspect helpers (Phase 3).
 // PRD §14: real Keplerian propagation, no SGP4. Sub-satellite-point
 // math is the inverse of `aoiToVector`. Next-pass timings are
-// deterministic plausible stubs — not real propagation. They read as
+// deterministic plausible stubs: not real propagation. They read as
 // sub-hour SLA evidence and stay stable across clicks (so the same
 // AOI always shows the same next 3 passes inside one session).
 // ────────────────────────────────────────────────────────────────────
@@ -150,7 +150,7 @@ export function positionToLatLng(v: THREE.Vector3): {
   lat: number;
   lng: number;
 } {
-  // Inverse of `aoiToVector` — assumes v is in the orbit frame
+  // Inverse of `aoiToVector`: assumes v is in the orbit frame
   // (Z = north pole), which is how SatellitePosition.position is stored.
   const norm = v.clone().normalize();
   const lat = 90 - Math.acos(norm.z) * DEG_TO_DEG;
@@ -174,7 +174,7 @@ export interface NextPass {
 
 /**
  * 3 deterministic plausible "next pass" entries for an AOI. Stays
- * stable for a given aoiId — same input, same output, always.
+ * stable for a given aoiId: same input, same output, always.
  */
 export function nextPassesForAOI(aoiId: string, count = 3): NextPass[] {
   const seed = hashString(aoiId);

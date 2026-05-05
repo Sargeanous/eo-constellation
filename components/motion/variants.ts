@@ -20,7 +20,7 @@ export const FADE: Variants = {
   exit: { opacity: 0, transition: { duration: 0.2 } },
 };
 
-// Stopwatch ticks — the 50s mission animation pulses one of these per second.
+// Stopwatch ticks: the 50s mission animation pulses one of these per second.
 export const TICK: Variants = {
   rest: { scale: 1, opacity: 0.6 },
   pulse: {

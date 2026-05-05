@@ -6,7 +6,7 @@ import { buildConstellation } from "@/lib/orbit";
 import { useDemoStore } from "@/lib/store";
 
 // 22 satellites as small instanced glowing dots. Phase 1: static
-// positions. Phase 3: clickable — each dot is wrapped in a larger
+// positions. Phase 3: clickable: each dot is wrapped in a larger
 // transparent hit-target sphere so a finger tap on iPad doesn't have
 // to hit a 0.012-unit dot.
 //

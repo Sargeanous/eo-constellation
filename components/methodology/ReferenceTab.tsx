@@ -1,7 +1,7 @@
 "use client";
 import { MissionVideo } from "@/components/video/MissionVideo";
 
-// Reference tab — partner orbital cinematic. Per the §4 override
+// Reference tab: partner orbital cinematic. Per the §4 override
 // (2026-05-05), partner footage lives in surfaces clearly framed as
 // "supporting evidence", never as a platform feature. The methodology
 // modal is the natural home: the Chairman opens it when MoD asks
@@ -40,7 +40,7 @@ export function ReferenceTab() {
           This clip pre-dates the canonical{" "}
           <span className="text-foreground">22 SAR / 350 km / 38°</span>{" "}
           configuration and is included as supporting evidence of the
-          partner&apos;s simulation capability — not as a depiction of our
+          partner&apos;s simulation capability: not as a depiction of our
           final design. The corrected re-render is in flight.
         </p>
         <p className="text-xs italic">

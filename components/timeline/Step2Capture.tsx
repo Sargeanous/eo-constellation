@@ -7,12 +7,12 @@ import { SLA_STEPS } from "@/lib/data";
 import { GlobeInset } from "./GlobeInset";
 import { SARScene } from "./SARScene";
 
-// Step 2 — Satellite Tasking & Data Capture. PRD §4 step 2.
+// Step 2: Satellite Tasking & Data Capture. PRD §4 step 2.
 // Three sub-beats keyed to substep demoMs windows in lib/data.ts:
-//   2a Tasking            (3s)  — dotted-line ground-station → constellation
-//   2b Revisit            (38s) — globe inset advancing toward Hormuz,
+//   2a Tasking            (3s) : dotted-line ground-station → constellation
+//   2b Revisit            (38s): globe inset advancing toward Hormuz,
 //                                 mid-step caption swap at the midpoint
-//   2c Capture & Downlink (9s)  — SAR scene reveal flash, byte stream
+//   2c Capture & Downlink (9s) : SAR scene reveal flash, byte stream
 
 const STEP2 = SLA_STEPS.find((s) => s.id === 2)!;
 const TASKING = STEP2.substeps!.find((s) => s.name === "Tasking")!;
@@ -99,7 +99,7 @@ function TaskingPanel() {
             SAR-07
           </text>
         </g>
-        {/* Tasking link — animated dashes */}
+        {/* Tasking link: animated dashes */}
         <path
           d="M 50 124 Q 200 -10 360 50"
           fill="none"
@@ -202,7 +202,7 @@ function CapturePanel() {
 }
 
 function SidePanel({ sub, elapsed }: { sub: Sub; elapsed: number }) {
-  // Byte stream during capture/downlink — fake bytes ticking up.
+  // Byte stream during capture/downlink: fake bytes ticking up.
   const bytes = useMemo(() => {
     if (sub !== "capture" && sub !== "post") return 0;
     const t = Math.max(

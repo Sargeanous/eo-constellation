@@ -5,8 +5,8 @@ import { SATELLITE_CAPABILITY, palette } from "@/lib/data";
 // to the Earth surface, three target dots inside the footprint.
 //
 // Animation: a "sweep" arc inside the cone whose stroke-dashoffset
-// loops, plus a soft pulse on the cone edges. All SVG SMIL — no JS,
-// no framer-motion — so it renders the same in the modal regardless
+// loops, plus a soft pulse on the cone edges. All SVG SMIL: no JS,
+// no framer-motion: so it renders the same in the modal regardless
 // of mount order.
 
 export function SlewTab() {
@@ -18,7 +18,7 @@ export function SlewTab() {
   const groundY = 360;
   // Tan of slew angle scaled so the half-cone half-width at the ground
   // looks generous on screen. Real geometry would compute from altitude
-  // — this is illustrative.
+  //: this is illustrative.
   const halfCone = Math.tan((slew * Math.PI) / 180) * (groundY - satY) * 1.0;
 
   const leftFoot = cx - halfCone;
@@ -97,7 +97,7 @@ export function SlewTab() {
             strokeDasharray="3 4"
           />
 
-          {/* Sweep wedge — animates left-to-right inside the cone */}
+          {/* Sweep wedge: animates left-to-right inside the cone */}
           <g>
             <path
               d={`M ${cx} ${satY} L ${cx - halfCone * 0.18} ${groundY} L ${cx + halfCone * 0.18} ${groundY} Z`}
@@ -228,14 +228,14 @@ export function SlewTab() {
         <p>
           The sweep wedge (gold) shows the steerable instrument boresight. As
           the satellite passes overhead, the wedge selects which targets in
-          the footprint to capture — typically two or three priority POIs per
+          the footprint to capture: typically two or three priority POIs per
           pass.
         </p>
         <p className="text-xs italic">
           Imaging modes: {SATELLITE_CAPABILITY.imagingModes.join(" · ")}.
           Polarization: {SATELLITE_CAPABILITY.polarization}. Swath:{" "}
-          {SATELLITE_CAPABILITY.swathKm.spotlight ?? "—"} km spotlight ·{" "}
-          {SATELLITE_CAPABILITY.swathKm.stripmap ?? "—"} km stripmap.
+          {SATELLITE_CAPABILITY.swathKm.spotlight ?? "-"} km spotlight ·{" "}
+          {SATELLITE_CAPABILITY.swathKm.stripmap ?? "-"} km stripmap.
         </p>
       </figcaption>
     </div>

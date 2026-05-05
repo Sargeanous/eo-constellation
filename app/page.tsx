@@ -21,7 +21,7 @@ export default function IntroPage() {
       try {
         await enableAudio();
       } catch {
-        /* swallow — audio is non-essential */
+        /* swallow: audio is non-essential */
       }
     }
   }

@@ -1,11 +1,11 @@
-EARTH-DAY.JPG — NASA Blue Marble (no-clouds variant)
+EARTH-DAY.JPG: NASA Blue Marble (no-clouds variant)
 ======================================================
 
 This file is a NASA Blue Marble Earth surface map.
 
-Source       : NASA Visible Earth ([visibleearth.nasa.gov](http://visibleearth.nasa.gov)) — the Blue Marble:
-               Next Generation collection by Reto Stöckli, NASA Earth
-               Observatory (NASA Goddard Space Flight Center).
+Source       : NASA Visible Earth ([visibleearth.nasa.gov](http://visibleearth.nasa.gov)).
+               Blue Marble: Next Generation collection by Reto Stöckli,
+               NASA Earth Observatory (NASA Goddard Space Flight Center).
 License      : Public domain. NASA imagery is generally free to use without
                restriction. Standard NASA attribution applies.
 Working file : 4096×2048 cloudless Blue Marble derivative (~1.4 MB).
@@ -25,7 +25,7 @@ To swap:
   1. Download the file from the URL above (or any other Blue Marble at 5400×2700
      or higher).
   2. Replace public/textures/earth-day.jpg in this folder.
-  3. No code changes required — GlobeScene.tsx loads
+  3. No code changes required: GlobeScene.tsx loads
      /textures/earth-day.jpg by name.
 
 NOTES
