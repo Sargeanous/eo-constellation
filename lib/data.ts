@@ -501,3 +501,63 @@ export const EOC_TIMELINE: StatusQuoFriction[] = [
 
 export const REPORT_HEADER = "EDGE Sovereign EO Constellation — Mission Report";
 export const REPORT_FOOTER = "Powered by Origen | A TACTICA Capability";
+
+// ────────────────────────────────────────────────────────────────────
+// Methodology depth — sourced from the partner (STAR.VISION) simulation
+// deck and applied to the canonical 22 SAR config. These power the
+// "How was this designed?" modal on /constellation.
+// ────────────────────────────────────────────────────────────────────
+
+export interface SatelliteCapability {
+  /** ±N° off-nadir tilt enabling multi-target imaging in a single pass. */
+  slewAngleDeg: number;
+  /** SAR-mode-specific swath. Spotlight and StripMap differ; we won't
+   *  render a single number until the partner spec sheet confirms.
+   *  null → render "—" in the UI. */
+  nadirSwathKm: number | null;
+  imagingModes: string[];
+  polarization: string;
+}
+
+export const SATELLITE_CAPABILITY: SatelliteCapability = {
+  slewAngleDeg: 30,
+  nadirSwathKm: null, // TODO: pending SAR-mode spec sheet from partner.
+  imagingModes: ["Spotlight (0.3 m GSD)", "StripMap (0.5 m GSD)"],
+  polarization: "VV",
+};
+
+export interface OrbitalGeometry {
+  /** Walker-Delta convention: total/planes/phasing. We store the
+   *  human-readable shorthand in walkerDeltaNotation; the underlying
+   *  fields are also exposed for the diagram. */
+  walkerDeltaNotation: string;
+  ascendingNodeSpacingDeg: number;
+  satellitesPerPlane: number;
+  totalPlanes: number;
+  isWalkerDeltaClass: boolean;
+}
+
+export const ORBITAL_GEOMETRY: OrbitalGeometry = {
+  walkerDeltaNotation: "11P/2S",
+  ascendingNodeSpacingDeg: 360 / 11,
+  satellitesPerPlane: 2,
+  totalPlanes: 11,
+  isWalkerDeltaClass: true,
+};
+
+export interface TargetClustering {
+  description: string;
+  exampleTotalTargets: number;
+  exampleAscendingPasses: number;
+  exampleDescendingPasses: number;
+  exampleOutliers: number;
+}
+
+export const TARGET_CLUSTERING: TargetClustering = {
+  description:
+    "Custom clustering tool groups POIs by their position relative to orbital tracks, aligned with the imaging swath. One satellite pass can image multiple targets via slew, dramatically improving daily revisit efficiency.",
+  exampleTotalTargets: 35,
+  exampleAscendingPasses: 11,
+  exampleDescendingPasses: 15,
+  exampleOutliers: 1,
+};

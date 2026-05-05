@@ -87,3 +87,15 @@ body {
   user-select: none;
   -webkit-user-select: none;
 }
+
+/* MissionVideo placeholder loop — used until partner MP4s arrive. */
+@keyframes placeholder-drift {
+  from {
+    transform: scale(1) translate(0, 0);
+    filter: hue-rotate(0deg);
+  }
+  to {
+    transform: scale(1.06) translate(2%, -2%);
+    filter: hue-rotate(8deg);
+  }
+}
