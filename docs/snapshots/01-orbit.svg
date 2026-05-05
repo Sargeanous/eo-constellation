@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" font-family="ui-monospace, Menlo, monospace">
+  <rect width="800" height="480" fill="#020617"/>
+  <defs>
+    <radialGradient id="earthGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1E293B"/>
+      <stop offset="80%" stop-color="#0F172A"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </radialGradient>
+    <radialGradient id="atmosGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="85%" stop-color="#38BDF8" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#38BDF8" stop-opacity="0.45"/>
+    </radialGradient>
+  </defs>
+  <line x1="400" y1="110" x2="400" y2="370" stroke="#1E293B" stroke-width="1" stroke-dasharray="2 4"/>
+  <ellipse cx="400" cy="240" rx="78" ry="4" fill="none" stroke="#1E293B" stroke-width="1" stroke-dasharray="2 3"/>
+  <!-- 11 orbit ellipses -->
+  <ellipse cx="400" cy="240" rx="220" ry="70" fill="none" stroke="#38BDF8" stroke-opacity="0.18" stroke-width="1.2" transform="rotate(0 400 240)"/>
+  <ellipse cx="400" cy="240" rx="220" ry="70" fill="none" stroke="#38BDF8" stroke-opacity="0.21" stroke-width="1.2" transform="rotate(32.7 400 240)"/>
+  <ellipse cx="400" cy="240" rx="220" ry="70" fill="none" stroke="#38BDF8" stroke-opacity="0.24" stroke-width="1.2" transform="rotate(65.5 400 240)"/>
+  <ellipse cx="400" cy="240" rx="220" ry="70" fill="none" stroke="#38BDF8" stroke-opacity="0.27" stroke-width="1.2" transform="rotate(98.2 400 240)"/>
+  <ellipse cx="400" cy="240" rx="220" ry="70" fill="none" stroke="#38BDF8" stroke-opacity="0.30" stroke-width="1.2" transform="rotate(130.9 400 240)"/>
+  <ellipse cx="400" cy="240" rx="220" ry="70" fill="none" stroke="#38BDF8" stroke-opacity="0.34" stroke-width="1.2" transform="rotate(163.6 400 240)"/>
+  <ellipse cx="400" cy="240" rx="220" ry="70" fill="none" stroke="#38BDF8" stroke-opacity="0.37" stroke-width="1.2" transform="rotate(196.4 400 240)"/>
+  <ellipse cx="400" cy="240" rx="220" ry="70" fill="none" stroke="#38BDF8" stroke-opacity="0.40" stroke-width="1.2" transform="rotate(229.1 400 240)"/>
+  <ellipse cx="400" cy="240" rx="220" ry="70" fill="none" stroke="#38BDF8" stroke-opacity="0.43" stroke-width="1.2" transform="rotate(261.8 400 240)"/>
+  <ellipse cx="400" cy="240" rx="220" ry="70" fill="none" stroke="#38BDF8" stroke-opacity="0.46" stroke-width="1.2" transform="rotate(294.5 400 240)"/>
+  <ellipse cx="400" cy="240" rx="220" ry="70" fill="none" stroke="#38BDF8" stroke-opacity="0.49" stroke-width="1.2" transform="rotate(327.3 400 240)"/>
+  <!-- Earth -->
+  <circle cx="400" cy="240" r="82" fill="url(#atmosGrad)"/>
+  <circle cx="400" cy="240" r="70" fill="url(#earthGrad)"/>
+  <circle cx="400" cy="240" r="70" fill="none" stroke="#1E293B" stroke-width="0.8"/>
+  <!-- 22 satellites: 2 per plane along each major axis at ±220px -->
+  <!-- Plane 0 (rot 0°) -->
+  <circle cx="620" cy="240" r="6" fill="#38BDF8" fill-opacity="0.18"/><circle cx="620" cy="240" r="2.5" fill="#38BDF8"/>
+  <circle cx="180" cy="240" r="6" fill="#38BDF8" fill-opacity="0.18"/><circle cx="180" cy="240" r="2.5" fill="#38BDF8"/>
+  <!-- Plane 1 (32.7°) -->
+  <circle cx="585" cy="358.8" r="6" fill="#38BDF8" fill-opacity="0.18"/><circle cx="585" cy="358.8" r="2.5" fill="#38BDF8"/>
+  <circle cx="215" cy="121.2" r="6" fill="#38BDF8" fill-opacity="0.18"/><circle cx="215" cy="121.2" r="2.5" fill="#38BDF8"/>
+  <!-- Plane 2 (65.5°) -->
+  <circle cx="491.3" cy="440.2" r="6" fill="#38BDF8" fill-opacity="0.18"/><circle cx="491.3" cy="440.2" r="2.5" fill="#38BDF8"/>
+  <circle cx="308.7" cy="39.8" r="6" fill="#38BDF8" fill-opacity="0.18"/><circle cx="308.7" cy="39.8" r="2.5" fill="#38BDF8"/>
+  <!-- Plane 3 (98.2°) -->
+  <circle cx="368.6" cy="457.7" r="6" fill="#38BDF8" fill-opacity="0.18"/><circle cx="368.6" cy="457.7" r="2.5" fill="#38BDF8"/>
+  <circle cx="431.4" cy="22.3" r="6" fill="#38BDF8" fill-opacity="0.18"/><circle cx="431.4" cy="22.3" r="2.5" fill="#38BDF8"/>
+  <!-- Plane 4 (130.9°) -->
+  <circle cx="255.7" cy="406.2" r="6" fill="#38BDF8" fill-opacity="0.18"/><circle cx="255.7" cy="406.2" r="2.5" fill="#38BDF8"/>
+  <circle cx="544.3" cy="73.8" r="6" fill="#38BDF8" fill-opacity="0.18"/><circle cx="544.3" cy="73.8" r="2.5" fill="#38BDF8"/>
+  <!-- Plane 5 (163.6°) -->
+  <circle cx="188.9" cy="302.3" r="6" fill="#38BDF8" fill-opacity="0.18"/><circle cx="188.9" cy="302.3" r="2.5" fill="#38BDF8"/>
+  <circle cx="611.1" cy="177.7" r="6" fill="#38BDF8" fill-opacity="0.18"/><circle cx="611.1" cy="177.7" r="2.5" fill="#38BDF8"/>
+  <!-- Plane 6 (196.4°) -->
+  <circle cx="188.9" cy="177.7" r="6" fill="#38BDF8" fill-opacity="0.18"/><circle cx="188.9" cy="177.7" r="2.5" fill="#38BDF8"/>
+  <circle cx="611.1" cy="302.3" r="6" fill="#38BDF8" fill-opacity="0.18"/><circle cx="611.1" cy="302.3" r="2.5" fill="#38BDF8"/>
+  <!-- Plane 7 (229.1°) -->
+  <circle cx="255.7" cy="73.8" r="6" fill="#38BDF8" fill-opacity="0.18"/><circle cx="255.7" cy="73.8" r="2.5" fill="#38BDF8"/>
+  <circle cx="544.3" cy="406.2" r="6" fill="#38BDF8" fill-opacity="0.18"/><circle cx="544.3" cy="406.2" r="2.5" fill="#38BDF8"/>
+  <!-- Plane 8 (261.8°) -->
+  <circle cx="368.6" cy="22.3" r="6" fill="#38BDF8" fill-opacity="0.18"/><circle cx="368.6" cy="22.3" r="2.5" fill="#38BDF8"/>
+  <circle cx="431.4" cy="457.7" r="6" fill="#38BDF8" fill-opacity="0.18"/><circle cx="431.4" cy="457.7" r="2.5" fill="#38BDF8"/>
+  <!-- Plane 9 (294.5°) -->
+  <circle cx="491.3" cy="39.8" r="6" fill="#38BDF8" fill-opacity="0.18"/><circle cx="491.3" cy="39.8" r="2.5" fill="#38BDF8"/>
+  <circle cx="308.7" cy="440.2" r="6" fill="#38BDF8" fill-opacity="0.18"/><circle cx="308.7" cy="440.2" r="2.5" fill="#38BDF8"/>
+  <!-- Plane 10 (327.3°) -->
+  <circle cx="585" cy="121.2" r="6" fill="#38BDF8" fill-opacity="0.18"/><circle cx="585" cy="121.2" r="2.5" fill="#38BDF8"/>
+  <circle cx="215" cy="358.8" r="6" fill="#38BDF8" fill-opacity="0.18"/><circle cx="215" cy="358.8" r="2.5" fill="#38BDF8"/>
+  <!-- Highlight plane 1 in gold -->
+  <ellipse cx="400" cy="240" rx="220" ry="70" fill="none" stroke="#D4A949" stroke-width="1.6" stroke-opacity="0.85" transform="rotate(0 400 240)"/>
+  <!-- Labels -->
+  <text x="628" y="244" font-size="11" fill="#94A3B8">Plane 1 / 11</text>
+  <text x="320" y="166" font-size="11" fill="#94A3B8" text-anchor="end">Earth</text>
+  <text x="400" y="90" font-size="11" fill="#F1F5F9" text-anchor="middle">11P/2S</text>
+  <text x="400" y="106" font-size="10" fill="#94A3B8" text-anchor="middle">Walker-Delta class · 11 planes × 2 sats = 22</text>
+  <text x="20" y="432" font-size="10" fill="#94A3B8">Altitude: 350 km</text>
+  <text x="20" y="446" font-size="10" fill="#94A3B8">Inclination: 38° ±3°</text>
+  <text x="20" y="460" font-size="10" fill="#94A3B8">RAAN spacing: 32.73°</text>
+</svg>

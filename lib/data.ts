@@ -512,16 +512,22 @@ export interface SatelliteCapability {
   /** ±N° off-nadir tilt enabling multi-target imaging in a single pass. */
   slewAngleDeg: number;
   /** SAR-mode-specific swath. Spotlight and StripMap differ; we won't
-   *  render a single number until the partner spec sheet confirms.
+   *  invent a value — the partner spec sheet (STAR.VISION) lands these.
    *  null → render "—" in the UI. */
-  nadirSwathKm: number | null;
+  swathKm: {
+    spotlight: number | null;
+    stripmap: number | null;
+  };
   imagingModes: string[];
   polarization: string;
 }
 
 export const SATELLITE_CAPABILITY: SatelliteCapability = {
   slewAngleDeg: 30,
-  nadirSwathKm: null, // TODO: pending SAR-mode spec sheet from partner.
+  swathKm: {
+    spotlight: null, // TODO: source from STAR.VISION SAR spec sheet.
+    stripmap: null, // TODO: same.
+  },
   imagingModes: ["Spotlight (0.3 m GSD)", "StripMap (0.5 m GSD)"],
   polarization: "VV",
 };

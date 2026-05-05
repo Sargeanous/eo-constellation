@@ -6,6 +6,7 @@ import { Globe as Globe3D, Layers, Map as MapIcon } from "lucide-react";
 import { Globe } from "@/components/globe/Globe";
 import { MissionVideo } from "@/components/video/MissionVideo";
 import { ConfigSandbox } from "@/components/sandbox/ConfigSandbox";
+import { MethodologyModal } from "@/components/methodology/MethodologyModal";
 import { Button } from "@/components/ui/button";
 import {
   ToggleGroup,
@@ -17,6 +18,7 @@ type Surface = "globe" | "flat";
 
 export default function ConstellationPage() {
   const [surface, setSurface] = useState<Surface>("globe");
+  const [methodOpen, setMethodOpen] = useState(false);
 
   return (
     <main className="relative min-h-screen overflow-hidden">
@@ -91,23 +93,19 @@ export default function ConstellationPage() {
         </ToggleGroup>
       </div>
 
-      {/* "How was this designed?" entry — visible affordance now,
-          implementation gated on the modal questions. The button is
-          intentionally inert; tapping logs to the console so the
-          rehearsal operator can verify position without the modal
-          shipped yet. */}
+      {/* "How was this designed?" entry — opens the full-screen
+          methodology modal (Q1 confirmed: full-screen modal, Q2: text
+          button, Q3: static SVG only). */}
       <button
         className="cinematic-surface group fixed bottom-24 left-6 z-40 inline-flex items-center gap-2 rounded-full border border-gold/40 bg-background/80 px-4 py-2 font-display text-sm text-gold backdrop-blur-md hover:border-gold"
         aria-label="How was this designed?"
-        onClick={() => {
-          // Phase: modal landing pending Q1–Q3 answers.
-          // eslint-disable-next-line no-console
-          console.info("[methodology-modal] not implemented yet");
-        }}
+        onClick={() => setMethodOpen(true)}
       >
         <Layers className="h-4 w-4" />
         How was this designed?
       </button>
+
+      <MethodologyModal open={methodOpen} onOpenChange={setMethodOpen} />
     </main>
   );
 }
