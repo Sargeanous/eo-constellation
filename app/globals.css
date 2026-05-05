@@ -129,6 +129,20 @@ body {
   -webkit-user-select: none;
 }
 
+/* Cover Begin button: gentle gold halo pulse so the tap target reads
+   as primary affordance without being theatrical. */
+@keyframes gold-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 hsl(var(--gold-500) / 0);
+  }
+  50% {
+    box-shadow: 0 0 0 14px hsl(var(--gold-500) / 0.18);
+  }
+}
+.pulse-gold {
+  animation: gold-pulse 2.6s ease-in-out infinite;
+}
+
 /* MissionVideo placeholder loop: used until partner MP4s arrive. */
 @keyframes placeholder-drift {
   from {

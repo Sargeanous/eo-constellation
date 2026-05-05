@@ -475,12 +475,12 @@ export const STATUS_QUO_FRICTIONS: StatusQuoFriction[] = [
   {
     hours: [0, 8],
     label: "Vendor request & negotiation",
-    friction: "Sensitive AOIs refused 3× this year.",
+    friction: "Sensitive AOIs routinely refused by foreign vendors.",
   },
   {
     hours: [8, 56],
     label: "Tasking approval & vendor scheduling",
-    friction: "48h average for non-urgent.",
+    friction: "48h is typical for non-urgent tasking.",
   },
   {
     hours: [56, 68],
@@ -493,6 +493,11 @@ export const STATUS_QUO_FRICTIONS: StatusQuoFriction[] = [
     friction: "Human-in-the-loop. English-only models.",
   },
 ];
+
+/** Footnote that anchors the status-quo numbers to a verifiable
+ *  source. Shown as small italic text below the friction list. */
+export const STATUS_QUO_SOURCE =
+  "Industry-typical figures. Source: program briefings + Sovereign Constellation Plan, internal.";
 
 // ────────────────────────────────────────────────────────────────────
 // EO-CONSTELLATION timeline (right column on /problem). Mirrors the

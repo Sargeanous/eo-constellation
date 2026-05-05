@@ -1,5 +1,4 @@
 "use client";
-import Link from "next/link";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Shield, Shuffle, Cpu, Link2 } from "lucide-react";
@@ -79,7 +78,7 @@ export default function DecisionPage() {
           })}
         </motion.div>
 
-        <motion.div variants={CHILD_RISE} className="mt-10 flex gap-3">
+        <motion.div variants={CHILD_RISE} className="mt-10">
           <Button
             size="lg"
             className="bg-gold px-10 text-primary-foreground hover:bg-gold/90"
@@ -87,9 +86,9 @@ export default function DecisionPage() {
           >
             {CTA_LABELS[ctaMode]}
           </Button>
-          <Button size="lg" variant="outline" asChild>
-            <Link href="/">Restart</Link>
-          </Button>
+          {/* "Restart" intentionally absent: in front of MoD, the close
+              should be the only path forward. The rehearsal hamburger
+              still has Skip-to-screen for resetting between rooms. */}
         </motion.div>
       </motion.div>
 

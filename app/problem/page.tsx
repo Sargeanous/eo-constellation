@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { CHILD_RISE, STAGGER_CHILDREN } from "@/components/motion/variants";
 import {
   STATUS_QUO_FRICTIONS,
+  STATUS_QUO_SOURCE,
   EOC_TIMELINE,
   STATUS_QUO_HOURS,
   FINAL_MISSION_TIME,
@@ -89,7 +90,7 @@ export default function ProblemPage() {
               {FINAL_MISSION_TIME}
             </p>
           </div>
-          <p className="md:col-span-3 text-center font-display text-base text-amber md:text-lg">
+          <p className="md:col-span-3 text-center font-display text-base text-gold md:text-lg">
             {RESULT_TAGLINE}
           </p>
         </motion.div>
@@ -268,6 +269,9 @@ export default function ProblemPage() {
                 </li>
               ))}
             </ul>
+            <p className="text-[11px] italic text-muted-foreground">
+              {STATUS_QUO_SOURCE}
+            </p>
           </div>
           <div className="space-y-3">
             <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">

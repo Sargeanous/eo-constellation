@@ -1,85 +1,144 @@
 "use client";
-import { useMemo, useState } from "react";
+import { memo, useMemo, useState } from "react";
 import * as THREE from "three";
 import { palette } from "@/lib/data";
-import { buildConstellation } from "@/lib/orbit";
+import { buildConstellation, type SatellitePosition } from "@/lib/orbit";
 import { useDemoStore } from "@/lib/store";
 
-// 22 satellites as small instanced glowing dots. Phase 1: static
-// positions. Phase 3: clickable: each dot is wrapped in a larger
-// transparent hit-target sphere so a finger tap on iPad doesn't have
-// to hit a 0.012-unit dot.
+// 22 satellites as small glowing dots. Phase 1: static positions.
+// Phase 3: clickable, with hover + selection state lifted via the
+// Zustand store.
 //
-// Hover and selected state both lift to small visual cues:
-//   hovered  → halo opacity bumps to 0.45
-//   selected → halo turns gold + halo radius doubles
+// Performance note (perf round 2): the 22 base meshes used to
+// re-render whenever hover state changed (every pointer move). Now
+// the base group is React.memo'd and the hover/selected halo is a
+// separate overlay that consumes selection state alone, so dragging
+// across satellites no longer rebuilds 22 mesh trees per frame.
 
 export function Satellites() {
   const sats = useMemo(() => buildConstellation(), []);
-  const selected = useDemoStore((s) => s.selectedSatId);
   const setSelected = useDemoStore((s) => s.setSelectedSat);
   const [hovered, setHovered] = useState<string | null>(null);
-
-  const dotRadius = 0.012;
-  const hitRadius = dotRadius * 4.2; // generous touch target
+  const selected = useDemoStore((s) => s.selectedSatId);
 
   return (
     <group>
-      {sats.map((s) => {
-        const isSelected = selected === s.id;
-        const isHovered = hovered === s.id;
-        const haloColor = isSelected
-          ? new THREE.Color(palette.accentGold)
-          : new THREE.Color(palette.accentSky);
-        const haloOpacity = isSelected ? 0.85 : isHovered ? 0.45 : 0.18;
-        const haloScale = isSelected ? 1.5 : isHovered ? 1.2 : 1;
-
-        return (
-          <group
-            key={s.id}
-            position={s.position}
-            onPointerOver={(e) => {
-              e.stopPropagation();
-              setHovered(s.id);
-              document.body.style.cursor = "pointer";
-            }}
-            onPointerOut={(e) => {
-              e.stopPropagation();
-              setHovered((h) => (h === s.id ? null : h));
-              document.body.style.cursor = "default";
-            }}
-            onClick={(e) => {
-              e.stopPropagation();
-              setSelected(isSelected ? null : s.id);
-            }}
-          >
-            {/* Halo */}
-            <mesh scale={haloScale}>
-              <sphereGeometry args={[dotRadius, 12, 12]} />
-              <meshBasicMaterial
-                color={haloColor}
-                transparent
-                opacity={haloOpacity * 0.4}
-                toneMapped={false}
-                depthWrite={false}
-              />
-            </mesh>
-            {/* Visible dot */}
-            <mesh>
-              <sphereGeometry args={[dotRadius * 0.7, 12, 12]} />
-              <meshBasicMaterial
-                color={isSelected ? palette.accentGold : palette.accentSky}
-                toneMapped={false}
-              />
-            </mesh>
-            {/* Invisible larger hit target for touch */}
-            <mesh visible={false}>
-              <sphereGeometry args={[hitRadius, 6, 6]} />
-              <meshBasicMaterial transparent opacity={0} />
-            </mesh>
-          </group>
-        );
-      })}
+      <SatelliteBase
+        sats={sats}
+        onHover={setHovered}
+        onSelect={setSelected}
+      />
+      <SatelliteHalos
+        sats={sats}
+        hovered={hovered}
+        selected={selected}
+      />
     </group>
+  );
+}
+
+const DOT_RADIUS = 0.012;
+const HIT_RADIUS = DOT_RADIUS * 4.2;
+const SKY = palette.accentSky;
+const GOLD = palette.accentGold;
+
+interface SatelliteBaseProps {
+  sats: SatellitePosition[];
+  onHover: (id: string | null) => void;
+  onSelect: (id: string | null) => void;
+}
+
+/** 22 base meshes (visible dot + invisible hit-target). Pure: no
+ *  hover/selection state, so this renders exactly once for the whole
+ *  session. */
+const SatelliteBase = memo(function SatelliteBase({
+  sats,
+  onHover,
+  onSelect,
+}: SatelliteBaseProps) {
+  return (
+    <group>
+      {sats.map((s) => (
+        <group
+          key={s.id}
+          position={s.position}
+          onPointerOver={(e) => {
+            e.stopPropagation();
+            onHover(s.id);
+            document.body.style.cursor = "pointer";
+          }}
+          onPointerOut={(e) => {
+            e.stopPropagation();
+            onHover(null);
+            document.body.style.cursor = "default";
+          }}
+          onClick={(e) => {
+            e.stopPropagation();
+            onSelect(s.id);
+          }}
+        >
+          {/* Visible dot */}
+          <mesh>
+            <sphereGeometry args={[DOT_RADIUS * 0.7, 12, 12]} />
+            <meshBasicMaterial color={SKY} toneMapped={false} />
+          </mesh>
+          {/* Invisible larger hit target for touch */}
+          <mesh visible={false}>
+            <sphereGeometry args={[HIT_RADIUS, 6, 6]} />
+            <meshBasicMaterial transparent opacity={0} />
+          </mesh>
+        </group>
+      ))}
+    </group>
+  );
+});
+
+interface SatelliteHalosProps {
+  sats: SatellitePosition[];
+  hovered: string | null;
+  selected: string | null;
+}
+
+/** Up to 2 halo meshes (one for the hovered sat, one for the
+ *  selected sat). Always two render passes regardless of how many
+ *  satellites exist. */
+function SatelliteHalos({ sats, hovered, selected }: SatelliteHalosProps) {
+  const hoveredSat = hovered ? sats.find((s) => s.id === hovered) : null;
+  const selectedSat = selected ? sats.find((s) => s.id === selected) : null;
+
+  return (
+    <group>
+      {selectedSat && (
+        <Halo position={selectedSat.position} color={GOLD} scale={1.5} opacity={0.34} />
+      )}
+      {hoveredSat && hoveredSat.id !== selected && (
+        <Halo position={hoveredSat.position} color={SKY} scale={1.2} opacity={0.18} />
+      )}
+    </group>
+  );
+}
+
+function Halo({
+  position,
+  color,
+  scale,
+  opacity,
+}: {
+  position: THREE.Vector3;
+  color: string;
+  scale: number;
+  opacity: number;
+}) {
+  return (
+    <mesh position={position} scale={scale}>
+      <sphereGeometry args={[DOT_RADIUS, 12, 12]} />
+      <meshBasicMaterial
+        color={color}
+        transparent
+        opacity={opacity}
+        toneMapped={false}
+        depthWrite={false}
+      />
+    </mesh>
   );
 }

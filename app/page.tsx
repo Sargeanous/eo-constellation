@@ -32,7 +32,7 @@ export default function IntroPage() {
           confirmed §4 override: partner video is supporting evidence,
           never a platform feature, so it does not belong behind the
           cover. The 3D globe carries the cover. */}
-      <Globe autoRotate interactive={false} />
+      <Globe autoRotate interactive={false} bloom={false} />
 
       {/* Vignette so the typography reads against the Earth. */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-deepspace/30 via-transparent to-deepspace" />
@@ -67,7 +67,7 @@ export default function IntroPage() {
           <Button
             asChild
             size="lg"
-            className="bg-gold text-primary-foreground hover:bg-gold/90 px-10 h-14 text-base"
+            className="pulse-gold bg-gold text-primary-foreground hover:bg-gold/90 px-10 h-14 text-base"
           >
             <Link href="/problem" onClick={onBegin}>
               Begin

@@ -25,6 +25,10 @@ interface GlobeProps {
    *  the canvas can show through. The container's bg-deep-space class
    *  still provides the fallback colour if the video errors. */
   transparent?: boolean;
+  /** Mount the bloom postprocess. Defaults to true. The cover screen
+   *  passes false to skip the postprocess pass: bloom matters most on
+   *  /constellation where the satellite dots are the focal point. */
+  bloom?: boolean;
   className?: string;
 }
 
@@ -35,6 +39,7 @@ export function Globe({
   showSatellites = true,
   showAOIs = true,
   transparent = false,
+  bloom = true,
   className,
 }: GlobeProps) {
   return (
@@ -60,7 +65,7 @@ export function Globe({
           showSatellites={showSatellites}
           showAOIs={showAOIs}
         />
-        <GlobeBloom />
+        {bloom && <GlobeBloom />}
       </Canvas>
     </div>
   );

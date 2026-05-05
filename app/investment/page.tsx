@@ -57,8 +57,13 @@ export default function InvestmentPage() {
             <CardHeader>
               <CardTitle>27-month implementation</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-4">
               <Timeline27 />
+              <p className="rounded-md border border-border bg-card/40 px-4 py-3 text-xs italic text-muted-foreground">
+                Critical-path risks: regulatory licensing (M5-M9) and
+                launch-window slippage (M26-M27). Mitigation owned by
+                Phase 1 risk plan.
+              </p>
             </CardContent>
           </Card>
         </motion.div>

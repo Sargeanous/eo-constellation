@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Globe as Globe3D, Layers, Map as MapIcon, BarChart3 } from "lucide-react";
+import { Globe as Globe3D, Layers, Map as MapIcon, BarChart3, ArrowRight } from "lucide-react";
 import { Globe } from "@/components/globe/Globe";
 import { MissionVideo } from "@/components/video/MissionVideo";
 import { ConfigSandbox } from "@/components/sandbox/ConfigSandbox";
@@ -10,6 +10,12 @@ import { MethodologyModal } from "@/components/methodology/MethodologyModal";
 import { AOIPanel } from "@/components/constellation/AOIPanel";
 import { SimulationComparison } from "@/components/constellation/SimulationComparison";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   ToggleGroup,
   ToggleGroupItem,
@@ -79,11 +85,41 @@ export default function ConstellationPage() {
 
         <motion.div
           variants={CHILD_RISE}
-          className="md:col-span-1 flex flex-col items-end justify-end gap-3"
+          className="md:col-span-1 flex flex-col gap-4"
         >
-          <Button asChild>
-            <Link href="/investment">Continue</Link>
-          </Button>
+          <Card className="border-gold/30">
+            <CardHeader>
+              <CardTitle className="font-display">
+                Why this geometry?
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3 text-sm text-muted-foreground">
+              <p>
+                Walker-Delta{" "}
+                <span className="font-mono text-foreground">11P / 2S</span>{" "}
+                at 38° + 3° tolerance, 350 km circular. SAR-only.
+                Counter-countermeasure orbit (non-sun-synchronous) so
+                overpass times stay unpredictable.
+              </p>
+              <p>
+                Four configurations were tested. The cost-optimised
+                22-SAR variant beat the mixed-payload alternatives on
+                MENA average revisit at a fraction of the budget.
+              </p>
+              <button
+                onClick={() => setSimOpen(true)}
+                className="group inline-flex items-center gap-2 text-xs font-mono uppercase tracking-[0.2em] text-gold hover:text-gold/80"
+              >
+                See the four configurations
+                <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+              </button>
+            </CardContent>
+          </Card>
+          <div className="flex justify-end">
+            <Button asChild>
+              <Link href="/investment">See the investment</Link>
+            </Button>
+          </div>
         </motion.div>
       </motion.div>
 
@@ -108,8 +144,9 @@ export default function ConstellationPage() {
         </ToggleGroup>
       </div>
 
-      {/* Bottom-left button stack: methodology (gold) + simulation
-          comparison (muted). AOI inspection happens via tap on the
+      {/* Bottom-left button stack: both phrased as questions MoD might
+          ask. Methodology in gold (primary), simulation comparison
+          muted (secondary). AOI inspection happens via tap on the
           globe markers themselves. */}
       <div className="cinematic-surface fixed bottom-24 left-6 z-40 flex flex-col items-start gap-2">
         <button
@@ -122,11 +159,11 @@ export default function ConstellationPage() {
         </button>
         <button
           className="group inline-flex items-center gap-2 rounded-full border border-border bg-background/80 px-4 py-2 font-display text-xs text-muted-foreground backdrop-blur-md hover:text-foreground"
-          aria-label="Show simulation results"
+          aria-label="Why these numbers?"
           onClick={() => setSimOpen(true)}
         >
           <BarChart3 className="h-3.5 w-3.5" />
-          Show simulation results
+          Why these numbers?
         </button>
       </div>
 

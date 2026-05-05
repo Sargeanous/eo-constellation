@@ -1,7 +1,7 @@
 "use client";
 import { useRef } from "react";
-import { useFrame, useThree } from "@react-three/fiber";
-import { OrbitControls, Stars, useTexture } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
+import { OrbitControls, Stars, Stats, useTexture } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { KernelSize } from "postprocessing";
 import * as THREE from "three";
@@ -11,6 +11,7 @@ import { OrbitTracks } from "./OrbitTracks";
 import { AOIMarkers } from "./AOIMarkers";
 import { SatelliteTooltip } from "./SatelliteTooltip";
 import { MENA_CENTRE } from "@/lib/orbit";
+import { useDemoStore } from "@/lib/store";
 
 interface GlobeSceneProps {
   /** Slow auto-rotation around the Earth's polar axis. Disable on
@@ -38,13 +39,7 @@ export default function GlobeScene({
   const dayMap = useTexture("/textures/earth-day.jpg");
   // sRGB so the Blue Marble doesn't render flat in linear space.
   dayMap.colorSpace = THREE.SRGBColorSpace;
-
-  const { camera } = useThree();
-  // Aim the camera at MENA (lat 25°N, lng 50°E). The orbit math
-  // produces +Z = north pole, so we swap to Three.js's default
-  // +Y up by rotating the whole world group: see <group rotation> below.
-  // MENA_CENTRE in our orbit frame is (x, y, z); after the world rotation
-  // we want it visible roughly centred in front of the camera.
+  const showFps = useDemoStore((s) => s.debug.showFps);
 
   // Slow auto-rotation: Apple-flavoured, never instant. Roughly one
   // revolution per 80 seconds. Disabled when interactive (so OrbitControls
@@ -106,6 +101,7 @@ export default function GlobeScene({
           dampingFactor={0.08}
         />
       )}
+      {showFps && <Stats className="!left-auto !right-4 !top-4" />}
     </>
   );
 }
