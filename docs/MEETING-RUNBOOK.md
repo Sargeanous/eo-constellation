@@ -10,6 +10,22 @@ PRD reference: §11 (iPad-specific notes), §12 Phase 6 (Hardware QA),
 
 ## T-72 hours: build & deploy
 
+### Pre-flight asset check
+
+Before the first `npm run build`, drop in the three asset bundles
+that don't ship in git:
+
+| Asset | Path | Without it |
+|---|---|---|
+| iPad PWA icons (5 PNGs) | `public/icons/` | iOS uses a generic letter glyph on Add-to-Home-Screen |
+| Aptos web fonts (5 `.woff2`) + uncomment `@font-face` block in `app/globals.css` | `public/fonts/` | iPad falls back to Inter (Aptos isn't a system font on iPadOS) |
+| Partner MP4s (orbit_cinematic, ground_tracks, aoi_iran_zoom) | `public/videos/` | flat-map toggle, AOI panel, methodology Reference tab show the placeholder gradient |
+
+READMEs in each folder explain the exact filenames + the
+pwa-asset-generator / Office-fonts-folder / ffmpeg paths.
+
+### Build
+
 ```bash
 git pull origin claude/bootstrap-eo-constellation-RIfbY
 npm install
