@@ -139,6 +139,11 @@ export const COST_USD = {
 export interface SLASubstep {
   name: string;
   durationMin: number;
+  /** Demo-time window of this substep within its parent step's
+   *  demoMs range. Used by the Step 2 sub-animations to drive the
+   *  tasking → revisit → capture/downlink choreography. */
+  startDemoMs: number;
+  endDemoMs: number;
 }
 
 export interface SLAStep {
@@ -183,10 +188,28 @@ export const SLA_STEPS: SLAStep[] = [
     endMissionSeconds: 3_480,
     startDemoMs: 4_000,
     endDemoMs: 54_000,
+    // Substep demoMs windows total to step 2's 4_000–54_000 demo range.
+    // Tasking is short (~3s); revisit is the long beat the Chairman wants
+    // MoD to feel (38s); capture+downlink lands the SAR + bytes (9s).
     substeps: [
-      { name: "Tasking", durationMin: 2 },
-      { name: "Revisit", durationMin: 45 },
-      { name: "Capture & Downlink", durationMin: 8 },
+      {
+        name: "Tasking",
+        durationMin: 2,
+        startDemoMs: 4_000,
+        endDemoMs: 7_000,
+      },
+      {
+        name: "Revisit",
+        durationMin: 45,
+        startDemoMs: 7_000,
+        endDemoMs: 45_000,
+      },
+      {
+        name: "Capture & Downlink",
+        durationMin: 10,
+        startDemoMs: 45_000,
+        endDemoMs: 54_000,
+      },
     ],
   },
   {

@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { MissionTimeline } from "@/components/timeline/MissionTimeline";
+import { MissionRunner } from "@/components/timeline/MissionRunner";
 import { Button } from "@/components/ui/button";
 import { CHILD_RISE, STAGGER_CHILDREN } from "@/components/motion/variants";
 
@@ -22,14 +22,13 @@ export default function MissionPage() {
             The 1-Hour SLA — Live.
           </h1>
           <p className="mt-4 max-w-3xl text-lg text-muted-foreground">
-            Watch this. ~60 seconds of demo represents ~60 minutes of mission.
-            Phase 2 lands the full step-2 substep choreography (alert → tasking
-            → 45-minute revisit → capture → downlink → SAR scene → report PDF).
+            Watch this. ~60 seconds of demo represents ~60 minutes of mission
+            time. The revisit beat is deliberately the long one.
           </p>
         </motion.header>
 
         <motion.div variants={CHILD_RISE}>
-          <MissionTimeline />
+          <MissionRunner />
         </motion.div>
 
         <motion.div variants={CHILD_RISE} className="flex justify-end">
