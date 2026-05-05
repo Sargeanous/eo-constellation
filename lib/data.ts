@@ -132,11 +132,18 @@ export const COST_USD = {
 
 // ────────────────────────────────────────────────────────────────────
 // SLA: the sub-1-hour mission, broken into 4 narrated steps.
-// Total demo budget is 20 seconds (was 60s). The Chairman + Minister
-// won't wait 50s for a single beat, so the revisit (the long one) is
-// 10s now instead of 38s. Mission seconds during the run are no longer
-// fabricated digits: the Stopwatch shows demo-elapsed and the
-// resolution beat lands as "< 1 hour" rather than a fake 58:42.
+//
+// Mission digits tick visibly throughout the run, at variable speed:
+//   Step 1 (intel)              : ~10x   slow ticking, digits readable
+//   Step 2 (tasking + revisit)  : ~215x  fast-forward / time-lapse
+//   Step 3 (analytics)          : ~10x   back to slow
+//   Step 4 (report)             : ~6x    slow
+//
+// Total demo: 4 + 16 + 3 + 2 = 25s. The visible-clock variable speed
+// is what the operator wanted: it shouldn't take less time, it should
+// pace step 2 like a fast-forward. Step 2 stays the longest beat by
+// demo seconds (so the "revisit" wait still feels like a wait) but
+// the clock digits inside that window blur into a time-lapse.
 // ────────────────────────────────────────────────────────────────────
 
 export interface SLASubstep {
@@ -162,54 +169,49 @@ export interface SLAStep {
   substeps?: SLASubstep[];
 }
 
-// Mission-second windows kept as PRD §4 wrote them (for the per-step
-// captions and any subtitle that wants to reference "minutes elapsed
-// in the mission"). The on-screen Stopwatch ticks demo seconds, not
-// these values. Total demo: 2 + 14 + 2.5 + 1.5 = 20s.
-
 export const SLA_STEPS: SLAStep[] = [
   {
     id: 1,
     name: "Situation Awareness & Intel Generation",
     caption: "OSINT + GEOINT fusion. AI agent classifies and prioritizes.",
     boundMinutes: 1,
-    demoSeconds: 2,
+    demoSeconds: 4,
     startMissionSeconds: 0,
     endMissionSeconds: 42,
     startDemoMs: 0,
-    endDemoMs: 2_000,
+    endDemoMs: 4_000,
   },
   {
     id: 2,
     name: "Satellite Tasking & Data Capture",
     caption: "Sovereign tasking, no foreign approval. SAR-07 acknowledged.",
     boundMinutes: 55,
-    demoSeconds: 14,
+    demoSeconds: 16,
     startMissionSeconds: 42,
     endMissionSeconds: 3_480,
-    startDemoMs: 2_000,
-    endDemoMs: 16_000,
-    // Substep demoMs windows total to step 2's 2_000-16_000 demo range.
-    // Revisit shrunk from 38s to 10s: long enough to feel a real wait,
-    // short enough that nobody in the room loses interest.
+    startDemoMs: 4_000,
+    endDemoMs: 20_000,
+    // Substep demoMs windows total step 2's 4_000-20_000 demo range.
+    // Revisit is the longest substep (clock fast-forwards through the
+    // 45-minute revisit window) but the others get visible motion too.
     substeps: [
       {
         name: "Tasking",
         durationMin: 2,
-        startDemoMs: 2_000,
-        endDemoMs: 3_500,
+        startDemoMs: 4_000,
+        endDemoMs: 5_500,
       },
       {
         name: "Revisit",
         durationMin: 45,
-        startDemoMs: 3_500,
-        endDemoMs: 13_500,
+        startDemoMs: 5_500,
+        endDemoMs: 17_000,
       },
       {
         name: "Capture & Downlink",
         durationMin: 10,
-        startDemoMs: 13_500,
-        endDemoMs: 16_000,
+        startDemoMs: 17_000,
+        endDemoMs: 20_000,
       },
     ],
   },
@@ -218,26 +220,26 @@ export const SLA_STEPS: SLAStep[] = [
     name: "Automated Analytics & Validation",
     caption: "Onboard CV models. No human in the loop. No foreign cloud.",
     boundMinutes: 3,
-    demoSeconds: 2.5,
+    demoSeconds: 3,
     startMissionSeconds: 3_480,
     endMissionSeconds: 3_510,
-    startDemoMs: 16_000,
-    endDemoMs: 18_500,
+    startDemoMs: 20_000,
+    endDemoMs: 23_000,
   },
   {
     id: 4,
     name: "Report on Desk/Screen",
     caption: "Branded report, AR + EN, on the desk.",
     boundMinutes: 1,
-    demoSeconds: 1.5,
+    demoSeconds: 2,
     startMissionSeconds: 3_510,
     endMissionSeconds: 3_522,
-    startDemoMs: 18_500,
-    endDemoMs: 20_000,
+    startDemoMs: 23_000,
+    endDemoMs: 25_000,
   },
 ];
 
-export const MISSION_TOTAL_DEMO_MS = 20_000;
+export const MISSION_TOTAL_DEMO_MS = 25_000;
 export const MISSION_TOTAL_SECONDS = 3_522;
 /** Headline result the demo lands on. Phrasing kept deliberately
  *  honest: there is no real mission run, so we don't manufacture a

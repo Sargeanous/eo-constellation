@@ -22,7 +22,7 @@ export default function MissionPage() {
             The 1-Hour SLA: Live.
           </h1>
           <p className="mt-4 max-w-3xl text-lg text-muted-foreground">
-            Watch this. The revisit beat in the middle is the long one — by
+            Watch this. The revisit beat in the middle is the long one: by
             design, so the wait is visible.
           </p>
         </motion.header>

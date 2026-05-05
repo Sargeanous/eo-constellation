@@ -1,4 +1,4 @@
-# EDGE Sovereign EO Constellation — Meeting Runbook
+# EDGE Sovereign EO Constellation: Meeting Runbook
 
 The day-of operator's checklist. Run through this before the room
 opens and again when you sit down with the iPad.
@@ -64,7 +64,7 @@ Deploy options:
 
 ### Install path on the iPad
 
-1. Open Safari (not Chrome — only Safari supports the manifest's
+1. Open Safari (not Chrome: only Safari supports the manifest's
    landscape-locked standalone mode on iPadOS).
 2. Visit the deploy URL.
 3. Tap the **Share** icon → **Add to Home Screen**.
@@ -107,7 +107,7 @@ re-deploy, re-install on the iPad. Serwist will re-precache.
   - Open the rehearsal hamburger → flip **Audio** ON.
   - Tap Run Mission once in rehearsal to confirm the chime fires
     (Tone.js needs the user gesture to start its AudioContext, so
-    the toggle alone is insufficient — a tap arms it).
+    the toggle alone is insufficient: a tap arms it).
   - iPad ringer must not be on silent.
 - Vibration: iPad Safari does not implement `navigator.vibrate`;
   the haptic on Run Mission is a no-op there. Expected.
@@ -125,7 +125,7 @@ re-deploy, re-install on the iPad. Serwist will re-precache.
 
 - Wake the iPad. Confirm:
   - Battery > 50%, or plugged in.
-  - Wi-Fi off (or on if you're showing a live element — but
+  - Wi-Fi off (or on if you're showing a live element: but
     everything in this demo is static so off is safer).
   - iPad in landscape; OrientationGate refuses portrait.
   - Home-screen-launched, not Safari-launched (no URL bar visible).
@@ -146,7 +146,7 @@ re-deploy, re-install on the iPad. Serwist will re-precache.
   ask methodology questions next. Tap "How was this designed?" on
   `/constellation` to open the modal. The Reference tab is where
   partner-supplied evidence lives.
-- If MoD asks "is the Iran zoom from your platform?" — answer no:
+- If MoD asks "is the Iran zoom from your platform?": answer no:
   it's STAR.VISION simulation reference. The header bar says so
   explicitly.
 
@@ -170,7 +170,7 @@ re-deploy, re-install on the iPad. Serwist will re-precache.
 | AOI panel opens to a blank video | The partner MP4 isn't in the precache. Either the file wasn't dropped before install, or naming is off. Close panel; AOI markers still inspectable on the globe. |
 | iPad battery warning | Plug in. The cable is in your bag. |
 | Wi-Fi drops mid-demo | No-op. Everything is precached. |
-| Stopwatch shows fake-looking digits | Won't happen — we removed the fabricated mission clock. The demo elapsed counter is honest seconds. |
+| Stopwatch shows fake-looking digits | Won't happen: we removed the fabricated mission clock. The demo elapsed counter is honest seconds. |
 
 ---
 

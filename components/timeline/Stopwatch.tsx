@@ -1,20 +1,24 @@
 "use client";
 import { useDemoStore } from "@/lib/store";
 import {
+  SLA_STEPS,
   MISSION_TOTAL_DEMO_MS,
   FINAL_MISSION_TIME,
 } from "@/lib/data";
 
-// Stopwatch with a thin gold progress ring. Mono digits, tabular-nums
-// so the digits don't shift width while ticking. Reads
-// missionElapsedMs and missionPhase from the store, owns no time of
-// its own.
+// Stopwatch with a thin gold progress ring.
 //
-// What the stopwatch shows during a run is honest demo-elapsed time
-// (00.0s ... 20.0s), not a fabricated mission clock. The
-// "< 1 hour" landing only appears at the end. Source: PRD §16 plus
-// the directive that the platform must not invent precise mission
-// numbers (no real run yet).
+// During the run, the digits are interpolated MISSION-time minute:second
+// values. The interpolation is linear within each step, so by design
+// the digits tick slowly during steps 1, 3, 4 (where the per-step
+// mission window is short) and fast-forward during step 2 (where the
+// 45-minute revisit window is compressed into ~12 demo seconds).
+// That variable pace is the visual point: the Chairman sees the
+// clock fast-forward through the wait that historically took days.
+//
+// At completion, the digits are replaced by "< 1 hour": we don't
+// manufacture a precise minute:second number for a demo with no
+// real run behind it.
 
 interface StopwatchProps {
   /** Diameter in px. Default 180; final-beat instances pass larger. */
@@ -23,14 +27,47 @@ interface StopwatchProps {
   forceDisplay?: string;
 }
 
+function activeStep(elapsedMs: number) {
+  return (
+    SLA_STEPS.find(
+      (s) => elapsedMs >= s.startDemoMs && elapsedMs < s.endDemoMs,
+    ) ?? null
+  );
+}
+
+function formatMmSs(totalSec: number): string {
+  const t = Math.max(0, Math.floor(totalSec));
+  const m = Math.floor(t / 60).toString().padStart(2, "0");
+  const s = (t % 60).toString().padStart(2, "0");
+  return `${m}:${s}`;
+}
+
+/** Mission seconds for the current demo elapsed. Interpolates within
+ *  whichever step is active. Each step's local linear ramp produces
+ *  the variable visible speed (slow → fast → slow → slow). */
+function computeMissionSec(elapsedMs: number): number {
+  const step = activeStep(elapsedMs);
+  if (!step) {
+    if (elapsedMs >= MISSION_TOTAL_DEMO_MS) {
+      return SLA_STEPS[SLA_STEPS.length - 1]!.endMissionSeconds;
+    }
+    return 0;
+  }
+  const t =
+    (elapsedMs - step.startDemoMs) / (step.endDemoMs - step.startDemoMs);
+  return (
+    step.startMissionSeconds +
+    t * (step.endMissionSeconds - step.startMissionSeconds)
+  );
+}
+
 export function Stopwatch({ size = 180, forceDisplay }: StopwatchProps) {
   const elapsed = useDemoStore((s) => s.missionElapsedMs);
   const phase = useDemoStore((s) => s.missionPhase);
   const finished = phase === "delivered";
 
-  // Demo-time display: seconds.tenths until completion, then "< 1 hour".
-  const elapsedSec = elapsed / 1000;
-  const liveDisplay = `${elapsedSec.toFixed(1)}s`;
+  const missionSec = computeMissionSec(elapsed);
+  const liveDisplay = formatMmSs(missionSec);
   const display =
     forceDisplay ?? (finished ? FINAL_MISSION_TIME : liveDisplay);
 
@@ -40,7 +77,8 @@ export function Stopwatch({ size = 180, forceDisplay }: StopwatchProps) {
   const r = size / 2 - 6;
   const circumference = 2 * Math.PI * r;
   const offset = circumference * (1 - progress);
-  // Final phrase is wider than a number; scale font down so it fits.
+  // Final phrase ("< 1 hour") is wider than digits; scale down so it
+  // fits the same ring.
   const fontSize = finished
     ? Math.round(size * 0.16)
     : Math.round(size * 0.22);
@@ -88,7 +126,7 @@ export function Stopwatch({ size = 180, forceDisplay }: StopwatchProps) {
           {display}
         </span>
         <span className="mt-1 font-mono text-[9px] uppercase tracking-[0.3em] text-muted-foreground">
-          {finished ? "result" : "demo elapsed"}
+          {finished ? "result" : "mission clock"}
         </span>
       </div>
     </div>
