@@ -131,9 +131,12 @@ export const COST_USD = {
 } as const;
 
 // ────────────────────────────────────────────────────────────────────
-// SLA: the 1-hour mission, broken into 4 narrated steps.
-// demoSeconds defines the compressed-time budget on screen 3.
-// Sum of demoSeconds is 60 (per §13.1, locked).
+// SLA: the sub-1-hour mission, broken into 4 narrated steps.
+// Total demo budget is 20 seconds (was 60s). The Chairman + Minister
+// won't wait 50s for a single beat, so the revisit (the long one) is
+// 10s now instead of 38s. Mission seconds during the run are no longer
+// fabricated digits: the Stopwatch shows demo-elapsed and the
+// resolution beat lands as "< 1 hour" rather than a fake 58:42.
 // ────────────────────────────────────────────────────────────────────
 
 export interface SLASubstep {
@@ -159,12 +162,10 @@ export interface SLAStep {
   substeps?: SLASubstep[];
 }
 
-// Real timing (mission seconds, integer):
-// Step 1 ends at 0:42 (42s)
-// Step 2 ends at 58:00 (3480s) : internal: tasking 0:42→3:00, revisit 3:00→48:00, capture/downlink 48:00→58:00
-// Step 3 ends at 58:30 (3510s)
-// Step 4 ends at 58:42 (3522s)
-// Demo timing (demo ms): step 1 = 4s, step 2 = 50s, step 3 = 4s, step 4 = 2s: total 60s.
+// Mission-second windows kept as PRD §4 wrote them (for the per-step
+// captions and any subtitle that wants to reference "minutes elapsed
+// in the mission"). The on-screen Stopwatch ticks demo seconds, not
+// these values. Total demo: 2 + 14 + 2.5 + 1.5 = 20s.
 
 export const SLA_STEPS: SLAStep[] = [
   {
@@ -172,43 +173,43 @@ export const SLA_STEPS: SLAStep[] = [
     name: "Situation Awareness & Intel Generation",
     caption: "OSINT + GEOINT fusion. AI agent classifies and prioritizes.",
     boundMinutes: 1,
-    demoSeconds: 4,
+    demoSeconds: 2,
     startMissionSeconds: 0,
     endMissionSeconds: 42,
     startDemoMs: 0,
-    endDemoMs: 4_000,
+    endDemoMs: 2_000,
   },
   {
     id: 2,
     name: "Satellite Tasking & Data Capture",
     caption: "Sovereign tasking, no foreign approval. SAR-07 acknowledged.",
     boundMinutes: 55,
-    demoSeconds: 50,
+    demoSeconds: 14,
     startMissionSeconds: 42,
     endMissionSeconds: 3_480,
-    startDemoMs: 4_000,
-    endDemoMs: 54_000,
-    // Substep demoMs windows total to step 2's 4_000-54_000 demo range.
-    // Tasking is short (~3s); revisit is the long beat the Chairman wants
-    // MoD to feel (38s); capture+downlink lands the SAR + bytes (9s).
+    startDemoMs: 2_000,
+    endDemoMs: 16_000,
+    // Substep demoMs windows total to step 2's 2_000-16_000 demo range.
+    // Revisit shrunk from 38s to 10s: long enough to feel a real wait,
+    // short enough that nobody in the room loses interest.
     substeps: [
       {
         name: "Tasking",
         durationMin: 2,
-        startDemoMs: 4_000,
-        endDemoMs: 7_000,
+        startDemoMs: 2_000,
+        endDemoMs: 3_500,
       },
       {
         name: "Revisit",
         durationMin: 45,
-        startDemoMs: 7_000,
-        endDemoMs: 45_000,
+        startDemoMs: 3_500,
+        endDemoMs: 13_500,
       },
       {
         name: "Capture & Downlink",
         durationMin: 10,
-        startDemoMs: 45_000,
-        endDemoMs: 54_000,
+        startDemoMs: 13_500,
+        endDemoMs: 16_000,
       },
     ],
   },
@@ -217,30 +218,34 @@ export const SLA_STEPS: SLAStep[] = [
     name: "Automated Analytics & Validation",
     caption: "Onboard CV models. No human in the loop. No foreign cloud.",
     boundMinutes: 3,
-    demoSeconds: 4,
+    demoSeconds: 2.5,
     startMissionSeconds: 3_480,
     endMissionSeconds: 3_510,
-    startDemoMs: 54_000,
-    endDemoMs: 58_000,
+    startDemoMs: 16_000,
+    endDemoMs: 18_500,
   },
   {
     id: 4,
     name: "Report on Desk/Screen",
     caption: "Branded report, AR + EN, on the desk.",
     boundMinutes: 1,
-    demoSeconds: 2,
+    demoSeconds: 1.5,
     startMissionSeconds: 3_510,
     endMissionSeconds: 3_522,
-    startDemoMs: 58_000,
-    endDemoMs: 60_000,
+    startDemoMs: 18_500,
+    endDemoMs: 20_000,
   },
 ];
 
-export const MISSION_TOTAL_DEMO_MS = 60_000;
+export const MISSION_TOTAL_DEMO_MS = 20_000;
 export const MISSION_TOTAL_SECONDS = 3_522;
-export const FINAL_MISSION_TIME = "58:42";
+/** Headline result the demo lands on. Phrasing kept deliberately
+ *  honest: there is no real mission run, so we don't manufacture a
+ *  precise minute:second number. */
+export const FINAL_MISSION_TIME = "< 1 hour";
 export const STATUS_QUO_HOURS = 72;
-export const SPEEDUP_PCT = 7388;
+/** One-line tagline that replaces the "7,388% faster" line. */
+export const RESULT_TAGLINE = "End-to-end intelligence cycle, in under one hour.";
 
 // ────────────────────────────────────────────────────────────────────
 // Areas of Interest.

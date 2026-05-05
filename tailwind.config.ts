@@ -10,15 +10,33 @@ export default {
   theme: {
     container: { center: true, padding: "1.5rem", screens: { "2xl": "1400px" } },
     extend: {
+      // Aptos preempts the Google fallbacks. On a machine that has
+      // Microsoft Office (or self-hosted Aptos web fonts via
+      // public/fonts/), the browser picks Aptos. Everywhere else we
+      // fall back to the next/font/google stack so the layout never
+      // breaks. See public/fonts/README.txt for the self-host path
+      // (required if the meeting iPad doesn't already have Aptos).
       fontFamily: {
-        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        sans: [
+          "Aptos",
+          "var(--font-sans)",
+          "system-ui",
+          "sans-serif",
+        ],
         display: [
+          "Aptos Display",
+          "Aptos",
           "var(--font-display)",
           "var(--font-sans)",
           "system-ui",
           "sans-serif",
         ],
-        mono: ["var(--font-mono)", "ui-monospace", "monospace"],
+        mono: [
+          "Aptos Mono",
+          "var(--font-mono)",
+          "ui-monospace",
+          "monospace",
+        ],
       },
       colors: {
         border: "hsl(var(--border))",

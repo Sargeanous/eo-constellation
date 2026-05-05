@@ -17,9 +17,11 @@ import { Step4Report } from "./Step4Report";
 import { FinalBeat } from "./FinalBeat";
 import { chime } from "@/lib/audio";
 
-// Phase 2: the centrepiece. Single button drives a 60s compressed
-// timeline that animates four steps in sequence and lands on a frozen
-// 58:42 with a status-quo comparison. PRD §4.
+// Phase 2: the centrepiece. Single button drives a 20s compressed
+// timeline that animates four steps in sequence and lands on
+// "< 1 hour" plus a status-quo comparison. PRD §4 (timing tuned per
+// operator feedback: 60s was too long for a Chairman + Minister to
+// sit through, fabricated 58:42 was unprofessional).
 //
 // Architecture:
 //   - Store owns the clock (missionElapsedMs) and phase. We read both

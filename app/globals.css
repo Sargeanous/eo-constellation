@@ -2,6 +2,47 @@
 @tailwind components;
 @tailwind utilities;
 
+/* APTOS SELF-HOST: uncomment when public/fonts/Aptos*.woff2 are in
+   place. Without these files, the platform falls back to Inter via
+   the Tailwind font-family stack. See public/fonts/README.txt. */
+/*
+@font-face {
+  font-family: "Aptos";
+  src: url("/fonts/Aptos.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Aptos";
+  src: url("/fonts/Aptos-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Aptos Display";
+  src: url("/fonts/AptosDisplay.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Aptos Display";
+  src: url("/fonts/AptosDisplay-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Aptos Mono";
+  src: url("/fonts/AptosMono.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+*/
+
 html {
   -webkit-tap-highlight-color: transparent;
 }

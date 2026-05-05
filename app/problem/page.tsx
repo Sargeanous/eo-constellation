@@ -9,7 +9,7 @@ import {
   EOC_TIMELINE,
   STATUS_QUO_HOURS,
   FINAL_MISSION_TIME,
-  SPEEDUP_PCT,
+  RESULT_TAGLINE,
   palette,
 } from "@/lib/data";
 
@@ -38,10 +38,8 @@ function hoursToWidth(h: number): number {
 }
 
 export default function ProblemPage() {
-  const statusQuoEnd = STATUS_QUO_HOURS;
   const eocEnd =
     EOC_TIMELINE[EOC_TIMELINE.length - 1]?.hours[1] ?? 1;
-  const eocPercent = ((eocEnd / statusQuoEnd) * 100).toFixed(2);
 
   const totalRows = 2;
   const svgH = SVG_BAR_GAP * 3 + SVG_BAR_H * totalRows + 40;
@@ -64,7 +62,7 @@ export default function ProblemPage() {
             EO-CONSTELLATION.
           </h1>
           <p className="mt-4 max-w-3xl text-lg text-muted-foreground">
-            You&apos;ve tried this before. Here&apos;s why it failed: and why
+            You&apos;ve tried this before. Here&apos;s why it failed, and why
             this time is different.
           </p>
         </motion.header>
@@ -78,7 +76,7 @@ export default function ProblemPage() {
             <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
               Status quo
             </p>
-            <p className="mt-1 tabular font-mono text-5xl font-semibold text-muted-foreground md:text-6xl">
+            <p className="mt-1 font-display text-5xl font-semibold text-muted-foreground md:text-6xl">
               {STATUS_QUO_HOURS}+ h
             </p>
           </div>
@@ -87,13 +85,12 @@ export default function ProblemPage() {
             <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
               EO-CONSTELLATION
             </p>
-            <p className="mt-1 tabular font-mono text-5xl font-semibold text-gold md:text-6xl">
+            <p className="mt-1 font-display text-5xl font-semibold text-gold md:text-6xl">
               {FINAL_MISSION_TIME}
             </p>
           </div>
           <p className="md:col-span-3 text-center font-display text-base text-amber md:text-lg">
-            EO-CONSTELLATION is {eocPercent}% the duration. You are{" "}
-            {SPEEDUP_PCT.toLocaleString()}% faster.
+            {RESULT_TAGLINE}
           </p>
         </motion.div>
 
@@ -198,7 +195,7 @@ export default function ProblemPage() {
                 fill={palette.accentGold}
                 opacity="0.85"
               >
-                EO-CONSTELLATION · 58:42
+                EO-CONSTELLATION · UNDER 1 HOUR
               </text>
               {EOC_TIMELINE.map((seg, i) => {
                 const x = hoursToX(seg.hours[0]);
@@ -234,7 +231,7 @@ export default function ProblemPage() {
                 fontFamily="ui-monospace, monospace"
                 fill={palette.accentGold}
               >
-                {eocPercent}% of status-quo width
+                a sliver, on the same scale
               </text>
             </g>
           </svg>

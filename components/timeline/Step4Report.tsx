@@ -114,7 +114,7 @@ export function Step4Report() {
               <p className="font-mono text-[8px] uppercase tracking-[0.25em] text-[#0F172A]/60">
                 End-to-end
               </p>
-              <p className="tabular font-mono text-[14px] font-semibold text-[#0F172A]">
+              <p className="font-display text-[14px] font-semibold text-[#0F172A]">
                 {FINAL_MISSION_TIME}
               </p>
             </div>
