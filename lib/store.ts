@@ -38,6 +38,14 @@ interface DemoState {
   ctaMode: CtaMode;
   setCtaMode: (m: CtaMode) => void;
 
+  /** /constellation tap-to-inspect selection. Null when nothing is
+   *  selected. Setting one clears the other so the satellite tooltip
+   *  and the AOI side panel can never both be open. */
+  selectedSatId: string | null;
+  selectedAOIId: string | null;
+  setSelectedSat: (id: string | null) => void;
+  setSelectedAOI: (id: string | null) => void;
+
   /** Debug flags surfaced via the rehearsal hamburger. */
   debug: {
     showFps: boolean;
@@ -85,6 +93,13 @@ export const useDemoStore = create<DemoState>((set) => ({
     }
     set({ ctaMode: m });
   },
+
+  selectedSatId: null,
+  selectedAOIId: null,
+  setSelectedSat: (id) =>
+    set({ selectedSatId: id, selectedAOIId: id ? null : undefined }),
+  setSelectedAOI: (id) =>
+    set({ selectedAOIId: id, selectedSatId: id ? null : undefined }),
 
   debug: { showFps: false },
   setDebug: (patch) => set((s) => ({ debug: { ...s.debug, ...patch } })),

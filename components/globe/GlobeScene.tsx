@@ -9,6 +9,7 @@ import { Atmosphere } from "./Atmosphere";
 import { Satellites } from "./Satellites";
 import { OrbitTracks } from "./OrbitTracks";
 import { AOIMarkers } from "./AOIMarkers";
+import { SatelliteTooltip } from "./SatelliteTooltip";
 import { MENA_CENTRE } from "@/lib/orbit";
 
 interface GlobeSceneProps {
@@ -88,6 +89,9 @@ export default function GlobeScene({
           {showOrbits && <OrbitTracks />}
           {showSatellites && <Satellites />}
           {showAOIs && <AOIMarkers />}
+          {/* Tooltip lives in the same rotated group so it tracks the
+              selected satellite under camera moves. */}
+          {interactive && showSatellites && <SatelliteTooltip />}
           <Atmosphere />
         </group>
       </group>

@@ -2,12 +2,13 @@
 import Link from "next/link";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Globe as Globe3D, Layers, MapPin, Map as MapIcon } from "lucide-react";
+import { Globe as Globe3D, Layers, Map as MapIcon, BarChart3 } from "lucide-react";
 import { Globe } from "@/components/globe/Globe";
 import { MissionVideo } from "@/components/video/MissionVideo";
 import { ConfigSandbox } from "@/components/sandbox/ConfigSandbox";
 import { MethodologyModal } from "@/components/methodology/MethodologyModal";
-import { AOIReferenceDialog } from "@/components/constellation/AOIReferenceDialog";
+import { AOIPanel } from "@/components/constellation/AOIPanel";
+import { SimulationComparison } from "@/components/constellation/SimulationComparison";
 import { Button } from "@/components/ui/button";
 import {
   ToggleGroup,
@@ -20,7 +21,7 @@ type Surface = "globe" | "flat";
 export default function ConstellationPage() {
   const [surface, setSurface] = useState<Surface>("globe");
   const [methodOpen, setMethodOpen] = useState(false);
-  const [aoiRefOpen, setAoiRefOpen] = useState(false);
+  const [simOpen, setSimOpen] = useState(false);
 
   return (
     <main className="relative min-h-screen overflow-hidden">
@@ -66,9 +67,9 @@ export default function ConstellationPage() {
             22 satellites. 350 km. 38 degrees.
           </h1>
           <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-            Counter-countermeasure orbit. SAR-only. Sovereign by design.
-            Phase 3 adds tap-to-inspect satellites + AOIs and the simulation
-            comparison panel.
+            Counter-countermeasure orbit. SAR-only. Sovereign by design. Tap a
+            satellite for details. Tap an AOI for daily passes and the next
+            three overhead.
           </p>
         </motion.header>
 
@@ -87,8 +88,8 @@ export default function ConstellationPage() {
       </motion.div>
 
       {/* Surface toggle — globe vs flat ground tracks. Bottom-right
-          so it doesn't collide with the methodology button (Phase
-          modal work) which lives bottom-left. */}
+          so it doesn't collide with the methodology + simulation
+          buttons (bottom-left). */}
       <div className="cinematic-surface fixed bottom-24 right-6 z-40 rounded-full border border-border bg-background/80 p-1 backdrop-blur-md">
         <ToggleGroup
           type="single"
@@ -107,9 +108,9 @@ export default function ConstellationPage() {
         </ToggleGroup>
       </div>
 
-      {/* "How was this designed?" entry — opens the full-screen
-          methodology modal (Q1 confirmed: full-screen modal, Q2: text
-          button, Q3: static SVG only). */}
+      {/* Bottom-left button stack — methodology (gold) + simulation
+          comparison (muted). AOI inspection happens via tap on the
+          globe markers themselves. */}
       <div className="cinematic-surface fixed bottom-24 left-6 z-40 flex flex-col items-start gap-2">
         <button
           className="group inline-flex items-center gap-2 rounded-full border border-gold/40 bg-background/80 px-4 py-2 font-display text-sm text-gold backdrop-blur-md hover:border-gold"
@@ -121,16 +122,17 @@ export default function ConstellationPage() {
         </button>
         <button
           className="group inline-flex items-center gap-2 rounded-full border border-border bg-background/80 px-4 py-2 font-display text-xs text-muted-foreground backdrop-blur-md hover:text-foreground"
-          aria-label="Tehran reference pass"
-          onClick={() => setAoiRefOpen(true)}
+          aria-label="Show simulation results"
+          onClick={() => setSimOpen(true)}
         >
-          <MapPin className="h-3.5 w-3.5" />
-          Tehran reference pass
+          <BarChart3 className="h-3.5 w-3.5" />
+          Show simulation results
         </button>
       </div>
 
       <MethodologyModal open={methodOpen} onOpenChange={setMethodOpen} />
-      <AOIReferenceDialog open={aoiRefOpen} onOpenChange={setAoiRefOpen} />
+      <SimulationComparison open={simOpen} onOpenChange={setSimOpen} />
+      <AOIPanel />
     </main>
   );
 }

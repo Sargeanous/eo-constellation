@@ -134,3 +134,73 @@ export const AOI_VECTORS = AOIS.map((a) => ({
  * MENA-face-on camera target. Roughly centred on (lat 25°N, lng 50°E).
  */
 export const MENA_CENTRE = aoiToVector(25, 50);
+
+// ────────────────────────────────────────────────────────────────────
+// Tap-to-inspect helpers (Phase 3).
+// PRD §14: real Keplerian propagation, no SGP4. Sub-satellite-point
+// math is the inverse of `aoiToVector`. Next-pass timings are
+// deterministic plausible stubs — not real propagation. They read as
+// sub-hour SLA evidence and stay stable across clicks (so the same
+// AOI always shows the same next 3 passes inside one session).
+// ────────────────────────────────────────────────────────────────────
+
+const DEG_TO_DEG = 180 / Math.PI;
+
+export function positionToLatLng(v: THREE.Vector3): {
+  lat: number;
+  lng: number;
+} {
+  // Inverse of `aoiToVector` — assumes v is in the orbit frame
+  // (Z = north pole), which is how SatellitePosition.position is stored.
+  const norm = v.clone().normalize();
+  const lat = 90 - Math.acos(norm.z) * DEG_TO_DEG;
+  const lng = Math.atan2(norm.y, norm.x) * DEG_TO_DEG;
+  return { lat, lng };
+}
+
+function hashString(s: string): number {
+  let h = 2_166_136_261;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16_777_619) >>> 0;
+  }
+  return h;
+}
+
+export interface NextPass {
+  satId: string;
+  etaMin: number;
+}
+
+/**
+ * 3 deterministic plausible "next pass" entries for an AOI. Stays
+ * stable for a given aoiId — same input, same output, always.
+ */
+export function nextPassesForAOI(aoiId: string, count = 3): NextPass[] {
+  const seed = hashString(aoiId);
+  const passes: NextPass[] = [];
+  for (let i = 0; i < count; i++) {
+    const satIdx = ((seed >>> (i * 4)) % 22) + 1;
+    const etaBase = 6 + ((seed >>> (i * 5)) % 18);
+    const eta = etaBase + i * 19;
+    passes.push({
+      satId: `EDGE-SAR-${satIdx.toString().padStart(2, "0")}`,
+      etaMin: eta,
+    });
+  }
+  return passes;
+}
+
+/**
+ * For a given satellite, the next AOI it'll image. Deterministic.
+ */
+export function nextAOIForSat(satId: string): {
+  aoiId: string;
+  aoiName: string;
+  etaMin: number;
+} {
+  const seed = hashString(satId);
+  const aoi = AOIS[seed % AOIS.length]!;
+  const eta = 7 + (seed % 28);
+  return { aoiId: aoi.id, aoiName: aoi.name, etaMin: eta };
+}
