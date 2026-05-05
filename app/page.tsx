@@ -2,7 +2,6 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Globe } from "@/components/globe/Globe";
-import { MissionVideo } from "@/components/video/MissionVideo";
 import { Button } from "@/components/ui/button";
 import { useDemoStore } from "@/lib/store";
 import { enableAudio } from "@/lib/audio";
@@ -29,22 +28,13 @@ export default function IntroPage() {
 
   return (
     <main className="relative h-screen w-screen overflow-hidden">
-      {/* Background video layer — partner orbit cinematic, low opacity.
-          Falls through to a placeholder loop until the corrected MP4
-          (22 SAR / 350 km / 38°) lands. preload="metadata" because this
-          is the cover screen and the network warm-up cost is tolerable. */}
-      <MissionVideo
-        videoId="cover_orbit_cinematic"
-        background
-        preload="metadata"
-        className="!absolute inset-0 h-full w-full"
-      />
+      {/* Cover frames platform identity, not partner footage. Per
+          confirmed §4 override: partner video is supporting evidence,
+          never a platform feature, so it does not belong behind the
+          cover. The 3D globe carries the cover. */}
+      <Globe autoRotate interactive={false} />
 
-      {/* The 3D globe sits above the video with a transparent canvas
-          so the loop reads through. */}
-      <Globe autoRotate interactive={false} transparent />
-
-      {/* Vignette so the typography reads against the Earth + video. */}
+      {/* Vignette so the typography reads against the Earth. */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-deepspace/30 via-transparent to-deepspace" />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-deepspace/40 via-transparent to-deepspace/40" />
 

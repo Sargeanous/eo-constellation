@@ -36,6 +36,13 @@ interface MissionVideoProps {
   fit?: "cover" | "contain";
   /** ARIA label for screen readers; videos are decorative by default. */
   ariaLabel?: string;
+  /** Attribution chip overlaid in the corner. Pass when the clip is
+   *  partner / third-party reference material so the platform never
+   *  presents external footage as its own output. Defence customers
+   *  read uncredited footage as a credibility tell. Position defaults
+   *  to bottom-left to clear the typography we usually layer top. */
+  attribution?: string;
+  attributionPlacement?: "top-left" | "top-right" | "bottom-left" | "bottom-right";
 }
 
 export function MissionVideo({
@@ -46,6 +53,8 @@ export function MissionVideo({
   forcePlaceholder,
   fit = "cover",
   ariaLabel,
+  attribution,
+  attributionPlacement = "bottom-left",
 }: MissionVideoProps) {
   const entry = VIDEOS[videoId];
   const containerRef = useRef<HTMLDivElement>(null);
@@ -111,7 +120,35 @@ export function MissionVideo({
         />
       )}
       {!showVideo && <Placeholder />}
+      {attribution && <Attribution text={attribution} placement={attributionPlacement} />}
     </div>
+  );
+}
+
+const PLACEMENT_CLASSES: Record<NonNullable<MissionVideoProps["attributionPlacement"]>, string> = {
+  "top-left": "top-3 left-3",
+  "top-right": "top-3 right-3",
+  "bottom-left": "bottom-3 left-3",
+  "bottom-right": "bottom-3 right-3",
+};
+
+function Attribution({
+  text,
+  placement,
+}: {
+  text: string;
+  placement: NonNullable<MissionVideoProps["attributionPlacement"]>;
+}) {
+  return (
+    <span
+      className={cn(
+        "pointer-events-none absolute z-10 inline-flex items-center gap-1.5 rounded-full border border-border/80 bg-background/70 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground backdrop-blur-md",
+        PLACEMENT_CLASSES[placement],
+      )}
+    >
+      <span className="h-1.5 w-1.5 rounded-full bg-gold/80" aria-hidden />
+      {text}
+    </span>
   );
 }
 

@@ -22,18 +22,30 @@ export default function ConstellationPage() {
 
   return (
     <main className="relative min-h-screen overflow-hidden">
-      {/* Background surface — 3D globe or flat ground-tracks loop. The
-          flat map is a partner-supplied video; until it lands, the
-          MissionVideo placeholder fills the slot. */}
+      {/* Background surface — 3D globe (canonical platform output) or
+          flat ground-tracks loop (partner reference). The flat-map
+          mode renders an explicit attribution chip and a header bar so
+          the video reads as supporting evidence, never as a platform
+          feature (§4 override decision, 2026-05-05). */}
       <div className="absolute inset-0 opacity-80">
         {surface === "globe" ? (
           <Globe interactive autoRotate={false} />
         ) : (
-          <MissionVideo
-            videoId="ground_tracks_flat"
-            preload="metadata"
-            className="!absolute inset-0 h-full w-full"
-          />
+          <>
+            <div className="pointer-events-none absolute left-0 right-0 top-0 z-20 border-b border-gold/30 bg-background/85 px-6 py-2 backdrop-blur-md">
+              <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-muted-foreground">
+                <span className="mr-2 text-gold">●</span>
+                Partner reference · STAR.VISION simulation · not platform output
+              </p>
+            </div>
+            <MissionVideo
+              videoId="ground_tracks_flat"
+              preload="metadata"
+              className="!absolute inset-0 h-full w-full"
+              attribution="STAR.VISION simulation"
+              attributionPlacement="bottom-right"
+            />
+          </>
         )}
       </div>
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-background via-background/70 to-transparent" />
