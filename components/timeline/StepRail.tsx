@@ -33,10 +33,12 @@ export function StepRail() {
             key={s.id}
             animate={{
               opacity: active ? 1 : passed ? 0.75 : 0.4,
+              scale: active ? 1.02 : 1,
             }}
+            transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
             className={`relative overflow-hidden rounded-md border px-3 py-3 ${
               active
-                ? "border-gold bg-gold/10"
+                ? "border-gold bg-gold/10 shadow-[0_0_20px_-8px_hsl(var(--gold-500)/0.6)]"
                 : passed
                   ? "border-border bg-card"
                   : "border-border bg-background"

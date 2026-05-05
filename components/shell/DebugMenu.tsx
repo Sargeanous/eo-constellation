@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import * as THREE from "three";
 import { Menu } from "lucide-react";
+import { toast } from "sonner";
 import {
   Sheet,
   SheetContent,
@@ -51,8 +52,9 @@ export function DebugMenu() {
           reject(new Error("preWarm failed")),
         );
       });
+      toast.success("Globe textures pre-warmed");
     } catch {
-      /* ignore: texture preload is best-effort */
+      toast.error("Pre-warm failed (textures will load on first view)");
     } finally {
       setPreWarming(false);
     }

@@ -5,6 +5,7 @@ import { Dock } from "@/components/shell/Dock";
 import { OrientationGate } from "@/components/shell/OrientationGate";
 import { PageTransition } from "@/components/motion/PageTransition";
 import { DebugMenu } from "@/components/shell/DebugMenu";
+import { Toaster } from "@/components/ui/sonner";
 
 const display = Space_Grotesk({
   subsets: ["latin"],
@@ -57,6 +58,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <PageTransition>{children}</PageTransition>
           <Dock />
           <DebugMenu />
+          <Toaster position="top-center" />
         </OrientationGate>
       </body>
     </html>

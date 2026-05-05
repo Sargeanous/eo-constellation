@@ -15,7 +15,7 @@ import { Step2Capture } from "./Step2Capture";
 import { Step3Analytics } from "./Step3Analytics";
 import { Step4Report } from "./Step4Report";
 import { FinalBeat } from "./FinalBeat";
-import { chime } from "@/lib/audio";
+import { chime, tick } from "@/lib/audio";
 
 // Phase 2: the centrepiece. Single button drives a 20s compressed
 // timeline that animates four steps in sequence and lands on
@@ -52,6 +52,9 @@ export function MissionRunner() {
   const rafRef = useRef<number | null>(null);
   const lastRef = useRef<number | null>(null);
   const chimedRef = useRef(false);
+  // Last step id we fired a tick for, so we don't double-fire across
+  // re-renders within the same step.
+  const tickedStepRef = useRef<StepId | null>(null);
 
   const isRunning = phase !== "idle" && phase !== "delivered";
 
@@ -78,8 +81,14 @@ export function MissionRunner() {
   // Map step id → store phase string; we don't strictly need the store
   // phase to drive the rail (rail reads elapsed directly), but the
   // store phase is what gates the RAF loop and the dock highlights.
+  // We also fire a soft Tone tick on each NEW step entry so the audio
+  // has rhythm beyond the single closing chime (only audible if the
+  // rehearsal hamburger has armed audio).
   useEffect(() => {
-    if (phase === "idle") return;
+    if (phase === "idle") {
+      tickedStepRef.current = null;
+      return;
+    }
     if (elapsed >= MISSION_TOTAL_DEMO_MS) {
       if (phase !== "delivered") setMissionPhase("delivered");
       return;
@@ -94,7 +103,13 @@ export function MissionRunner() {
     };
     const target = map[id];
     if (target && target !== phase) setMissionPhase(target);
-  }, [elapsed, phase, setMissionPhase]);
+    if (audioEnabled && id !== tickedStepRef.current) {
+      tickedStepRef.current = id;
+      tick().catch(() => {
+        /* swallow: tick is non-essential */
+      });
+    }
+  }, [elapsed, phase, setMissionPhase, audioEnabled]);
 
   // Completion chime: fires once when we transition into delivered.
   useEffect(() => {
@@ -192,9 +207,9 @@ function IdleHero() {
         Tap <span className="text-gold">Run Mission</span> and watch the SLA.
       </p>
       <p className="max-w-lg text-sm text-muted-foreground">
-        ~60 seconds of demo represents ~60 minutes of mission time. The
-        revisit beat is the long one: that&apos;s the wait MoD has been told
-        for years takes 48+ hours.
+        Twenty seconds of demo, four steps, one resolution. The revisit
+        beat in the middle is the long one - that&apos;s the wait MoD has
+        been told for years takes 48+ hours.
       </p>
     </motion.div>
   );
