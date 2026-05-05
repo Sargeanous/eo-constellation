@@ -6,54 +6,79 @@ import { Button } from "@/components/ui/button";
 import { useDemoStore } from "@/lib/store";
 import { enableAudio } from "@/lib/audio";
 import { CHILD_RISE, STAGGER_CHILDREN } from "@/components/motion/variants";
+import { CONSTELLATION } from "@/lib/data";
 
 export default function IntroPage() {
   const setAudioEnabled = useDemoStore((s) => s.setAudioEnabled);
   const audioEnabled = useDemoStore((s) => s.audioEnabled);
 
-  async function start() {
-    if (!audioEnabled) {
-      await enableAudio();
-      setAudioEnabled(true);
+  // PRD §13.2: audio defaults OFF and only arms after rehearsal toggle.
+  // The cover-screen Begin tap counts as the user gesture Tone needs to
+  // start its AudioContext IF audio is enabled, but it never enables it
+  // for the user.
+  async function onBegin() {
+    if (audioEnabled) {
+      try {
+        await enableAudio();
+      } catch {
+        /* swallow — audio is non-essential */
+      }
     }
   }
 
   return (
     <main className="relative h-screen w-screen overflow-hidden">
-      <Globe />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-background/30 via-background/10 to-background" />
+      <Globe autoRotate interactive={false} />
+
+      {/* Vignette so the typography reads against the Earth. */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-deepspace/30 via-transparent to-deepspace" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-deepspace/40 via-transparent to-deepspace/40" />
+
       <motion.section
         variants={STAGGER_CHILDREN}
         initial="hidden"
         animate="visible"
-        className="relative z-10 flex h-full flex-col items-center justify-center text-center px-8"
+        className="relative z-10 flex h-full flex-col items-center justify-center px-8 text-center"
       >
         <motion.p
           variants={CHILD_RISE}
-          className="text-xs uppercase tracking-[0.4em] text-muted-foreground mb-4"
+          className="mb-6 text-xs uppercase tracking-[0.5em] text-gold"
         >
-          {/* <DOMAIN_PLACEHOLDER>: eyebrow text */}
-          &lt;DOMAIN_PLACEHOLDER&gt;
+          {CONSTELLATION.name}
         </motion.p>
         <motion.h1
           variants={CHILD_RISE}
-          className="text-5xl md:text-7xl font-semibold tracking-tight max-w-4xl"
+          className="font-display text-6xl font-semibold tracking-tight md:text-8xl"
         >
-          {/* <DOMAIN_PLACEHOLDER>: hero headline */}
-          &lt;DOMAIN_PLACEHOLDER&gt;
+          EO-CONSTELLATION
         </motion.h1>
         <motion.p
           variants={CHILD_RISE}
-          className="mt-6 max-w-xl text-lg text-muted-foreground"
+          className="mt-6 max-w-xl text-xl text-muted-foreground md:text-2xl"
         >
-          {/* <DOMAIN_PLACEHOLDER>: hero subhead */}
-          &lt;DOMAIN_PLACEHOLDER&gt;
+          Sub-1-Hour MENA Revisit. Sovereign by design.
         </motion.p>
-        <motion.div variants={CHILD_RISE} className="mt-10">
-          <Button size="lg" onClick={start} asChild>
-            <Link href="/problem">Begin</Link>
+
+        <motion.div variants={CHILD_RISE} className="mt-12">
+          <Button
+            asChild
+            size="lg"
+            className="bg-gold text-primary-foreground hover:bg-gold/90 px-10 h-14 text-base"
+          >
+            <Link href="/problem" onClick={onBegin}>
+              Begin
+            </Link>
           </Button>
         </motion.div>
+
+        <motion.p
+          variants={CHILD_RISE}
+          className="absolute bottom-24 left-1/2 -translate-x-1/2 font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground/70"
+        >
+          {CONSTELLATION.totalSatellites} satellites &nbsp;·&nbsp;{" "}
+          {CONSTELLATION.altitudeKm} km &nbsp;·&nbsp;{" "}
+          {CONSTELLATION.inclinationDeg}°
+        </motion.p>
       </motion.section>
     </main>
   );

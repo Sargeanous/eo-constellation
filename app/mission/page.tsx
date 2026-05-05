@@ -18,13 +18,13 @@ export default function MissionPage() {
           <p className="text-xs uppercase tracking-[0.4em] text-muted-foreground">
             02 / Mission
           </p>
-          <h1 className="mt-3 text-4xl md:text-5xl font-semibold tracking-tight">
-            {/* <DOMAIN_PLACEHOLDER>: mission headline (sub-1-hour cycle) */}
-            &lt;DOMAIN_PLACEHOLDER&gt;
+          <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
+            The 1-Hour SLA — Live.
           </h1>
           <p className="mt-4 max-w-3xl text-lg text-muted-foreground">
-            {/* <DOMAIN_PLACEHOLDER>: mission subhead */}
-            &lt;DOMAIN_PLACEHOLDER&gt;
+            Watch this. ~60 seconds of demo represents ~60 minutes of mission.
+            Phase 2 lands the full step-2 substep choreography (alert → tasking
+            → 45-minute revisit → capture → downlink → SAR scene → report PDF).
           </p>
         </motion.header>
 

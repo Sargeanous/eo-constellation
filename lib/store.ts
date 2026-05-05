@@ -8,6 +8,8 @@ export type MissionPhase =
   | "downlink"
   | "delivered";
 
+export type CtaMode = "theatrical" | "neutral";
+
 interface DemoState {
   /** Index into the 6-screen flow (0 = intro, 5 = decision). The
    *  persistent dock at the bottom of every page reads this to highlight
@@ -17,11 +19,11 @@ interface DemoState {
 
   /** Audio gate. Tone.js requires a user gesture before AudioContext
    *  can start; once enabled it stays on. Persisted to localStorage so
-   *  a refresh keeps the user's choice. */
+   *  a refresh keeps the user's choice. Default OFF (PRD §13.2). */
   audioEnabled: boolean;
   setAudioEnabled: (v: boolean) => void;
 
-  /** Mission animation timeline state. The 50-second Run Mission
+  /** Mission animation timeline state. The 60-second Run Mission
    *  animation broadcasts here so multiple components (stopwatch,
    *  globe markers, timeline rail) can subscribe to the same clock. */
   missionPhase: MissionPhase;
@@ -30,16 +32,27 @@ interface DemoState {
   tickMission: (deltaMs: number) => void;
   resetMission: () => void;
 
-  /** Debug flags. Toggleable via a hidden gesture (e.g. four-finger tap)
-   *  for the operator's own QA, never shown to the customer. */
+  /** /decision CTA copy. Theatrical default ("Approve & Begin
+   *  Mobilization"); the rehearsal hamburger swaps to neutral
+   *  ("Begin Conversation"). Persisted (PRD §13.4). */
+  ctaMode: CtaMode;
+  setCtaMode: (m: CtaMode) => void;
+
+  /** Debug flags surfaced via the rehearsal hamburger. */
   debug: {
     showFps: boolean;
-    showRouteOutlines: boolean;
   };
   setDebug: (patch: Partial<DemoState["debug"]>) => void;
 }
 
 const AUDIO_KEY = "eoc.audioEnabled.v1";
+const CTA_KEY = "eoc.ctaMode.v1";
+
+function readCtaMode(): CtaMode {
+  if (typeof window === "undefined") return "theatrical";
+  const v = localStorage.getItem(CTA_KEY);
+  return v === "neutral" ? "neutral" : "theatrical";
+}
 
 export const useDemoStore = create<DemoState>((set) => ({
   screenIndex: 0,
@@ -63,6 +76,16 @@ export const useDemoStore = create<DemoState>((set) => ({
     set((s) => ({ missionElapsedMs: s.missionElapsedMs + deltaMs })),
   resetMission: () => set({ missionPhase: "idle", missionElapsedMs: 0 }),
 
-  debug: { showFps: false, showRouteOutlines: false },
+  ctaMode: readCtaMode(),
+  setCtaMode: (m) => {
+    try {
+      localStorage.setItem(CTA_KEY, m);
+    } catch {
+      /* ignore */
+    }
+    set({ ctaMode: m });
+  },
+
+  debug: { showFps: false },
   setDebug: (patch) => set((s) => ({ debug: { ...s.debug, ...patch } })),
 }));

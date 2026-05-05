@@ -3,17 +3,29 @@ import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { useDemoStore } from "@/lib/store";
 import {
-  MISSION_TIMELINE,
-  MISSION_TOTAL_MS,
-  type MissionPhaseSpec,
+  SLA_STEPS,
+  MISSION_TOTAL_DEMO_MS,
+  FINAL_MISSION_TIME,
+  STATUS_QUO_HOURS,
+  SPEEDUP_PCT,
 } from "@/lib/data";
 import { formatStopwatch } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 
-function activePhase(elapsed: number): MissionPhaseSpec | undefined {
-  return MISSION_TIMELINE.find(
-    (p) => elapsed >= p.startMs && elapsed < p.endMs,
+// Phase 1 placeholder — drives the stopwatch + 4-step rail off SLA_STEPS
+// in compressed-demo time so the route is testable. Phase 2 replaces
+// this with the full step-2 substep choreography (tasking / revisit /
+// capture-downlink), the alert pop-up, the satellite globe inset, the
+// SAR-scene reveal, and the report PDF preview.
+
+type StepId = (typeof SLA_STEPS)[number]["id"];
+
+function activeStep(elapsedMs: number) {
+  return (
+    SLA_STEPS.find(
+      (s) => elapsedMs >= s.startDemoMs && elapsedMs < s.endDemoMs,
+    ) ?? null
   );
 }
 
@@ -27,7 +39,7 @@ export function MissionTimeline() {
   const rafRef = useRef<number | null>(null);
   const lastRef = useRef<number | null>(null);
 
-  // RAF loop while a mission is running.
+  // RAF loop while the demo is running.
   useEffect(() => {
     if (phase === "idle" || phase === "delivered") {
       lastRef.current = null;
@@ -46,38 +58,73 @@ export function MissionTimeline() {
     };
   }, [phase, tickMission]);
 
-  // Phase bookkeeping: advance phase when elapsed crosses a boundary.
+  // Bookkeeping: advance the store phase when elapsed crosses a step
+  // boundary, freeze at "delivered" once we hit the demo end.
   useEffect(() => {
     if (phase === "idle") return;
-    if (elapsed >= MISSION_TOTAL_MS) {
+    if (elapsed >= MISSION_TOTAL_DEMO_MS) {
       setMissionPhase("delivered");
       return;
     }
-    const next = activePhase(elapsed);
-    if (next && next.id !== phase) setMissionPhase(next.id);
+    const next = activeStep(elapsed);
+    if (!next) return;
+    const id: StepId = next.id;
+    const map: Record<StepId, typeof phase> = {
+      1: "tasking",
+      2: "imaging",
+      3: "downlink",
+      4: "delivered",
+    };
+    const target = map[id];
+    if (target && target !== phase) setMissionPhase(target);
   }, [elapsed, phase, setMissionPhase]);
 
-  const pct = Math.min(100, (elapsed / MISSION_TOTAL_MS) * 100);
+  const pct = Math.min(100, (elapsed / MISSION_TOTAL_DEMO_MS) * 100);
   const isRunning = phase !== "idle" && phase !== "delivered";
+  const finished = phase === "delivered";
+
+  // Render the mission clock in real-mission seconds (0:00 → 58:42),
+  // not demo seconds. Map elapsed demo ms onto its step's mission seconds
+  // window linearly within the step.
+  const missionSec = (() => {
+    const step = activeStep(elapsed);
+    if (!step) {
+      return finished ? SLA_STEPS[SLA_STEPS.length - 1]!.endMissionSeconds : 0;
+    }
+    const t =
+      (elapsed - step.startDemoMs) / (step.endDemoMs - step.startDemoMs);
+    return Math.round(
+      step.startMissionSeconds +
+        t * (step.endMissionSeconds - step.startMissionSeconds),
+    );
+  })();
 
   return (
-    <div className="space-y-4 rounded-lg border border-border bg-card p-6">
+    <div className="space-y-6 rounded-xl border border-border bg-card p-6">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-xs uppercase tracking-widest text-muted-foreground">
             Mission clock
           </p>
-          <p className="font-mono text-3xl">{formatStopwatch(elapsed)}</p>
+          <p className="tabular font-mono text-5xl text-gold">
+            {finished
+              ? FINAL_MISSION_TIME
+              : formatStopwatch(missionSec * 1000)}
+          </p>
         </div>
         <div className="flex gap-2">
           {phase === "idle" && (
-            <Button onClick={() => setMissionPhase("tasking")}>
-              Run Mission
+            <Button
+              size="lg"
+              onClick={() => setMissionPhase("tasking")}
+              className="bg-gold text-primary-foreground hover:bg-gold/90"
+            >
+              ▶ Run Mission
             </Button>
           )}
-          {phase === "delivered" && (
-            <Button variant="outline" onClick={resetMission}>
-              Reset
+          {finished && (
+            <Button size="lg" variant="outline" onClick={resetMission}>
+              ↻ Run Again
             </Button>
           )}
           {isRunning && (
@@ -90,30 +137,47 @@ export function MissionTimeline() {
 
       <Progress value={pct} />
 
-      <ol className="grid grid-cols-5 gap-2 text-xs">
-        {MISSION_TIMELINE.map((p) => {
-          const active = phase === p.id;
-          const passed = elapsed >= p.endMs;
+      <ol className="grid grid-cols-1 gap-2 text-xs md:grid-cols-4">
+        {SLA_STEPS.map((s) => {
+          const a = activeStep(elapsed);
+          const isActive = a?.id === s.id;
+          const passed = elapsed >= s.endDemoMs;
           return (
             <motion.li
-              key={p.id}
-              animate={{
-                opacity: active ? 1 : passed ? 0.7 : 0.4,
-              }}
-              className={`rounded-md border px-2 py-2 ${
-                active
-                  ? "border-primary bg-primary/10"
-                  : "border-border bg-background"
-              }`}
+              key={s.id}
+              animate={{ opacity: isActive ? 1 : passed ? 0.75 : 0.4 }}
+              className={[
+                "rounded-md border px-3 py-3",
+                isActive
+                  ? "border-gold bg-gold/10"
+                  : "border-border bg-background",
+              ].join(" ")}
             >
-              <p className="uppercase tracking-wider text-[10px] text-muted-foreground">
-                {p.id}
+              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                Step {s.id}
               </p>
-              <p className="mt-1">{p.label}</p>
+              <p className="mt-1 text-sm">{s.name}</p>
+              <p className="mt-1 text-[11px] leading-snug text-muted-foreground">
+                {s.caption}
+              </p>
             </motion.li>
           );
         })}
       </ol>
+
+      {finished && (
+        <div className="rounded-md border border-border bg-background p-4 text-center">
+          <p className="tabular font-mono text-3xl text-gold">
+            {FINAL_MISSION_TIME}
+          </p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Status quo: {STATUS_QUO_HOURS}+ hours.
+          </p>
+          <p className="mt-1 text-xs text-amber">
+            You are {SPEEDUP_PCT.toLocaleString()}% faster.
+          </p>
+        </div>
+      )}
     </div>
   );
 }

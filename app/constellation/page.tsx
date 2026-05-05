@@ -9,8 +9,8 @@ import { CHILD_RISE, STAGGER_CHILDREN } from "@/components/motion/variants";
 export default function ConstellationPage() {
   return (
     <main className="relative min-h-screen overflow-hidden">
-      <div className="pointer-events-none absolute inset-0 opacity-60">
-        <Globe />
+      <div className="absolute inset-0 opacity-80">
+        <Globe interactive autoRotate={false} />
       </div>
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-background via-background/70 to-transparent" />
       <motion.div
@@ -23,13 +23,13 @@ export default function ConstellationPage() {
           <p className="text-xs uppercase tracking-[0.4em] text-muted-foreground">
             03 / Constellation
           </p>
-          <h1 className="mt-3 text-4xl md:text-5xl font-semibold tracking-tight">
-            {/* <DOMAIN_PLACEHOLDER>: constellation headline */}
-            &lt;DOMAIN_PLACEHOLDER&gt;
+          <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
+            22 satellites. 350 km. 38 degrees.
           </h1>
           <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-            {/* <DOMAIN_PLACEHOLDER>: constellation subhead */}
-            &lt;DOMAIN_PLACEHOLDER&gt;
+            Counter-countermeasure orbit. SAR-only. Sovereign by design.
+            Tap a satellite or AOI to inspect. Phase 3 lands tap-to-inspect
+            and the simulation comparison.
           </p>
         </motion.header>
 

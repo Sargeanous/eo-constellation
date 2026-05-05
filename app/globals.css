@@ -7,28 +7,37 @@ html {
 }
 body {
   overscroll-behavior-y: contain;
+  /* iPad: no body pinch-zoom; the only pinch belongs to the Three.js globe. */
+  touch-action: pan-y;
 }
 
 @layer base {
   :root {
-    /* <DOMAIN_PLACEHOLDER>: Sovereign Black palette.
-       Replace HSL stops in CLAUDE.md once the brand is locked. */
-    --bg-deep: 222 35% 6%;
-    --bg-card: 222 30% 9%;
-    --bg-raised: 222 26% 12%;
-    --gold-500: 42 92% 56%;
-    --gold-300: 42 92% 72%;
-    --sky-500: 206 90% 60%;
-    --sky-300: 206 90% 76%;
-    --ink-50: 0 0% 98%;
-    --ink-200: 220 12% 80%;
-    --ink-400: 220 8% 55%;
+    /* Sovereign Black palette — PRD §10. HSL because shadcn primitives
+       consume tokens as hsl(var(--token)).
+       Hex anchors:
+         #020617 deep space    #0F172A panel       #1E293B raised
+         #F1F5F9 ink           #94A3B8 muted ink
+         #D4A949 gold          #F59E0B amber
+         #E11D48 red           #10B981 green       #38BDF8 sky
+    */
+    --bg-deep: 222 47% 4%;
+    --bg-panel: 222 47% 11%;
+    --bg-raised: 217 33% 17%;
+    --ink-50: 210 40% 96%;
+    --ink-400: 215 20% 65%;
+    --gold-500: 41 62% 56%;
+    --amber-500: 38 92% 50%;
+    --red-500: 346 77% 50%;
+    --green-500: 160 84% 39%;
+    --sky-500: 199 92% 60%;
 
+    /* shadcn semantic tokens */
     --background: var(--bg-deep);
     --foreground: var(--ink-50);
-    --card: var(--bg-card);
+    --card: var(--bg-panel);
     --card-foreground: var(--ink-50);
-    --popover: var(--bg-card);
+    --popover: var(--bg-panel);
     --popover-foreground: var(--ink-50);
     --primary: var(--gold-500);
     --primary-foreground: var(--bg-deep);
@@ -38,10 +47,10 @@ body {
     --muted-foreground: var(--ink-400);
     --accent: var(--sky-500);
     --accent-foreground: var(--bg-deep);
-    --destructive: 0 75% 50%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 222 18% 18%;
-    --input: 222 18% 18%;
+    --destructive: var(--red-500);
+    --destructive-foreground: var(--ink-50);
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
     --ring: var(--gold-500);
     --radius: 0.875rem;
   }
@@ -52,7 +61,26 @@ body {
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
+    /* PRD §11: disable text selection globally (overridden in the report preview). */
+    -webkit-user-select: none;
+    user-select: none;
   }
+  .selectable,
+  .selectable * {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+}
+
+/* Numeric displays — stopwatch, cost waterfall — must not shift width. */
+.tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* Star-field background colour (deep space navy, PRD §3). */
+.bg-deep-space {
+  background-color: #020617;
 }
 
 .cinematic-surface {

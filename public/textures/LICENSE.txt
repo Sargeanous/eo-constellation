@@ -1,0 +1,39 @@
+EARTH-DAY.JPG — NASA Blue Marble (no-clouds variant)
+======================================================
+
+This file is a NASA Blue Marble Earth surface map.
+
+Source       : NASA Visible Earth ([visibleearth.nasa.gov](http://visibleearth.nasa.gov)) — the Blue Marble:
+               Next Generation collection by Reto Stöckli, NASA Earth
+               Observatory (NASA Goddard Space Flight Center).
+License      : Public domain. NASA imagery is generally free to use without
+               restriction. Standard NASA attribution applies.
+Working file : 4096×2048 cloudless Blue Marble derivative (~1.4 MB).
+Mirror used  : raw.githubusercontent.com/turban/webgl-earth (used because
+               eoimages.gsfc.nasa.gov was not reachable from the build
+               sandbox at scaffolding time).
+
+CANONICAL FILE FOR THE PRODUCTION DEMO
+--------------------------------------
+Per spec, the operator should swap this placeholder with the higher-resolution
+canonical version before the meeting:
+
+  world.topo.bathy.200407.3x5400x2700.jpg
+  https://eoimages.gsfc.nasa.gov/images/imagerecords/73000/73580/world.topo.bathy.200407.3x5400x2700.jpg
+
+To swap:
+  1. Download the file from the URL above (or any other Blue Marble at 5400×2700
+     or higher).
+  2. Replace public/textures/earth-day.jpg in this folder.
+  3. No code changes required — GlobeScene.tsx loads
+     /textures/earth-day.jpg by name.
+
+NOTES
+-----
+- Per Phase 1 decisions, no normal map is shipped. Visual depth comes from the
+  Fresnel atmosphere shader and bloom postprocess in components/globe/.
+- File is precached by the Serwist service worker at install time so the demo
+  runs offline in a SCIF.
+
+Attribution string for the report PDF / footer:
+  "Earth imagery: NASA Blue Marble (public domain)."

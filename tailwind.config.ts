@@ -12,6 +12,12 @@ export default {
     extend: {
       fontFamily: {
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        display: [
+          "var(--font-display)",
+          "var(--font-sans)",
+          "system-ui",
+          "sans-serif",
+        ],
         mono: ["var(--font-mono)", "ui-monospace", "monospace"],
       },
       colors: {
@@ -48,6 +54,24 @@ export default {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
         },
+        /* Sovereign Black named accents (PRD §10).
+           Use these directly when you need a specific palette
+           role rather than a semantic token. */
+        gold: { DEFAULT: "hsl(var(--gold-500))", 500: "hsl(var(--gold-500))" },
+        amber: {
+          DEFAULT: "hsl(var(--amber-500))",
+          500: "hsl(var(--amber-500))",
+        },
+        sovred: { DEFAULT: "hsl(var(--red-500))", 500: "hsl(var(--red-500))" },
+        sovgreen: {
+          DEFAULT: "hsl(var(--green-500))",
+          500: "hsl(var(--green-500))",
+        },
+        sovsky: {
+          DEFAULT: "hsl(var(--sky-500))",
+          500: "hsl(var(--sky-500))",
+        },
+        deepspace: "#020617",
       },
       borderRadius: {
         lg: "var(--radius)",
