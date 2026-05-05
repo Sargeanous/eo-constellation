@@ -48,19 +48,19 @@ export default function IntroPage() {
           variants={CHILD_RISE}
           className="mb-6 text-xs uppercase tracking-[0.5em] text-gold"
         >
-          {CONSTELLATION.name}
+          Sub-1-Hour MENA Revisit
         </motion.p>
         <motion.h1
           variants={CHILD_RISE}
-          className="font-display text-6xl font-semibold tracking-tight md:text-8xl"
+          className="font-display text-5xl font-semibold tracking-tight md:text-7xl"
         >
-          EO-CONSTELLATION
+          {CONSTELLATION.name}
         </motion.h1>
         <motion.p
           variants={CHILD_RISE}
           className="mt-6 max-w-xl text-xl text-muted-foreground md:text-2xl"
         >
-          Sub-1-Hour MENA Revisit. Sovereign by design.
+          Sovereign by design. AI-native. Built for MENA.
         </motion.p>
 
         <motion.div variants={CHILD_RISE} className="mt-12">
