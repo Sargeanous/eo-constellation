@@ -179,7 +179,7 @@ re-deploy, re-install on the iPad. Serwist will re-precache.
 
 1. **The 4-config simulation comparison** uses interpolated revisit
    numbers from 4 partner runs. Full physics in
-   `simulator-v2.tactica.ae` (linked in the modal footer).
+   the partner physics simulator (linked in the modal footer).
 2. **Daily-pass counts per AOI** in the side panel are derived from
    the canonical 22 SAR / 350 km / 38° configuration, not from the
    STAR.VISION video that shows the older 20-sat / 500 km / 42°

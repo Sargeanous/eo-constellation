@@ -4,15 +4,15 @@ import { Cpu, ShieldCheck } from "lucide-react";
 import { SARScene, SAR_VESSELS } from "./SARScene";
 import { BaseerPill } from "./BaseerPill";
 
-// Step 3: Automated Analytics & Validation. PRD §4.
-// Bounding boxes around each detected vessel, classifications appear,
-// caption: "Onboard CV models. No human in the loop. No foreign cloud."
-// BASEER pill in the corner: detections feed back into BASEER.
+// Step 4: Automated Analytics & Validation. Bounding boxes around each
+// detected vessel, classifications appear, caption: "Onboard CV models.
+// No human in the loop. No foreign cloud." BASEER pill in the corner:
+// detections feed back into BASEER.
 
 export function Step3Analytics() {
   return (
     <motion.div
-      key="step3"
+      key="step4"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
@@ -55,7 +55,7 @@ export function Step3Analytics() {
       <div className="flex flex-col gap-4 rounded-lg border border-border bg-card p-6">
         <div>
           <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
-            Step 3 · Onboard analytics
+            Step 4 · Onboard analytics
           </p>
           <p className="mt-2 font-display text-base font-semibold">
             CV models on the bird. No human in the loop.

@@ -1,23 +1,23 @@
 "use client";
-import { useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowDownToLine, Radio } from "lucide-react";
+import { Radio } from "lucide-react";
 import { useDemoStore } from "@/lib/store";
 import { SLA_STEPS } from "@/lib/data";
 import { GlobeInset } from "./GlobeInset";
 import { SARScene } from "./SARScene";
 
-// Step 2: Satellite Tasking & Data Capture. PRD §4 step 2.
-// Three sub-beats keyed to substep demoMs windows in lib/data.ts:
-//   2a Tasking            (3s) : dotted-line ground-station → constellation
-//   2b Revisit            (38s): globe inset advancing toward Hormuz,
-//                                 mid-step caption swap at the midpoint
-//   2c Capture & Downlink (9s) : SAR scene reveal flash, byte stream
+// Step 2: Satellite Tasking & Data Capture. Three sub-beats keyed to
+// substep demoMs windows in lib/data.ts:
+//   2a Tasking  : dotted-line ground-station → constellation
+//   2b Revisit  : globe inset advancing toward Hormuz, caption swap
+//                 at the midpoint
+//   2c Capture  : SAR scene reveal flash. Byte stream / downlink lives
+//                 in the dedicated Step 3 (Sovereign downlink).
 
 const STEP2 = SLA_STEPS.find((s) => s.id === 2)!;
 const TASKING = STEP2.substeps!.find((s) => s.name === "Tasking")!;
 const REVISIT = STEP2.substeps!.find((s) => s.name === "Revisit")!;
-const CAPTURE = STEP2.substeps!.find((s) => s.name === "Capture & Downlink")!;
+const CAPTURE = STEP2.substeps!.find((s) => s.name === "Capture")!;
 const REVISIT_MIDPOINT =
   (REVISIT.startDemoMs + REVISIT.endDemoMs) / 2;
 
@@ -53,7 +53,7 @@ export function Step2Capture() {
         </AnimatePresence>
       </div>
 
-      <SidePanel sub={sub} elapsed={elapsed} />
+      <SidePanel sub={sub} />
     </motion.div>
   );
 }
@@ -201,17 +201,7 @@ function CapturePanel() {
   );
 }
 
-function SidePanel({ sub, elapsed }: { sub: Sub; elapsed: number }) {
-  // Byte stream during capture/downlink: fake bytes ticking up.
-  const bytes = useMemo(() => {
-    if (sub !== "capture" && sub !== "post") return 0;
-    const t = Math.max(
-      0,
-      Math.min(1, (elapsed - CAPTURE.startDemoMs) / (CAPTURE.endDemoMs - CAPTURE.startDemoMs)),
-    );
-    return Math.round(420 * t); // MB
-  }, [sub, elapsed]);
-
+function SidePanel({ sub }: { sub: Sub }) {
   return (
     <div className="flex flex-col gap-4 rounded-lg border border-border bg-card p-6">
       <div>
@@ -240,20 +230,9 @@ function SidePanel({ sub, elapsed }: { sub: Sub; elapsed: number }) {
           <p className="font-mono text-[11px] text-sovgreen">
             {sub === "tasking" && "uplink · ack"}
             {sub === "revisit" && "in transit"}
-            {(sub === "capture" || sub === "post") && "downlink · sovereign"}
+            {(sub === "capture" || sub === "post") && "scene captured"}
           </p>
         </div>
-        {(sub === "capture" || sub === "post") && (
-          <div className="mt-3 flex items-baseline justify-between">
-            <p className="flex items-center gap-2 font-mono text-[11px] text-muted-foreground">
-              <ArrowDownToLine className="h-3 w-3 text-gold" />
-              SAR scene
-            </p>
-            <p className="tabular font-mono text-sm text-gold">
-              {bytes.toLocaleString()} MB
-            </p>
-          </div>
-        )}
       </div>
     </div>
   );

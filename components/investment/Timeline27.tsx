@@ -1,11 +1,12 @@
 "use client";
-import { TIMELINE_PHASES, palette } from "@/lib/data";
+import { TIMELINE_PHASES, FIRST_LIGHT_MONTHS, palette } from "@/lib/data";
 
-// 20-month implementation Gantt. After M20 the constellation is on
-// orbit and the engagement is mainly operations - that's why the
-// chart axis stops short of YEAR 2. All sub-tasks are visible at a
-// glance: each phase header sits above its own grouped sub-task rows.
-// No expand-collapse. PRD §7 + operator feedback (2026-05-06, 06-07).
+// Implementation Gantt with first-light emphasis. The big visual hook
+// is a vertical dotted line at month 6 labelled "FIRST LIGHT": that's
+// the milestone (first SAR bird on orbit, sovereign data flowing into
+// BASEER), powered by partner manufacturing lines that are already
+// running. The full 22-bird ramp continues to M20; the chart shows
+// that detail without making it the headline.
 
 const TOTAL_MONTHS = 24; // 20 months to launch + 4 months ops runoff
 const W = 880;
@@ -61,7 +62,7 @@ export function Timeline27() {
         viewBox={`0 0 ${W} ${svgH}`}
         className="w-full"
         role="img"
-        aria-label="20-month implementation timeline"
+        aria-label="Implementation timeline with six-month first-light milestone"
       >
         {/* Vertical month axis lines */}
         {[0, 6, 12, 18, 20].map((m) => {
@@ -217,6 +218,32 @@ export function Timeline27() {
             M{m}
           </text>
         ))}
+
+        {/* First-light dotted line: spans the whole chart so the
+            milestone reads against every phase row. */}
+        <line
+          x1={monthToX(FIRST_LIGHT_MONTHS)}
+          y1={PAD_TOP - 12}
+          x2={monthToX(FIRST_LIGHT_MONTHS)}
+          y2={axisY + 4}
+          stroke={palette.accentGold}
+          strokeWidth="1.4"
+          strokeDasharray="4 5"
+          strokeOpacity="0.95"
+        />
+        <g
+          fontFamily="ui-monospace, Menlo, monospace"
+          fontSize="10"
+          fill={palette.accentGold}
+        >
+          <text
+            x={monthToX(FIRST_LIGHT_MONTHS) + 6}
+            y={PAD_TOP - 4}
+            fontWeight="600"
+          >
+            ◆ FIRST LIGHT · M{FIRST_LIGHT_MONTHS}
+          </text>
+        </g>
       </svg>
     </div>
   );

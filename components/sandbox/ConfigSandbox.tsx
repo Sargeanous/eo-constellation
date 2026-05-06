@@ -109,7 +109,7 @@ export function ConfigSandbox() {
 
         <p className="text-[11px] italic text-muted-foreground">
           Interpolated from 4 simulation runs. Full physics in{" "}
-          <span className="font-mono">simulator-v2.tactica.ae</span>.
+          partner physics simulator.
         </p>
       </CardContent>
     </Card>

@@ -6,6 +6,8 @@ export type MissionPhase =
   | "uplink"
   | "imaging"
   | "downlink"
+  | "analytics"
+  | "report"
   | "delivered";
 
 interface DemoState {
@@ -22,8 +24,14 @@ interface DemoState {
   /** Mission animation timeline state. */
   missionPhase: MissionPhase;
   missionElapsedMs: number;
+  /** True when the operator has tapped Stop mid-run. Freezes the RAF
+   *  loop and the visible clock at the current elapsed/phase, but does
+   *  NOT reset progress. Resume (or Run Again) clears this. */
+  missionPaused: boolean;
   setMissionPhase: (p: MissionPhase) => void;
   tickMission: (deltaMs: number) => void;
+  pauseMission: () => void;
+  resumeMission: () => void;
   resetMission: () => void;
 
   /** /constellation tap-to-inspect selection. Null when nothing is
@@ -60,10 +68,14 @@ export const useDemoStore = create<DemoState>((set) => ({
 
   missionPhase: "idle",
   missionElapsedMs: 0,
+  missionPaused: false,
   setMissionPhase: (p) => set({ missionPhase: p }),
   tickMission: (deltaMs) =>
     set((s) => ({ missionElapsedMs: s.missionElapsedMs + deltaMs })),
-  resetMission: () => set({ missionPhase: "idle", missionElapsedMs: 0 }),
+  pauseMission: () => set({ missionPaused: true }),
+  resumeMission: () => set({ missionPaused: false }),
+  resetMission: () =>
+    set({ missionPhase: "idle", missionElapsedMs: 0, missionPaused: false }),
 
   selectedSatId: null,
   selectedAOIId: null,

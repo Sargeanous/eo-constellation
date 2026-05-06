@@ -1,15 +1,18 @@
 "use client";
-import { COST_USD, CONSTELLATION, palette } from "@/lib/data";
+import { FOREIGN_VENDOR_BENCHMARK, palette } from "@/lib/data";
 
-// Horizontal stacked bar showing the cost buildup. Labels live ABOVE
-// each segment with a leader line dropping into the bar, so the small
-// Ops segment (~0.7% of width) stays legible. PRD §7 + operator
-// feedback (2026-05-06).
+// Per-satellite cost comparison: foreign-vendor benchmark vs the EDGE
+// SAR bird. The headline is the saving, not the absolute price. We
+// deliberately do NOT show the $225M constellation grand total here:
+// the operator wanted the per-satellite saving as the lede so MoD
+// reads "sovereign at a fraction of the cost", not "another big budget
+// line". The why-cheaper bullets sit beside the chart.
 
 const W = 800;
-const BAR_TOP = 88;
-const BAR_H = 56;
 const PAD_X = 24;
+const ROW_H = 56;
+const ROW_GAP = 18;
+const TOP_PAD = 32;
 
 function fmtUsd(n: number): string {
   return `$${(n / 1_000_000).toLocaleString(undefined, {
@@ -18,150 +21,127 @@ function fmtUsd(n: number): string {
   })}M`;
 }
 
-interface Segment {
-  key: string;
-  shortLabel: string;
-  amount: number;
-  fill: string;
-  fillOp: number;
-}
-
 export function CostWaterfall() {
-  const segments: Segment[] = [
-    {
-      key: "sats",
-      shortLabel: `${CONSTELLATION.totalSatellites} × SAR satellites`,
-      amount: COST_USD.satellitesTotal,
-      fill: palette.accentSky,
-      fillOp: 0.55,
-    },
-    {
-      key: "ops",
-      shortLabel: "Operations & Control",
-      amount: COST_USD.opsAndControl,
-      fill: palette.accentGold,
-      fillOp: 0.85,
-    },
-  ];
+  const foreign = FOREIGN_VENDOR_BENCHMARK.perSatelliteUsd;
+  const ours = FOREIGN_VENDOR_BENCHMARK.ourPerSatelliteUsd;
+  const saving = FOREIGN_VENDOR_BENCHMARK.savingFraction;
 
-  const total = COST_USD.grandTotal;
   const span = W - PAD_X * 2;
+  const fxToWidth = (n: number) => (n / foreign) * span;
 
-  // Pre-compute segment x ranges so we can reference them in labels.
-  let cursor = PAD_X;
-  const placed = segments.map((s) => {
-    const w = (s.amount / total) * span;
-    const x = cursor;
-    cursor += w;
-    return { ...s, x, w, midX: x + w / 2 };
-  });
+  const foreignY = TOP_PAD + 18;
+  const oursY = foreignY + ROW_H + ROW_GAP + 18;
+  const SVG_H = oursY + ROW_H + 28;
 
-  // Total SVG height: top label band (40) + bar (56) + bottom label band (40) + grand-total (28)
-  const SVG_H = BAR_TOP + BAR_H + 70;
+  const oursW = Math.max(8, fxToWidth(ours));
 
   return (
-    <div className="space-y-4">
+    <div className="grid gap-6 md:grid-cols-[1.4fr_1fr]">
       <svg
         viewBox={`0 0 ${W} ${SVG_H}`}
         className="w-full"
         role="img"
-        aria-label="Cost buildup waterfall"
+        aria-label="Per-satellite build cost: foreign vendor benchmark vs EDGE SAR"
       >
-        {/* Top labels with leader lines */}
-        {placed.map((s, i) => {
-          // For the small segment (Ops), shove the label slightly to the
-          // right of the segment so it doesn't sit on the boundary.
-          const labelX =
-            s.w < 80 ? Math.min(s.x + s.w + 14, W - PAD_X - 80) : s.midX;
-          const labelAnchor: "middle" | "start" =
-            s.w < 80 ? "start" : "middle";
-          const leaderTargetX = s.midX;
-          return (
-            <g key={`label-${i}`}>
-              <text
-                x={labelX}
-                y={20}
-                textAnchor={labelAnchor}
-                fontFamily="ui-monospace, Menlo, monospace"
-                fontSize="11"
-                fill={palette.text}
-              >
-                {s.shortLabel}
-              </text>
-              <text
-                x={labelX}
-                y={36}
-                textAnchor={labelAnchor}
-                fontFamily="ui-monospace, Menlo, monospace"
-                fontSize="13"
-                fontWeight="600"
-                fill={s.fill}
-              >
-                {fmtUsd(s.amount)}
-              </text>
-              {/* Leader line: from label down to the segment top */}
-              <line
-                x1={
-                  labelAnchor === "middle"
-                    ? labelX
-                    : Math.min(labelX, leaderTargetX)
-                }
-                y1={44}
-                x2={leaderTargetX}
-                y2={BAR_TOP - 2}
-                stroke={s.fill}
-                strokeOpacity="0.55"
-                strokeWidth="0.8"
-              />
-            </g>
-          );
-        })}
+        {/* Foreign vendor row */}
+        <text
+          x={PAD_X}
+          y={foreignY - 6}
+          fontFamily="ui-monospace, Menlo, monospace"
+          fontSize="10"
+          fill={palette.textMuted}
+        >
+          FOREIGN VENDOR · PER SATELLITE
+        </text>
+        <rect
+          x={PAD_X}
+          y={foreignY}
+          width={span}
+          height={ROW_H}
+          fill={palette.accentRed}
+          fillOpacity="0.18"
+          stroke={palette.accentRed}
+          strokeOpacity="0.55"
+          strokeWidth="0.7"
+        />
+        <text
+          x={PAD_X + span - 12}
+          y={foreignY + ROW_H / 2 + 5}
+          textAnchor="end"
+          fontFamily="ui-monospace, Menlo, monospace"
+          fontSize="14"
+          fontWeight="600"
+          fill={palette.text}
+        >
+          {fmtUsd(foreign)}
+        </text>
 
-        {/* The bar itself */}
-        {placed.map((s, i) => (
-          <rect
-            key={`seg-${i}`}
-            x={s.x}
-            y={BAR_TOP}
-            width={s.w}
-            height={BAR_H}
-            fill={s.fill}
-            fillOpacity={s.fillOp}
-            stroke={s.fill}
-            strokeOpacity="0.9"
-            strokeWidth="0.7"
-          />
-        ))}
+        {/* Ours row */}
+        <text
+          x={PAD_X}
+          y={oursY - 6}
+          fontFamily="ui-monospace, Menlo, monospace"
+          fontSize="10"
+          fill={palette.accentGold}
+        >
+          EDGE SAR · PER SATELLITE
+        </text>
+        <rect
+          x={PAD_X}
+          y={oursY}
+          width={oursW}
+          height={ROW_H}
+          fill={palette.accentGold}
+          fillOpacity="0.55"
+          stroke={palette.accentGold}
+          strokeOpacity="0.95"
+          strokeWidth="0.8"
+        />
+        <text
+          x={PAD_X + oursW + 10}
+          y={oursY + ROW_H / 2 + 5}
+          fontFamily="ui-monospace, Menlo, monospace"
+          fontSize="14"
+          fontWeight="600"
+          fill={palette.accentGold}
+        >
+          {fmtUsd(ours)}
+        </text>
 
-        {/* Grand-total annotation below the bar */}
-        <g transform={`translate(0 ${BAR_TOP + BAR_H + 18})`}>
-          <line
-            x1={PAD_X}
-            y1={0}
-            x2={PAD_X + span}
-            y2={0}
-            stroke={palette.accentGold}
-            strokeOpacity="0.6"
-            strokeWidth="0.7"
-          />
-          <text
-            x={PAD_X + span / 2}
-            y={22}
-            textAnchor="middle"
-            fontFamily="ui-monospace, Menlo, monospace"
-            fontSize="14"
-            fontWeight="600"
-            fill={palette.accentGold}
-          >
-            Grand total · {fmtUsd(total)}
-          </text>
-        </g>
+        {/* Saving callout, anchored to the gap between the two bars */}
+        <text
+          x={PAD_X + span - 12}
+          y={oursY + ROW_H + 18}
+          textAnchor="end"
+          fontFamily="ui-monospace, Menlo, monospace"
+          fontSize="11"
+          fill={palette.accentGreen}
+        >
+          {Math.round(saving * 100)}% saving · sovereign build
+        </text>
       </svg>
 
-      <p className="rounded-md border border-border bg-card/40 px-4 py-3 text-sm italic text-muted-foreground">
-        {COST_USD.marketComparisonNote} The 350 km altitude is the lever:
-        lower mass, lower launch cost, faster iteration.
-      </p>
+      <div className="space-y-3">
+        <div>
+          <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+            Why this is cheaper
+          </p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Three structural reasons, not a discount.
+          </p>
+        </div>
+        <ul className="space-y-2">
+          {FOREIGN_VENDOR_BENCHMARK.whyCheaperBullets.map((b) => (
+            <li
+              key={b.title}
+              className="rounded-md border border-border bg-background px-3 py-2"
+            >
+              <p className="text-sm text-foreground">{b.title}</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">{b.body}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

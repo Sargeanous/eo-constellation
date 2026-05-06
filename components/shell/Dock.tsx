@@ -1,28 +1,60 @@
 "use client";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { SCREENS } from "@/lib/data";
 
-// Persistent bottom dock: six dots, one per screen. Active dot is
-// gold (PRD §10) and stretches; inactive dots are muted slate.
-// Hit-target is 44pt minimum even though the visible dot is small.
+// Persistent bottom dock: one dot per section on the single scrolling
+// page. The dock is anchor nav: tapping a dot smooth-scrolls to the
+// section's id. The active dot reflects whichever section is currently
+// in the viewport (computed via IntersectionObserver). 44pt hit target.
 
 export function Dock() {
-  const pathname = usePathname();
+  const [activeId, setActiveId] = useState<string>(SCREENS[0]?.id ?? "");
+
+  useEffect(() => {
+    const ids = SCREENS.map((s) => s.id);
+    const targets = ids
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => !!el);
+    if (targets.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        const top = visible[0];
+        if (top?.target.id) setActiveId(top.target.id);
+      },
+      {
+        rootMargin: "-30% 0px -50% 0px",
+        threshold: [0, 0.25, 0.5, 0.75, 1],
+      },
+    );
+    targets.forEach((t) => observer.observe(t));
+    return () => observer.disconnect();
+  }, []);
+
+  function onClick(id: string) {
+    document
+      .getElementById(id)
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
   return (
     <nav
-      aria-label="Demo navigator"
+      aria-label="Section navigator"
       className="cinematic-surface fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 gap-3 rounded-full
                  border border-border bg-background/70 px-4 py-3 backdrop-blur-md"
     >
       {SCREENS.map((s) => {
-        const active = pathname === s.href;
+        const active = activeId === s.id;
         return (
-          <Link
+          <button
             key={s.id}
-            href={s.href}
-            aria-current={active ? "page" : undefined}
-            aria-label={`Screen ${s.index + 1}: ${s.title}`}
+            type="button"
+            onClick={() => onClick(s.id)}
+            aria-current={active ? "true" : undefined}
+            aria-label={`Section ${s.index + 1}: ${s.title}`}
             className="grid h-11 min-w-[44px] place-items-center"
           >
             <span
@@ -33,7 +65,7 @@ export function Dock() {
                   : "h-2 w-2 bg-muted-foreground/40",
               ].join(" ")}
             />
-          </Link>
+          </button>
         );
       })}
     </nav>

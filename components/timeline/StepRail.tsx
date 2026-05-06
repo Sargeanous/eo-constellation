@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useDemoStore } from "@/lib/store";
 import { SLA_STEPS } from "@/lib/data";
 
-// Rail of 4 step pills along the bottom of the mission view. Active
+// Rail of 5 step pills along the bottom of the mission view. Active
 // step is gold-bordered with the gold pill stretched; passed steps are
 // muted; future steps barely visible. A thin progress sliver inside the
 // active pill mirrors the demoMs progress within that step.
@@ -12,7 +12,7 @@ export function StepRail() {
   const elapsed = useDemoStore((s) => s.missionElapsedMs);
 
   return (
-    <ol className="grid grid-cols-1 gap-2 md:grid-cols-4">
+    <ol className="grid grid-cols-1 gap-2 md:grid-cols-5">
       {SLA_STEPS.map((s) => {
         const passed = elapsed >= s.endDemoMs;
         const active = elapsed >= s.startDemoMs && elapsed < s.endDemoMs;

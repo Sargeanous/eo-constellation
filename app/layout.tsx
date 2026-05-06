@@ -25,7 +25,7 @@ const mono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: "EDGE Sovereign EO Constellation",
-  description: "Sub-1-Hour MENA Revisit. Sovereign by design.",
+  description: "EDGE Sovereign EO Constellation. Sovereign by design.",
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,

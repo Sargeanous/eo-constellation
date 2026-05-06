@@ -5,11 +5,11 @@
 // Optimization with Sub-Hour Revisit Capability).
 
 // ────────────────────────────────────────────────────────────────────
-// 6-screen narrative: used by the bottom dock.
+// Section narrative: used by the bottom dock as anchors on the single
+// scrolling page. Order matches the on-page section order.
 // ────────────────────────────────────────────────────────────────────
 
 export type ScreenId =
-  | "intro"
   | "problem"
   | "mission"
   | "constellation"
@@ -21,51 +21,45 @@ export interface Screen {
   index: number;
   title: string;
   subtitle: string;
+  /** In-page anchor (e.g. "#problem"). The dock scrolls to this id. */
   href: string;
 }
 
 export const SCREENS: Screen[] = [
   {
-    id: "intro",
-    index: 0,
-    title: "EO-CONSTELLATION",
-    subtitle: "Sub-1-Hour MENA Revisit. Sovereign by design.",
-    href: "/",
-  },
-  {
     id: "problem",
-    index: 1,
+    index: 0,
     title: "The Problem",
     subtitle: "You've tried this before. Here's why it failed.",
-    href: "/problem",
+    href: "#problem",
   },
   {
     id: "mission",
-    index: 2,
-    title: "The 1-Hour SLA: Live",
+    index: 1,
+    title: "Live mission",
     subtitle: "Watch this.",
-    href: "/mission",
+    href: "#mission",
   },
   {
     id: "constellation",
-    index: 3,
+    index: 2,
     title: "The Constellation",
     subtitle: "22 satellites. 350 km. 38 degrees.",
-    href: "/constellation",
+    href: "#constellation",
   },
   {
     id: "investment",
-    index: 4,
-    title: "The Cost & Timeline",
-    subtitle: "$225.7M. 20 months to first light.",
-    href: "/investment",
+    index: 3,
+    title: "Cost & Timeline",
+    subtitle: "Sovereign cost. Six-month first light.",
+    href: "#investment",
   },
   {
     id: "decision",
-    index: 5,
+    index: 4,
     title: "The Decision",
     subtitle: "Sovereign. AI-native. Built for MENA.",
-    href: "/decision",
+    href: "#decision",
   },
 ];
 
@@ -127,8 +121,52 @@ export const COST_USD = {
   opsAndControl: 1_563_000,
   grandTotal: 225_721_000,
   marketComparisonNote:
-    "40-50% below market for comparable LEO EO constellations.",
+    "Roughly 90% below the per-satellite cost of foreign EO vendors.",
 } as const;
+
+// ────────────────────────────────────────────────────────────────────
+// Foreign-vendor benchmark used on /investment to anchor the saving
+// claim. WorldView Legion (Maxar) class is the closest like-for-like
+// for sub-metre EO; their build cost per satellite has been publicly
+// reported at ~$120M. Our $10.2M per SAR satellite is ~91.5% lower.
+// We don't quote the foreign vendor by name in the UI; the reference
+// stays in the methodology modal.
+// ────────────────────────────────────────────────────────────────────
+
+export const FOREIGN_VENDOR_BENCHMARK = {
+  /** Per-satellite build cost in USD, foreign vendor benchmark. */
+  perSatelliteUsd: 120_000_000,
+  /** Per-satellite cost of an EDGE SAR bird (in USD). */
+  ourPerSatelliteUsd: 10_189_000,
+  /** Saving as a fraction of the foreign vendor cost. */
+  savingFraction: 1 - 10_189_000 / 120_000_000,
+  whyCheaperBullets: [
+    {
+      title: "Sovereign supply chain",
+      body: "Components and assembly inside our own ecosystem; no foreign export-licence stack to absorb.",
+    },
+    {
+      title: "Economies of scale",
+      body: "22 birds on a single bus design. Tooling, test rigs, and ground software amortise across the run.",
+    },
+    {
+      title: "Partnership-led build",
+      body: "Co-development with the partner manufacturer means launch-ready hardware on existing lines, not a green-field programme.",
+    },
+  ],
+} as const;
+
+// ────────────────────────────────────────────────────────────────────
+// Implementation cadence emphasis.
+// First-light = first SAR bird on orbit, sovereign data flowing into
+// BASEER. Partner manufacturing lines are already running, so the
+// 6-month figure is the realistic critical-path number to first light.
+// The full 22-bird constellation completes inside the partner-shared
+// 20-month plan; that detail stays in the timeline chart but is no
+// longer the headline.
+// ────────────────────────────────────────────────────────────────────
+
+export const FIRST_LIGHT_MONTHS = 6;
 
 // ────────────────────────────────────────────────────────────────────
 // SLA: the sub-1-hour mission, broken into 4 narrated steps.
@@ -157,7 +195,7 @@ export interface SLASubstep {
 }
 
 export interface SLAStep {
-  id: 1 | 2 | 3 | 4;
+  id: 1 | 2 | 3 | 4 | 5;
   name: string;
   caption: string;
   boundMinutes: number;
@@ -172,74 +210,82 @@ export interface SLAStep {
 export const SLA_STEPS: SLAStep[] = [
   {
     id: 1,
-    name: "Situation Awareness & Intel Generation",
+    name: "Intel cue",
     caption: "OSINT + GEOINT fusion. AI agent classifies and prioritizes.",
     boundMinutes: 1,
-    demoSeconds: 4,
+    demoSeconds: 3,
     startMissionSeconds: 0,
     endMissionSeconds: 42,
     startDemoMs: 0,
-    endDemoMs: 4_000,
+    endDemoMs: 3_000,
   },
   {
     id: 2,
-    name: "Satellite Tasking & Data Capture",
+    name: "Tasking & capture",
     caption: "Sovereign tasking, no foreign approval. SAR-07 acknowledged.",
-    boundMinutes: 55,
-    demoSeconds: 16,
+    boundMinutes: 50,
+    demoSeconds: 12,
     startMissionSeconds: 42,
-    endMissionSeconds: 3_480,
-    startDemoMs: 4_000,
-    endDemoMs: 20_000,
-    // Substep demoMs windows total step 2's 4_000-20_000 demo range.
-    // Revisit is the longest substep (clock fast-forwards through the
-    // 45-minute revisit window) but the others get visible motion too.
+    endMissionSeconds: 3_180,
+    startDemoMs: 3_000,
+    endDemoMs: 15_000,
     substeps: [
       {
         name: "Tasking",
         durationMin: 2,
-        startDemoMs: 4_000,
-        endDemoMs: 5_500,
+        startDemoMs: 3_000,
+        endDemoMs: 4_500,
       },
       {
         name: "Revisit",
         durationMin: 45,
-        startDemoMs: 5_500,
-        endDemoMs: 17_000,
+        startDemoMs: 4_500,
+        endDemoMs: 13_500,
       },
       {
-        name: "Capture & Downlink",
-        durationMin: 10,
-        startDemoMs: 17_000,
-        endDemoMs: 20_000,
+        name: "Capture",
+        durationMin: 5,
+        startDemoMs: 13_500,
+        endDemoMs: 15_000,
       },
     ],
   },
   {
     id: 3,
-    name: "Automated Analytics & Validation",
-    caption: "Onboard CV models. No human in the loop. No foreign cloud.",
+    name: "Sovereign downlink",
+    caption: "Bytes pushed to a UAE ground station. Nothing leaves the country.",
     boundMinutes: 3,
     demoSeconds: 3,
-    startMissionSeconds: 3_480,
-    endMissionSeconds: 3_510,
-    startDemoMs: 20_000,
-    endDemoMs: 23_000,
+    startMissionSeconds: 3_180,
+    endMissionSeconds: 3_360,
+    startDemoMs: 15_000,
+    endDemoMs: 18_000,
   },
   {
     id: 4,
-    name: "Report on Desk/Screen",
-    caption: "Branded report, AR + EN, on the desk.",
+    name: "Onboard analytics",
+    caption: "CV models on the bird, sovereign cloud. No human in the loop.",
+    boundMinutes: 2,
+    demoSeconds: 3,
+    startMissionSeconds: 3_360,
+    endMissionSeconds: 3_510,
+    startDemoMs: 18_000,
+    endDemoMs: 21_000,
+  },
+  {
+    id: 5,
+    name: "Report",
+    caption: "Branded report, on the desk.",
     boundMinutes: 1,
     demoSeconds: 2,
     startMissionSeconds: 3_510,
     endMissionSeconds: 3_522,
-    startDemoMs: 23_000,
-    endDemoMs: 25_000,
+    startDemoMs: 21_000,
+    endDemoMs: 23_000,
   },
 ];
 
-export const MISSION_TOTAL_DEMO_MS = 25_000;
+export const MISSION_TOTAL_DEMO_MS = 23_000;
 export const MISSION_TOTAL_SECONDS = 3_522;
 /** Headline result the demo lands on. Phrasing kept deliberately
  *  honest: there is no real mission run, so we don't manufacture a
@@ -266,6 +312,25 @@ export const AOIS: AOI[] = [
   { id: "tehran", name: "Tehran", lat: 35.69, lng: 51.39, dailyPasses: 54 },
   { id: "hormuz", name: "Strait of Hormuz", lat: 26.57, lng: 56.25, dailyPasses: 24 },
   { id: "gulfofoman", name: "Gulf of Oman", lat: 24.5, lng: 58.5, dailyPasses: 21 },
+];
+
+// ────────────────────────────────────────────────────────────────────
+// Sovereign UAE ground stations. Three sites planned for downlink,
+// keeping every byte inside the country. The Mission animation routes
+// the captured imagery to the nearest one of these.
+// ────────────────────────────────────────────────────────────────────
+
+export interface GroundStation {
+  id: string;
+  name: string;
+  lat: number;
+  lng: number;
+}
+
+export const GROUND_STATIONS: GroundStation[] = [
+  { id: "fujairah", name: "Fujairah", lat: 25.13, lng: 56.34 },
+  { id: "abudhabi", name: "Abu Dhabi", lat: 24.45, lng: 54.39 },
+  { id: "rasghumeis", name: "Ras Ghumeis", lat: 24.07, lng: 52.64 },
 ];
 
 // ────────────────────────────────────────────────────────────────────
@@ -371,7 +436,7 @@ export const POI_REVISITS: POIRevisit[] = [
 // ────────────────────────────────────────────────────────────────────
 
 export interface Differentiator {
-  id: "sovereign" | "counter" | "ai_native" | "tactica_synergy";
+  id: "sovereign" | "counter" | "ai_native" | "closed_loop";
   title: string;
   body: string;
   icon: "shield" | "shuffle" | "cpu" | "link";
@@ -397,7 +462,7 @@ export const DIFFERENTIATORS: Differentiator[] = [
     icon: "cpu",
   },
   {
-    id: "tactica_synergy",
+    id: "closed_loop",
     title: "Closed-loop sovereign C2",
     body: "Decision-grade C2 inside the same sovereign perimeter. Intel cue, tasking, capture, analysis, and report close the OODA loop in under an hour without leaving the room.",
     icon: "link",
@@ -535,7 +600,7 @@ export const EOC_TIMELINE: StatusQuoFriction[] = [
 // ────────────────────────────────────────────────────────────────────
 
 export const REPORT_HEADER = "EDGE Sovereign EO Constellation: Mission Report";
-export const REPORT_FOOTER = "Powered by Origen | A TACTICA Capability";
+export const REPORT_FOOTER = "Powered by Origen";
 
 // ────────────────────────────────────────────────────────────────────
 // Methodology depth: sourced from the partner (STAR.VISION) simulation

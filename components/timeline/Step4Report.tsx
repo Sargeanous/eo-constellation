@@ -8,7 +8,7 @@ import { BaseerPill } from "./BaseerPill";
 // 1-page A-aspect preview slides up. Header + cover image + summary +
 // recommended action + footer. Branded per §13.3 (locked):
 //   header: "EDGE Sovereign EO Constellation: Mission Report"
-//   footer: "Powered by Origen | A TACTICA Capability"
+//   footer: "Powered by Origen"
 // BASEER pill alongside: the report lands back in the BASEER intel
 // platform.
 

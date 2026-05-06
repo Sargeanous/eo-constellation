@@ -161,8 +161,8 @@ export function SimulationComparison({
                 </table>
               </div>
               <p className="text-[11px] text-muted-foreground">
-                Interpolated from 4 simulation runs. Full physics in{" "}
-                <span className="font-mono">simulator-v2.tactica.ae</span>.
+                Interpolated from 4 simulation runs. Full physics in
+                the partner physics simulator.
               </p>
             </div>
           </div>

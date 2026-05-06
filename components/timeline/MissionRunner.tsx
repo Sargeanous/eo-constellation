@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Play } from "lucide-react";
+import { Pause, Play, RotateCcw } from "lucide-react";
 import { useDemoStore } from "@/lib/store";
 import {
   SLA_STEPS,
@@ -12,21 +12,21 @@ import { Stopwatch } from "./Stopwatch";
 import { StepRail } from "./StepRail";
 import { Step1Intel } from "./Step1Intel";
 import { Step2Capture } from "./Step2Capture";
+import { Step3Downlink } from "./Step3Downlink";
 import { Step3Analytics } from "./Step3Analytics";
 import { Step4Report } from "./Step4Report";
 import { FinalBeat } from "./FinalBeat";
 import { chime, tick } from "@/lib/audio";
 
-// Phase 2: the centrepiece. Single button drives a 20s compressed
-// timeline that animates four steps in sequence and lands on
-// "< 1 hour" plus a status-quo comparison. PRD §4 (timing tuned per
-// operator feedback: 60s was too long for a Chairman + Minister to
-// sit through, fabricated 58:42 was unprofessional).
+// Phase 2: the centrepiece. Single button drives a compressed timeline
+// that animates five steps (intel, tasking & capture, sovereign downlink,
+// onboard analytics, report) and lands on "< 1 hour".
 //
 // Architecture:
-//   - Store owns the clock (missionElapsedMs) and phase. We read both
-//     and drive a RAF loop that ticks elapsed while phase != idle and
-//     != delivered.
+//   - Store owns the clock (missionElapsedMs), phase, and a paused flag.
+//     We drive a RAF loop that ticks elapsed only while running AND not
+//     paused. Stop sets paused=true and freezes the run in place; Resume
+//     un-freezes; Reset clears everything back to idle.
 //   - Step components mount/unmount via AnimatePresence keyed on the
 //     active step id, so each step gets a clean enter/exit.
 //   - chime() is best-effort: gated behind audioEnabled in the store.
@@ -44,9 +44,12 @@ function activeStepId(elapsedMs: number): StepId | null {
 export function MissionRunner() {
   const elapsed = useDemoStore((s) => s.missionElapsedMs);
   const phase = useDemoStore((s) => s.missionPhase);
+  const paused = useDemoStore((s) => s.missionPaused);
   const audioEnabled = useDemoStore((s) => s.audioEnabled);
   const tickMission = useDemoStore((s) => s.tickMission);
   const setMissionPhase = useDemoStore((s) => s.setMissionPhase);
+  const pauseMission = useDemoStore((s) => s.pauseMission);
+  const resumeMission = useDemoStore((s) => s.resumeMission);
   const resetMission = useDemoStore((s) => s.resetMission);
 
   const rafRef = useRef<number | null>(null);
@@ -57,10 +60,11 @@ export function MissionRunner() {
   const tickedStepRef = useRef<StepId | null>(null);
 
   const isRunning = phase !== "idle" && phase !== "delivered";
+  const isTicking = isRunning && !paused;
 
-  // RAF loop: only ticks while running.
+  // RAF loop: only ticks while running and not paused.
   useEffect(() => {
-    if (!isRunning) {
+    if (!isTicking) {
       lastRef.current = null;
       return;
     }
@@ -75,7 +79,7 @@ export function MissionRunner() {
     return () => {
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
     };
-  }, [isRunning, tickMission]);
+  }, [isTicking, tickMission]);
 
   // Phase bookkeeping: flip the store phase as we cross step boundaries.
   // Map step id → store phase string; we don't strictly need the store
@@ -99,7 +103,8 @@ export function MissionRunner() {
       1: "tasking",
       2: "imaging",
       3: "downlink",
-      4: "delivered",
+      4: "analytics",
+      5: "report",
     };
     const target = map[id];
     if (target && target !== phase) setMissionPhase(target);
@@ -139,6 +144,14 @@ export function MissionRunner() {
     setMissionPhase("tasking");
   }
 
+  function onStop() {
+    pauseMission();
+  }
+
+  function onResume() {
+    resumeMission();
+  }
+
   function onRunAgain() {
     resetMission();
     // Use a microtask so the store has updated before we restart.
@@ -149,7 +162,7 @@ export function MissionRunner() {
 
   return (
     <div className="space-y-8">
-      {/* Stopwatch + Run / Reset controls */}
+      {/* Stopwatch + Run / Stop / Resume / Reset controls */}
       <div className="flex flex-col items-center gap-6 md:flex-row md:items-center md:justify-between">
         <Stopwatch />
         <div className="flex gap-3">
@@ -163,10 +176,26 @@ export function MissionRunner() {
               Run Mission
             </Button>
           )}
-          {isRunning && (
-            <Button variant="outline" onClick={resetMission}>
+          {isRunning && !paused && (
+            <Button variant="outline" onClick={onStop}>
+              <Pause className="mr-2 h-4 w-4" />
               Stop
             </Button>
+          )}
+          {isRunning && paused && (
+            <>
+              <Button
+                onClick={onResume}
+                className="bg-gold text-primary-foreground hover:bg-gold/90"
+              >
+                <Play className="mr-2 h-4 w-4" />
+                Resume
+              </Button>
+              <Button variant="outline" onClick={resetMission}>
+                <RotateCcw className="mr-2 h-4 w-4" />
+                Reset
+              </Button>
+            </>
           )}
         </div>
       </div>
@@ -177,9 +206,10 @@ export function MissionRunner() {
           {phase === "idle" && <IdleHero key="idle" />}
           {isRunning && stepId === 1 && <Step1Intel key="step1" />}
           {isRunning && stepId === 2 && <Step2Capture key="step2" />}
-          {isRunning && stepId === 3 && <Step3Analytics key="step3" />}
-          {isRunning && stepId === 4 && <Step4Report key="step4" />}
-          {phase === "delivered" && <Step4Report key="step4-final" />}
+          {isRunning && stepId === 3 && <Step3Downlink key="step3-downlink" />}
+          {isRunning && stepId === 4 && <Step3Analytics key="step4-analytics" />}
+          {isRunning && stepId === 5 && <Step4Report key="step5-report" />}
+          {phase === "delivered" && <Step4Report key="step5-final" />}
         </AnimatePresence>
       </div>
 
@@ -207,9 +237,8 @@ function IdleHero() {
         Tap <span className="text-gold">Run Mission</span> and watch the SLA.
       </p>
       <p className="max-w-lg text-sm text-muted-foreground">
-        Twenty seconds of demo, four steps, one resolution. The revisit
-        beat in the middle is the long one - that&apos;s the wait MoD has
-        been told for years takes 48+ hours.
+        Five steps, one resolution. Intel cue, sovereign tasking and capture,
+        downlink to a UAE ground station, onboard analytics, report.
       </p>
     </motion.div>
   );
