@@ -133,31 +133,17 @@ export const COST_USD = {
 // ────────────────────────────────────────────────────────────────────
 // SLA: the sub-1-hour mission, broken into 4 narrated steps.
 //
-// Two clocks per step, decoupled:
-//   - The mission clock advances from startMissionSeconds to
-//     endMissionSeconds over the [startDemoMs, clockEndDemoMs] window.
-//   - The step's content (alert card, globe inset, bounding boxes,
-//     report) renders over the full [startDemoMs, endDemoMs] window.
-// After clockEndDemoMs the clock holds at endMissionSeconds while
-// the rest of the step finishes. This lets the clock tick at a
-// natural "1 mission minute = 1 real second" pace during steps 1 / 3
-// / 4 (which span well under a minute of mission time, so the clock
-// finishes in a fraction of a real second) without the content
-// being cut off mid-render.
+// Mission digits tick visibly throughout the run, at variable speed:
+//   Step 1 (intel)              : ~10x   slow ticking, digits readable
+//   Step 2 (tasking + revisit)  : ~215x  fast-forward / time-lapse
+//   Step 3 (analytics)          : ~10x   back to slow
+//   Step 4 (report)             : ~6x    slow
 //
-// Step 2 has no hold: clockEndDemoMs == endDemoMs, so the clock
-// advances continuously and visibly fast-forwards through the
-// 57-minute revisit window. That's the speedup beat.
-//
-// Pacing target:
-//   Step 1 / 3 / 4 clock-active rate: ~60 mission sec per real sec
-//                                     (= 1 mission minute per real
-//                                     second, what the operator
-//                                     called "normal")
-//   Step 2 clock-active rate         : ~265 mission sec per real sec
-//                                     (~4.4× normal, clear speedup)
-//
-// Total demo time: 20 sec.
+// Total demo: 4 + 16 + 3 + 2 = 25s. The visible-clock variable speed
+// is what the operator wanted: it shouldn't take less time, it should
+// pace step 2 like a fast-forward. Step 2 stays the longest beat by
+// demo seconds (so the "revisit" wait still feels like a wait) but
+// the clock digits inside that window blur into a time-lapse.
 // ────────────────────────────────────────────────────────────────────
 
 export interface SLASubstep {
@@ -180,10 +166,6 @@ export interface SLAStep {
   endMissionSeconds: number;
   startDemoMs: number;
   endDemoMs: number;
-  /** Demo-time at which the mission clock REACHES endMissionSeconds
-   *  and starts holding. For steps where clock = step (no hold),
-   *  set this equal to endDemoMs. */
-  clockEndDemoMs: number;
   substeps?: SLASubstep[];
 }
 
@@ -193,48 +175,43 @@ export const SLA_STEPS: SLAStep[] = [
     name: "Situation Awareness & Intel Generation",
     caption: "OSINT + GEOINT fusion. AI agent classifies and prioritizes.",
     boundMinutes: 1,
-    demoSeconds: 3,
+    demoSeconds: 4,
     startMissionSeconds: 0,
     endMissionSeconds: 42,
     startDemoMs: 0,
-    endDemoMs: 3_000,
-    // Clock advances 0:00 → 0:42 over 700ms (60x), holds at 0:42 for
-    // the remaining 2.3s while the alert card + AI agent tile finish
-    // animating in.
-    clockEndDemoMs: 700,
+    endDemoMs: 4_000,
   },
   {
     id: 2,
     name: "Satellite Tasking & Data Capture",
     caption: "Sovereign tasking, no foreign approval. SAR-07 acknowledged.",
     boundMinutes: 55,
-    demoSeconds: 13,
+    demoSeconds: 16,
     startMissionSeconds: 42,
     endMissionSeconds: 3_480,
-    startDemoMs: 3_000,
-    endDemoMs: 16_000,
-    // Clock advances throughout step 2 (no hold). Average rate:
-    // 3438 mission sec / 13 demo sec ≈ 264 mission sec/real sec ≈
-    // 4.4× normal. This is the visible fast-forward.
-    clockEndDemoMs: 16_000,
+    startDemoMs: 4_000,
+    endDemoMs: 20_000,
+    // Substep demoMs windows total step 2's 4_000-20_000 demo range.
+    // Revisit is the longest substep (clock fast-forwards through the
+    // 45-minute revisit window) but the others get visible motion too.
     substeps: [
       {
         name: "Tasking",
         durationMin: 2,
-        startDemoMs: 3_000,
-        endDemoMs: 4_500,
+        startDemoMs: 4_000,
+        endDemoMs: 5_500,
       },
       {
         name: "Revisit",
         durationMin: 45,
-        startDemoMs: 4_500,
-        endDemoMs: 14_000,
+        startDemoMs: 5_500,
+        endDemoMs: 17_000,
       },
       {
         name: "Capture & Downlink",
         durationMin: 10,
-        startDemoMs: 14_000,
-        endDemoMs: 16_000,
+        startDemoMs: 17_000,
+        endDemoMs: 20_000,
       },
     ],
   },
@@ -243,14 +220,11 @@ export const SLA_STEPS: SLAStep[] = [
     name: "Automated Analytics & Validation",
     caption: "Onboard CV models. No human in the loop. No foreign cloud.",
     boundMinutes: 3,
-    demoSeconds: 2,
+    demoSeconds: 3,
     startMissionSeconds: 3_480,
     endMissionSeconds: 3_510,
-    startDemoMs: 16_000,
-    endDemoMs: 18_000,
-    // Clock advances 58:00 → 58:30 over 500ms (60x), holds the rest
-    // (1.5s) while bounding boxes appear.
-    clockEndDemoMs: 16_500,
+    startDemoMs: 20_000,
+    endDemoMs: 23_000,
   },
   {
     id: 4,
@@ -260,16 +234,12 @@ export const SLA_STEPS: SLAStep[] = [
     demoSeconds: 2,
     startMissionSeconds: 3_510,
     endMissionSeconds: 3_522,
-    startDemoMs: 18_000,
-    endDemoMs: 20_000,
-    // Clock advances 58:30 → 58:42 over 200ms (60x), holds at 58:42
-    // for 1.8s while the report PDF preview slides up. The next tick
-    // after this holds the FinalBeat takes over.
-    clockEndDemoMs: 18_200,
+    startDemoMs: 23_000,
+    endDemoMs: 25_000,
   },
 ];
 
-export const MISSION_TOTAL_DEMO_MS = 20_000;
+export const MISSION_TOTAL_DEMO_MS = 25_000;
 export const MISSION_TOTAL_SECONDS = 3_522;
 /** Headline result the demo lands on. Phrasing kept deliberately
  *  honest: there is no real mission run, so we don't manufacture a

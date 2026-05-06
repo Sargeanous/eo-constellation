@@ -42,16 +42,9 @@ function formatMmSs(totalSec: number): string {
   return `${m}:${s}`;
 }
 
-/** Mission seconds for the current demo elapsed. Within each step,
- *  the clock advances linearly from startMissionSeconds to
- *  endMissionSeconds over the [startDemoMs, clockEndDemoMs] window,
- *  then holds at endMissionSeconds until the step ends. That decouples
- *  the natural-pace clock from the longer step-content render window
- *  (so steps 1/3/4 can show the clock tick at "1 mission min = 1
- *  real sec" without the alert card / bounding boxes / report being
- *  cut off mid-animation). Step 2 has no hold (clockEndDemoMs ==
- *  endDemoMs), so the clock fast-forwards continuously through the
- *  57-minute revisit window. */
+/** Mission seconds for the current demo elapsed. Interpolates within
+ *  whichever step is active. Each step's local linear ramp produces
+ *  the variable visible speed (slow → fast → slow → slow). */
 function computeMissionSec(elapsedMs: number): number {
   const step = activeStep(elapsedMs);
   if (!step) {
@@ -60,9 +53,8 @@ function computeMissionSec(elapsedMs: number): number {
     }
     return 0;
   }
-  const clockSpan = step.clockEndDemoMs - step.startDemoMs;
-  const localMs = elapsedMs - step.startDemoMs;
-  const t = clockSpan > 0 ? Math.min(1, localMs / clockSpan) : 1;
+  const t =
+    (elapsedMs - step.startDemoMs) / (step.endDemoMs - step.startDemoMs);
   return (
     step.startMissionSeconds +
     t * (step.endMissionSeconds - step.startMissionSeconds)
