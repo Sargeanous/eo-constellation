@@ -1,12 +1,21 @@
 "use client";
 import { useState } from "react";
 
-// Fixed top-left platform logo. Renders /photos/logoedge.png; if the
-// asset isn't present we fall through to a small "EDGE" wordmark so
-// the brand still shows. The logo is tap-able to scroll to the cover.
+// Fixed top-left platform logo. Tries /photos/logoedge.{png,jpg,webp,svg}
+// in order; if none exist we fall through to a small "EDGE" wordmark so
+// the brand still shows. Tap-able to scroll back to the cover.
+
+const CANDIDATES = [
+  "/photos/logoedge.png",
+  "/photos/logoedge.jpg",
+  "/photos/logoedge.jpeg",
+  "/photos/logoedge.webp",
+  "/photos/logoedge.svg",
+];
 
 export function BrandLogo() {
-  const [errored, setErrored] = useState(false);
+  const [index, setIndex] = useState(0);
+  const errored = index >= CANDIDATES.length;
 
   function onClick() {
     document
@@ -26,9 +35,10 @@ export function BrandLogo() {
       {!errored ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src="/photos/logoedge.png"
+          key={CANDIDATES[index]}
+          src={CANDIDATES[index]}
           alt="EDGE"
-          onError={() => setErrored(true)}
+          onError={() => setIndex((i) => i + 1)}
           className="h-6 w-auto"
         />
       ) : (

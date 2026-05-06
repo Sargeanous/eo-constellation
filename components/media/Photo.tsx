@@ -1,13 +1,18 @@
 "use client";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ImageOff } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 // Small wrapper around <img>. If the file isn't present yet we render
 // an intentional-looking "asset pending" tile instead of a broken-image
-// glyph. The placeholder reads as "this is a slot for an asset" rather
-// than as a layout bug, so the platform still demos cleanly before the
-// partner imagery has been dropped into public/photos/.
+// glyph.
+//
+// On 404, we walk a list of common image extensions before declaring
+// the asset missing. So a caller passing "/photos/iran_zoom.jpg" still
+// resolves if the actual file dropped into public/photos/ happens to
+// be iran_zoom.png or iran_zoom.webp - useful because the partner ships
+// imagery in mixed formats and we don't want every drop to require a
+// code change.
 
 interface PhotoProps {
   src: string;
@@ -20,6 +25,20 @@ interface PhotoProps {
   placeholderLabel?: string;
 }
 
+const EXTENSION_FALLBACKS = ["jpg", "jpeg", "png", "webp", "avif"];
+
+function buildCandidates(src: string): string[] {
+  const m = src.match(/^(.*)\.([^./]+)$/);
+  if (!m) return [src];
+  const [, base, ext] = m;
+  const lower = ext!.toLowerCase();
+  const ordered = [
+    lower,
+    ...EXTENSION_FALLBACKS.filter((e) => e !== lower),
+  ];
+  return ordered.map((e) => `${base}.${e}`);
+}
+
 export function Photo({
   src,
   alt,
@@ -28,7 +47,9 @@ export function Photo({
   fit = "cover",
   placeholderLabel,
 }: PhotoProps) {
-  const [errored, setErrored] = useState(false);
+  const candidates = useMemo(() => buildCandidates(src), [src]);
+  const [index, setIndex] = useState(0);
+  const errored = index >= candidates.length;
 
   return (
     <div
@@ -40,9 +61,10 @@ export function Photo({
     >
       {!errored && (
         <img
-          src={src}
+          key={candidates[index]}
+          src={candidates[index]}
           alt={alt}
-          onError={() => setErrored(true)}
+          onError={() => setIndex((i) => i + 1)}
           className={cn(
             "absolute inset-0 h-full w-full",
             fit === "cover" ? "object-cover" : "object-contain",

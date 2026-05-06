@@ -18,11 +18,17 @@ EXPECTED FILES
   middle_east_target.jpg Constellation block - target clustering
                          visualisation over MENA.
 
+  logoedge.png           Platform logo. Rendered as a small chip in
+                         the top-left of every section. Anything from
+                         a 64-256 px tall PNG with transparent
+                         background is fine.
+
 OPTIONAL FILE EXTENSIONS
 ========================
-The components accept .jpg, .jpeg, .png, or .webp as long as the
-basename matches. If you only have .png, drop those - the platform's
-<img> elements infer the extension from the actual file you commit.
+The components reference exact filenames including extension. If you
+have .png instead of .jpg (or vice-versa), either rename the file or
+update the corresponding <Photo src=...> path in the matching
+component.
 
 WINDOWS GOTCHA
 ==============

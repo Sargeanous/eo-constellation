@@ -493,7 +493,7 @@ export default function Home() {
             </aside>
           </div>
 
-          {/* Media gallery: orbital cinematic + payload reference */}
+          {/* Media gallery: orbital cinematic + 3 reference photos */}
           <div className="grid gap-4 md:grid-cols-2">
             <figure className="overflow-hidden rounded-lg border border-border bg-card">
               <MissionVideo
@@ -514,6 +514,28 @@ export default function Home() {
               />
               <figcaption className="px-4 py-3 text-xs text-muted-foreground">
                 Payload reference · ±30° off-nadir slew.
+              </figcaption>
+            </figure>
+            <figure className="overflow-hidden rounded-lg border border-border bg-card">
+              <Photo
+                src="/photos/iran_zoom.jpg"
+                alt="Iran AOI zoom reference"
+                aspect="aspect-video"
+                placeholderLabel="Iran zoom"
+              />
+              <figcaption className="px-4 py-3 text-xs text-muted-foreground">
+                AOI zoom · Iran reference.
+              </figcaption>
+            </figure>
+            <figure className="overflow-hidden rounded-lg border border-border bg-card">
+              <Photo
+                src="/photos/middle_east_target.jpg"
+                alt="Middle East target overview"
+                aspect="aspect-video"
+                placeholderLabel="Middle East target"
+              />
+              <figcaption className="px-4 py-3 text-xs text-muted-foreground">
+                Middle East target · daily-pass envelope.
               </figcaption>
             </figure>
           </div>
