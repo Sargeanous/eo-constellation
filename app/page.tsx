@@ -463,7 +463,7 @@ export default function Home() {
               run, so we present them as a triptych. The orbital
               cinematic lives in the methodology modal already, so it
               doesn't need a second slot here. */}
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-4 md:grid-cols-2">
             <figure className="overflow-hidden rounded-lg border border-border bg-card">
               <MissionVideo
                 videoId="ground_tracks_flat"
