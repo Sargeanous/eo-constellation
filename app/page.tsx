@@ -99,17 +99,31 @@ export default function Home() {
       {/* ─────────── Cover ─────────── */}
       <section
         id="cover"
-        className="relative h-screen w-full overflow-hidden"
+        className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden px-8 text-center"
       >
-        <Globe autoRotate={false} interactive={false} bloom={false} />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-deepspace/30 via-transparent to-deepspace" />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-deepspace/40 via-transparent to-deepspace/40" />
+        {/* Subtle radial backdrop, no globe: the live globe lives in
+            the constellation section, where it earns its keep. Two of
+            them on one page was both visually noisy and a GPU drag. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            backgroundImage:
+              "radial-gradient(ellipse at 50% 30%, rgba(56,189,248,0.10), transparent 60%), radial-gradient(ellipse at 50% 80%, rgba(212,169,73,0.08), transparent 65%)",
+          }}
+        />
         <motion.div
           variants={STAGGER_CHILDREN}
           initial="hidden"
           animate="visible"
-          className="relative z-10 flex h-full flex-col items-center justify-center px-8 text-center"
+          className="relative z-10 flex flex-col items-center"
         >
+          <motion.p
+            variants={CHILD_RISE}
+            className="mb-6 text-xs uppercase tracking-[0.5em] text-gold"
+          >
+            Sovereign EO Constellation
+          </motion.p>
           <motion.h1
             variants={CHILD_RISE}
             className="font-display text-5xl font-semibold tracking-tight md:text-7xl"
@@ -133,7 +147,7 @@ export default function Home() {
           </motion.div>
           <motion.p
             variants={CHILD_RISE}
-            className="absolute bottom-24 left-1/2 -translate-x-1/2 font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground/70"
+            className="mt-16 font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground/70"
           >
             {CONSTELLATION.totalSatellites} satellites &nbsp;·&nbsp;{" "}
             {CONSTELLATION.altitudeKm} km &nbsp;·&nbsp;{" "}
@@ -479,8 +493,8 @@ export default function Home() {
             </aside>
           </div>
 
-          {/* Media gallery: orbit cinematic + zoom video + payload + targets */}
-          <div className="grid gap-4 md:grid-cols-3">
+          {/* Media gallery: orbital cinematic + payload reference */}
+          <div className="grid gap-4 md:grid-cols-2">
             <figure className="overflow-hidden rounded-lg border border-border bg-card">
               <MissionVideo
                 videoId="cover_orbit_cinematic"
@@ -492,43 +506,14 @@ export default function Home() {
               </figcaption>
             </figure>
             <figure className="overflow-hidden rounded-lg border border-border bg-card">
-              <MissionVideo
-                videoId="aoi_iran_zoom"
-                className="aspect-video"
-                ariaLabel="Iran AOI zoom"
-              />
-              <figcaption className="px-4 py-3 text-xs text-muted-foreground">
-                AOI zoom · Iran segment.
-              </figcaption>
-            </figure>
-            <figure className="overflow-hidden rounded-lg border border-border bg-card">
               <Photo
                 src="/photos/payload_slewing.jpg"
-                alt="SAR payload slewing"
+                alt="SAR payload slewing reference"
                 aspect="aspect-video"
+                placeholderLabel="Payload reference"
               />
               <figcaption className="px-4 py-3 text-xs text-muted-foreground">
-                Payload slewing · ±30° off-nadir.
-              </figcaption>
-            </figure>
-            <figure className="overflow-hidden rounded-lg border border-border bg-card">
-              <Photo
-                src="/photos/iran_zoom.jpg"
-                alt="Iran zoom reference"
-                aspect="aspect-video"
-              />
-              <figcaption className="px-4 py-3 text-xs text-muted-foreground">
-                Reference zoom · Iran target.
-              </figcaption>
-            </figure>
-            <figure className="overflow-hidden rounded-lg border border-border bg-card md:col-span-2">
-              <Photo
-                src="/photos/middle_east_target.jpg"
-                alt="Middle East target overview"
-                aspect="aspect-video"
-              />
-              <figcaption className="px-4 py-3 text-xs text-muted-foreground">
-                Middle East target · daily-pass envelope.
+                Payload reference · ±30° off-nadir slew.
               </figcaption>
             </figure>
           </div>
@@ -545,13 +530,15 @@ export default function Home() {
             <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
               Sovereign cost.{" "}
               <span className="text-muted-foreground">
-                {FIRST_LIGHT_MONTHS}-month first light.
+                Sign now, fly in {FIRST_LIGHT_MONTHS} months.
               </span>
             </h2>
             <p className="mt-4 max-w-3xl text-lg text-muted-foreground">
               Per-satellite build cost is roughly 90% lower than the foreign
-              EO vendor benchmark. Partner manufacturing lines are already
-              running, so first light lands in six months, not in a year.
+              EO vendor benchmark. The partner has SAR birds on the line
+              today: a deposit reserves a slot from the in-flight build, so
+              first light lands in six months instead of starting a green-
+              field programme.
             </p>
           </header>
 
@@ -566,16 +553,32 @@ export default function Home() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Implementation</CardTitle>
+              <CardTitle>Implementation plan</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <Timeline27 />
-              <p className="rounded-md border border-border bg-card/40 px-4 py-3 text-xs italic text-muted-foreground">
-                First-light marker (M{FIRST_LIGHT_MONTHS}) is the first SAR
-                bird on orbit, sovereign data flowing into BASEER. The
-                partner build runs concurrently after that to complete the
-                22-bird ramp.
-              </p>
+              <div className="grid gap-3 md:grid-cols-2">
+                <div className="rounded-md border border-gold/40 bg-gold/5 p-4">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-gold">
+                    Why six months
+                  </p>
+                  <p className="mt-2 text-sm text-foreground">
+                    Partner manufacturing is already running. A deposit
+                    today reserves a SAR bird from a build line that&apos;s
+                    mid-flight, not the start of a green-field programme.
+                  </p>
+                </div>
+                <div className="rounded-md border border-border bg-card/40 p-4">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
+                    Why now
+                  </p>
+                  <p className="mt-2 text-sm text-foreground">
+                    The reserved slot is the bird closest to ready. Every
+                    month of delay rolls the first-light date with the line.
+                    Sovereignty is a function of timing, not just spec.
+                  </p>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </div>

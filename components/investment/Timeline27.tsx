@@ -1,12 +1,14 @@
 "use client";
 import { TIMELINE_PHASES, FIRST_LIGHT_MONTHS, palette } from "@/lib/data";
 
-// Implementation Gantt with first-light emphasis. The big visual hook
-// is a vertical dotted line at month 6 labelled "FIRST LIGHT": that's
-// the milestone (first SAR bird on orbit, sovereign data flowing into
-// BASEER), powered by partner manufacturing lines that are already
-// running. The full 22-bird ramp continues to M20; the chart shows
-// that detail without making it the headline.
+// Implementation Gantt with a highlighted six-month "first-light
+// window" overlaid on top of the phase rows. The window represents
+// the reserved slot a deposit unlocks today: the partner is already
+// mid-build, so signing now drops us straight into the back end of
+// their production line and we get a sovereign bird operational in
+// six months. The rest of the 22-bird constellation continues to roll
+// in over the full implementation horizon - that detail is in the
+// per-phase rows but isn't the headline.
 
 const TOTAL_MONTHS = 24; // 20 months to launch + 4 months ops runoff
 const W = 880;
@@ -62,8 +64,27 @@ export function Timeline27() {
         viewBox={`0 0 ${W} ${svgH}`}
         className="w-full"
         role="img"
-        aria-label="Implementation timeline with six-month first-light milestone"
+        aria-label="Implementation timeline with six-month reserved first-light window"
       >
+        <defs>
+          <pattern
+            id="firstLightHatch"
+            patternUnits="userSpaceOnUse"
+            width="6"
+            height="6"
+            patternTransform="rotate(45)"
+          >
+            <line
+              x1="0"
+              y1="0"
+              x2="0"
+              y2="6"
+              stroke={palette.accentGold}
+              strokeOpacity="0.45"
+              strokeWidth="1.4"
+            />
+          </pattern>
+        </defs>
         {/* Vertical month axis lines */}
         {[0, 6, 12, 18, 20].map((m) => {
           const isYear = m % 12 === 0 || m === 20;
@@ -219,29 +240,29 @@ export function Timeline27() {
           </text>
         ))}
 
-        {/* First-light dotted line: spans the whole chart so the
-            milestone reads against every phase row. */}
-        <line
-          x1={monthToX(FIRST_LIGHT_MONTHS)}
-          y1={PAD_TOP - 12}
-          x2={monthToX(FIRST_LIGHT_MONTHS)}
-          y2={axisY + 4}
-          stroke={palette.accentGold}
-          strokeWidth="1.4"
-          strokeDasharray="4 5"
-          strokeOpacity="0.95"
-        />
-        <g
-          fontFamily="ui-monospace, Menlo, monospace"
-          fontSize="10"
-          fill={palette.accentGold}
-        >
+        {/* Reserved first-light window: a 6-month span overlaid on
+            top of the phase rows. Hatched gold so it reads as a
+            "claim" on the timeline, not as another phase. */}
+        <g>
+          <rect
+            x={monthToX(0)}
+            y={PAD_TOP - 6}
+            width={monthToX(FIRST_LIGHT_MONTHS) - monthToX(0)}
+            height={axisY - (PAD_TOP - 6)}
+            fill="url(#firstLightHatch)"
+            stroke={palette.accentGold}
+            strokeOpacity="0.85"
+            strokeWidth="1.2"
+          />
           <text
-            x={monthToX(FIRST_LIGHT_MONTHS) + 6}
-            y={PAD_TOP - 4}
+            x={monthToX(0) + 8}
+            y={PAD_TOP - 12}
+            fontFamily="ui-monospace, Menlo, monospace"
+            fontSize="10"
             fontWeight="600"
+            fill={palette.accentGold}
           >
-            ◆ FIRST LIGHT · M{FIRST_LIGHT_MONTHS}
+            ◆ FIRST-LIGHT WINDOW · {FIRST_LIGHT_MONTHS} MONTHS · DEPOSIT LOCKS THIS SLOT
           </text>
         </g>
       </svg>
