@@ -26,7 +26,10 @@ import {
 import { CHILD_RISE, STAGGER_CHILDREN } from "@/components/motion/variants";
 import { MissionRunner } from "@/components/timeline/MissionRunner";
 import { CostWaterfall } from "@/components/investment/CostWaterfall";
-import { Timeline27 } from "@/components/investment/Timeline27";
+import {
+  Timeline27,
+  type TimelineMode,
+} from "@/components/investment/Timeline27";
 import { MethodologyModal } from "@/components/methodology/MethodologyModal";
 import { SimulationComparison } from "@/components/constellation/SimulationComparison";
 import { AOIPanel } from "@/components/constellation/AOIPanel";
@@ -78,6 +81,7 @@ export default function Home() {
   const audioEnabled = useDemoStore((s) => s.audioEnabled);
   const [methodOpen, setMethodOpen] = useState(false);
   const [simOpen, setSimOpen] = useState(false);
+  const [timelineMode, setTimelineMode] = useState<TimelineMode>("scratch");
 
   async function onBegin() {
     if (audioEnabled) {
@@ -574,33 +578,15 @@ export default function Home() {
           </Card>
 
           <Card>
-            <CardHeader>
+            <CardHeader className="flex flex-row items-center justify-between gap-4 space-y-0">
               <CardTitle>Implementation plan</CardTitle>
+              <TimelineModeToggle
+                mode={timelineMode}
+                onChange={setTimelineMode}
+              />
             </CardHeader>
-            <CardContent className="space-y-4">
-              <Timeline27 />
-              <div className="grid gap-3 md:grid-cols-2">
-                <div className="rounded-md border border-gold/40 bg-gold/5 p-4">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-gold">
-                    Why six months
-                  </p>
-                  <p className="mt-2 text-sm text-foreground">
-                    Partner manufacturing is already running. A deposit
-                    today reserves a SAR bird from a build line that&apos;s
-                    mid-flight, not the start of a green-field programme.
-                  </p>
-                </div>
-                <div className="rounded-md border border-border bg-card/40 p-4">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
-                    Why now
-                  </p>
-                  <p className="mt-2 text-sm text-foreground">
-                    The reserved slot is the bird closest to ready. Every
-                    month of delay rolls the first-light date with the line.
-                    Sovereignty is a function of timing, not just spec.
-                  </p>
-                </div>
-              </div>
+            <CardContent>
+              <Timeline27 mode={timelineMode} />
             </CardContent>
           </Card>
         </div>
@@ -661,6 +647,47 @@ export default function Home() {
       <SimulationComparison open={simOpen} onOpenChange={setSimOpen} />
       <AOIPanel />
     </main>
+  );
+}
+
+function TimelineModeToggle({
+  mode,
+  onChange,
+}: {
+  mode: TimelineMode;
+  onChange: (m: TimelineMode) => void;
+}) {
+  const opts: { id: TimelineMode; label: string }[] = [
+    { id: "scratch", label: "From scratch" },
+    { id: "now", label: "If enabled now" },
+  ];
+  return (
+    <div
+      role="tablist"
+      aria-label="Implementation plan view"
+      className="inline-flex rounded-full border border-border bg-background p-0.5"
+    >
+      {opts.map((o) => {
+        const active = mode === o.id;
+        return (
+          <button
+            key={o.id}
+            type="button"
+            role="tab"
+            aria-selected={active}
+            onClick={() => onChange(o.id)}
+            className={[
+              "rounded-full px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] transition-colors",
+              active
+                ? "bg-gold text-primary-foreground"
+                : "text-muted-foreground hover:text-foreground",
+            ].join(" ")}
+          >
+            {o.label}
+          </button>
+        );
+      })}
+    </div>
   );
 }
 
