@@ -105,7 +105,7 @@ export default function Home() {
           animate="visible"
           className="relative z-10 flex flex-col items-center"
         >
-          <motion.div variants={CHILD_RISE} className="mb-8">
+          <motion.div variants={CHILD_RISE} className="mb-10">
             <BrandMark
               size="hero"
               fallbackTitle={CONSTELLATION.name}
@@ -114,17 +114,9 @@ export default function Home() {
           </motion.div>
           <motion.p
             variants={CHILD_RISE}
-            className="mt-2 max-w-2xl text-base text-muted-foreground md:text-lg"
+            className="font-display text-3xl font-semibold tracking-tight md:text-5xl"
           >
-            Sovereign EO Constellation. Built for MENA.
-          </motion.p>
-          <motion.p
-            variants={CHILD_RISE}
-            className="mt-12 font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground/70"
-          >
-            {CONSTELLATION.totalSatellites} satellites &nbsp;·&nbsp;{" "}
-            {CONSTELLATION.altitudeKm} km &nbsp;·&nbsp;{" "}
-            {CONSTELLATION.inclinationDeg}°
+            Sovereign EO Constellation
           </motion.p>
         </motion.div>
       </section>
@@ -388,7 +380,7 @@ export default function Home() {
               03 / Constellation
             </p>
             <h2 className="mt-2 font-display text-4xl font-semibold tracking-tight md:text-5xl">
-              22 satellites. 350 km. 38°.
+              22 SAR Satellites · 350 km altitude · 38° inclination
             </h2>
             <p className="mt-2 max-w-3xl text-sm text-muted-foreground md:text-base">
               Counter-countermeasure orbit. SAR-only. Sovereign by design.
@@ -490,17 +482,6 @@ export default function Home() {
               />
               <figcaption className="px-4 py-3 text-xs text-muted-foreground">
                 AOI zoom · Iran segment of the same run.
-              </figcaption>
-            </figure>
-            <figure className="overflow-hidden rounded-lg border border-border bg-card">
-              <Photo
-                src="/photos/iran_zoom.jpg"
-                alt="Iran AOI zoom still"
-                aspect="aspect-video"
-                placeholderLabel="Iran zoom still"
-              />
-              <figcaption className="px-4 py-3 text-xs text-muted-foreground">
-                Iran zoom · still frame from the same run.
               </figcaption>
             </figure>
             <figure className="overflow-hidden rounded-lg border border-border bg-card">
