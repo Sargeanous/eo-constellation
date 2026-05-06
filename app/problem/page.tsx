@@ -216,24 +216,6 @@ export default function ProblemPage() {
                   />
                 );
               })}
-              {/* Annotation pointing at the sliver */}
-              <line
-                x1={hoursToX(eocEnd) + 4}
-                y1={SVG_BAR_H / 2}
-                x2={hoursToX(eocEnd) + 60}
-                y2={-12}
-                stroke={palette.accentGold}
-                strokeWidth="0.7"
-              />
-              <text
-                x={hoursToX(eocEnd) + 64}
-                y={-12}
-                fontSize="10"
-                fontFamily="ui-monospace, monospace"
-                fill={palette.accentGold}
-              >
-                a sliver, on the same scale
-              </text>
             </g>
           </svg>
         </motion.div>
