@@ -1,22 +1,11 @@
 "use client";
-import { useState } from "react";
+import { BrandMark } from "./BrandMark";
 
-// Fixed top-left platform logo. Tries /photos/logoedge.{png,jpg,webp,svg}
-// in order; if none exist we fall through to a small "EDGE" wordmark so
-// the brand still shows. Tap-able to scroll back to the cover.
-
-const CANDIDATES = [
-  "/photos/logoedge.png",
-  "/photos/logoedge.jpg",
-  "/photos/logoedge.jpeg",
-  "/photos/logoedge.webp",
-  "/photos/logoedge.svg",
-];
+// Fixed top-left platform logo chip. Tap-able to scroll back to the
+// cover. The actual logo render lives in BrandMark, which handles the
+// extension fallback ladder + the wordmark fallback.
 
 export function BrandLogo() {
-  const [index, setIndex] = useState(0);
-  const errored = index >= CANDIDATES.length;
-
   function onClick() {
     document
       .getElementById("cover")
@@ -32,20 +21,7 @@ export function BrandLogo() {
                  border border-border bg-background/70 px-3 backdrop-blur-md
                  transition-colors hover:bg-background/90"
     >
-      {!errored ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          key={CANDIDATES[index]}
-          src={CANDIDATES[index]}
-          alt="EDGE"
-          onError={() => setIndex((i) => i + 1)}
-          className="h-6 w-auto"
-        />
-      ) : (
-        <span className="font-display text-sm font-semibold tracking-[0.2em] text-foreground">
-          EDGE
-        </span>
-      )}
+      <BrandMark size="chip" />
     </button>
   );
 }

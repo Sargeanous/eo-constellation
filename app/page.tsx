@@ -30,6 +30,7 @@ import {
   Timeline27,
   type TimelineMode,
 } from "@/components/investment/Timeline27";
+import { BrandMark } from "@/components/shell/BrandMark";
 import { MethodologyModal } from "@/components/methodology/MethodologyModal";
 import { SimulationComparison } from "@/components/constellation/SimulationComparison";
 import { AOIPanel } from "@/components/constellation/AOIPanel";
@@ -122,23 +123,18 @@ export default function Home() {
           animate="visible"
           className="relative z-10 flex flex-col items-center"
         >
+          <motion.div variants={CHILD_RISE} className="mb-8">
+            <BrandMark
+              size="hero"
+              fallbackTitle={CONSTELLATION.name}
+              fallbackEyebrow="Sovereign EO Constellation"
+            />
+          </motion.div>
           <motion.p
             variants={CHILD_RISE}
-            className="mb-6 text-xs uppercase tracking-[0.5em] text-gold"
+            className="mt-2 max-w-2xl text-base text-muted-foreground md:text-lg"
           >
-            Sovereign EO Constellation
-          </motion.p>
-          <motion.h1
-            variants={CHILD_RISE}
-            className="font-display text-5xl font-semibold tracking-tight md:text-7xl"
-          >
-            {CONSTELLATION.name}
-          </motion.h1>
-          <motion.p
-            variants={CHILD_RISE}
-            className="mt-4 max-w-2xl text-base text-muted-foreground md:text-lg"
-          >
-            Sovereign by design. Built for MENA.
+            Sovereign EO Constellation. Built for MENA.
           </motion.p>
           <motion.div variants={CHILD_RISE} className="mt-12">
             <Button
