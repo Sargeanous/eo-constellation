@@ -1,17 +1,18 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
 // Renders the EDGE logo from /photos/logoedge.{png,jpg,jpeg,webp,svg}.
-// Walks a list of common extensions on 404 before falling back to a
-// text wordmark so the brand always shows even before the asset is on
-// disk. Two sizes:
+// Uses an Image() preloader to test each candidate in order; only swaps
+// from the wordmark fallback to the <img> once a candidate has fired
+// onload. This is more robust than chained <img onError> retries: it
+// avoids flashing the broken-image alt while we walk extensions, and
+// it correctly handles dev-server cases where a 404 returns HTML
+// (which some browsers don't always treat as a clean error).
 //
+// Two sizes:
 //   "chip" - small, used inside the persistent top-left BrandLogo button
 //   "hero" - large, used as the cover-screen brand mark
-//
-// On the hero variant, the fallback shows a styled eyebrow + display-
-// font wordmark so the cover still looks polished pre-asset.
 
 const CANDIDATES = [
   "/photos/logoedge.png",
@@ -34,17 +35,31 @@ export function BrandMark({
   fallbackTitle = "EDGE",
   fallbackEyebrow,
 }: BrandMarkProps) {
-  const [index, setIndex] = useState(0);
-  const errored = index >= CANDIDATES.length;
+  const [resolvedSrc, setResolvedSrc] = useState<string | null>(null);
 
-  if (!errored) {
+  useEffect(() => {
+    let cancelled = false;
+    const tryAt = (i: number) => {
+      if (cancelled || i >= CANDIDATES.length) return;
+      const probe = new Image();
+      probe.onload = () => {
+        if (!cancelled) setResolvedSrc(CANDIDATES[i]!);
+      };
+      probe.onerror = () => tryAt(i + 1);
+      probe.src = CANDIDATES[i]!;
+    };
+    tryAt(0);
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (resolvedSrc) {
     return (
       // eslint-disable-next-line @next/next/no-img-element
       <img
-        key={CANDIDATES[index]}
-        src={CANDIDATES[index]}
+        src={resolvedSrc}
         alt="EDGE"
-        onError={() => setIndex((i) => i + 1)}
         className={cn(
           size === "chip" ? "h-6 w-auto" : "h-20 w-auto md:h-28",
           className,

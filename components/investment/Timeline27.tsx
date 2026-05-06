@@ -21,8 +21,8 @@ const TOTAL_MONTHS = 24;
 const W = 880;
 const PAD_LEFT = 240;
 const PAD_RIGHT = 24;
-const PAD_TOP = 56; // headroom for the "6 MONTHS" caption + year labels
-const PAD_BOTTOM = 56; // footroom for the "deposit / first light" subcaptions
+const PAD_TOP = 64; // headroom for the "6 MONTHS" caption + year labels
+const PAD_BOTTOM = 64; // footroom for M-month axis + subcaptions
 
 const PHASE_HEADER_H = 32;
 const TASK_ROW_H = 22;
@@ -288,7 +288,10 @@ function NowWindow({ svgH, axisY }: { svgH: number; axisY: number }) {
   const xR = monthToX(NOW_WINDOW.endMonth);
   const yT = PAD_TOP - 8;
   const yB = axisY + 6;
-  const midY = (yT + yB) / 2;
+  // Place the vertical border labels in the upper half of the
+  // rectangle, well above the bright Mission Execution rows so the
+  // text never overlaps a bar.
+  const labelMidY = yT + (yB - yT) * 0.22;
 
   return (
     <g>
@@ -306,34 +309,36 @@ function NowWindow({ svgH, axisY }: { svgH: number; axisY: number }) {
         rx="2"
       />
 
-      {/* Top caption: centred above the rectangle, no overlap with
-          year labels (which sit above PAD_TOP). */}
+      {/* Top caption: short enough to fit above the M14-M20 span even
+          when the chart container is narrow. The previous "partner
+          build already in flight" copy overflowed when scaled down. */}
       <text
         x={(xL + xR) / 2}
-        y={yT - 22}
+        y={yT - 26}
         textAnchor="middle"
         fontFamily="ui-monospace, Menlo, monospace"
         fontSize="11"
-        fontWeight="600"
+        fontWeight="700"
         fill={palette.accentGold}
       >
-        6 MONTHS · partner build already in flight
+        6 MONTHS · ALREADY IN FLIGHT
       </text>
       <text
         x={(xL + xR) / 2}
-        y={yT - 10}
+        y={yT - 12}
         textAnchor="middle"
         fontFamily="ui-monospace, Menlo, monospace"
         fontSize="9"
         fill={palette.accentGold}
         opacity="0.85"
       >
-        deposit today → operational at M{NOW_WINDOW.endMonth}
+        deposit today → first light in 6 months
       </text>
 
-      {/* LEFT BORDER label: vertical text running TOP-DOWN just outside
-          the dashed line on the left side. Keeps the centre clear. */}
-      <g transform={`translate(${xL - 8}, ${midY}) rotate(-90)`}>
+      {/* LEFT BORDER label: vertical text reading bottom-up, anchored
+          to the inside of the dashed line in the upper portion of the
+          rectangle. Avoids the bright execution bars in the middle. */}
+      <g transform={`translate(${xL + 14}, ${labelMidY}) rotate(-90)`}>
         <text
           textAnchor="middle"
           fontFamily="ui-monospace, Menlo, monospace"
@@ -341,13 +346,13 @@ function NowWindow({ svgH, axisY }: { svgH: number; axisY: number }) {
           fontWeight="700"
           fill={palette.accentGold}
         >
-          ◆ WE ARE NOW · M{NOW_WINDOW.startMonth}
+          WE ARE NOW
         </text>
       </g>
 
-      {/* RIGHT BORDER label: vertical text on the right side, BOTTOM-UP
-          (rotate +90) so it reads naturally as a counterpart. */}
-      <g transform={`translate(${xR + 8}, ${midY}) rotate(90)`}>
+      {/* RIGHT BORDER label: vertical text reading top-down inside the
+          right border. */}
+      <g transform={`translate(${xR - 14}, ${labelMidY}) rotate(90)`}>
         <text
           textAnchor="middle"
           fontFamily="ui-monospace, Menlo, monospace"
@@ -355,30 +360,31 @@ function NowWindow({ svgH, axisY }: { svgH: number; axisY: number }) {
           fontWeight="700"
           fill={palette.accentGold}
         >
-          SATELLITE FLYING · M{NOW_WINDOW.endMonth} ◆
+          SATELLITE FLYING
         </text>
       </g>
 
-      {/* Bottom-aligned subcaption pair: anchor each to its own corner
-          so they can't collide. */}
+      {/* Bottom subcaptions: one centred under each border so they
+          can't collide. Sit below the M-month axis labels. */}
       <text
-        x={xL + 6}
-        y={svgH - 10}
+        x={xL}
+        y={svgH - 6}
+        textAnchor="middle"
         fontFamily="ui-monospace, Menlo, monospace"
         fontSize="9"
         fill={palette.accentGold}
-        opacity="0.85"
+        opacity="0.9"
       >
         deposit locks the slot
       </text>
       <text
-        x={xR - 6}
-        y={svgH - 10}
-        textAnchor="end"
+        x={xR}
+        y={svgH - 6}
+        textAnchor="middle"
         fontFamily="ui-monospace, Menlo, monospace"
         fontSize="9"
         fill={palette.accentGold}
-        opacity="0.85"
+        opacity="0.9"
       >
         first light · sovereign data
       </text>

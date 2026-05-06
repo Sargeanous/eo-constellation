@@ -1,18 +1,21 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ImageOff } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// Small wrapper around <img>. If the file isn't present yet we render
-// an intentional-looking "asset pending" tile instead of a broken-image
-// glyph.
+// Wrapper around <img> with two robustness features:
 //
-// On 404, we walk a list of common image extensions before declaring
-// the asset missing. So a caller passing "/photos/iran_zoom.jpg" still
-// resolves if the actual file dropped into public/photos/ happens to
-// be iran_zoom.png or iran_zoom.webp - useful because the partner ships
-// imagery in mixed formats and we don't want every drop to require a
-// code change.
+//   1. Extension fallback - if /photos/foo.jpg is missing we test
+//      /photos/foo.jpeg, .png, .webp, .avif in turn before declaring
+//      the asset missing. Saves a code change every time the partner
+//      ships imagery in a different format.
+//
+//   2. Preloader-first - we Image()-probe each candidate before
+//      mounting the visible <img>. Until a candidate confirms onload,
+//      we render the "Asset pending" placeholder. Compared to chaining
+//      <img onError>, this avoids the broken-image alt flicker, and
+//      handles dev-server quirks where a 404 returns HTML (which some
+//      browsers don't treat as a clean image error).
 
 interface PhotoProps {
   src: string;
@@ -48,8 +51,31 @@ export function Photo({
   placeholderLabel,
 }: PhotoProps) {
   const candidates = useMemo(() => buildCandidates(src), [src]);
-  const [index, setIndex] = useState(0);
-  const errored = index >= candidates.length;
+  const [resolvedSrc, setResolvedSrc] = useState<string | null>(null);
+  const [exhausted, setExhausted] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    setResolvedSrc(null);
+    setExhausted(false);
+    const tryAt = (i: number) => {
+      if (cancelled) return;
+      if (i >= candidates.length) {
+        setExhausted(true);
+        return;
+      }
+      const probe = new Image();
+      probe.onload = () => {
+        if (!cancelled) setResolvedSrc(candidates[i]!);
+      };
+      probe.onerror = () => tryAt(i + 1);
+      probe.src = candidates[i]!;
+    };
+    tryAt(0);
+    return () => {
+      cancelled = true;
+    };
+  }, [candidates]);
 
   return (
     <div
@@ -59,19 +85,18 @@ export function Photo({
         className,
       )}
     >
-      {!errored && (
+      {resolvedSrc && (
+        // eslint-disable-next-line @next/next/no-img-element
         <img
-          key={candidates[index]}
-          src={candidates[index]}
+          src={resolvedSrc}
           alt={alt}
-          onError={() => setIndex((i) => i + 1)}
           className={cn(
             "absolute inset-0 h-full w-full",
             fit === "cover" ? "object-cover" : "object-contain",
           )}
         />
       )}
-      {errored && (
+      {!resolvedSrc && (
         <div className="absolute inset-0">
           <div
             aria-hidden
@@ -87,7 +112,9 @@ export function Photo({
             <div className="flex items-center gap-2 rounded-full border border-border bg-background/70 px-3 py-1.5 backdrop-blur-md">
               <ImageOff className="h-3.5 w-3.5 text-muted-foreground" />
               <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                {placeholderLabel ?? "Asset pending"}
+                {exhausted
+                  ? (placeholderLabel ?? "Asset pending")
+                  : "Loading…"}
               </span>
             </div>
           </div>

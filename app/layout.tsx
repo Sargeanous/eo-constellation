@@ -37,6 +37,8 @@ export const metadata: Metadata = {
   },
   icons: {
     apple: "/icons/apple-touch-icon-180.png",
+    icon: "/photos/logoedge.png",
+    shortcut: "/photos/logoedge.png",
   },
   formatDetection: { telephone: false },
 };
