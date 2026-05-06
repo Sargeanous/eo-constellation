@@ -15,8 +15,7 @@ import {
   Shuffle,
   X,
 } from "lucide-react";
-import { Globe } from "@/components/globe/Globe";
-import { Button } from "@/components/ui/button";
+import { FlatMap } from "@/components/constellation/FlatMap";
 import {
   Card,
   CardContent,
@@ -37,7 +36,6 @@ import { AOIPanel } from "@/components/constellation/AOIPanel";
 import { Photo } from "@/components/media/Photo";
 import { MissionVideo } from "@/components/video/MissionVideo";
 import { useDemoStore } from "@/lib/store";
-import { enableAudio } from "@/lib/audio";
 import {
   CONSTELLATION,
   DIFFERENTIATORS,
@@ -79,25 +77,9 @@ const ICON_MAP = {
 } as const;
 
 export default function Home() {
-  const audioEnabled = useDemoStore((s) => s.audioEnabled);
   const [methodOpen, setMethodOpen] = useState(false);
   const [simOpen, setSimOpen] = useState(false);
   const [timelineMode, setTimelineMode] = useState<TimelineMode>("scratch");
-
-  async function onBegin() {
-    if (audioEnabled) {
-      try {
-        await enableAudio();
-      } catch {
-        /* audio is non-essential */
-      }
-    }
-    if (typeof document !== "undefined") {
-      document
-        .getElementById("problem")
-        ?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  }
 
   return (
     <main className="relative w-full">
@@ -136,18 +118,9 @@ export default function Home() {
           >
             Sovereign EO Constellation. Built for MENA.
           </motion.p>
-          <motion.div variants={CHILD_RISE} className="mt-12">
-            <Button
-              size="lg"
-              onClick={onBegin}
-              className="pulse-gold bg-gold text-primary-foreground hover:bg-gold/90 px-10 h-14 text-base"
-            >
-              Begin
-            </Button>
-          </motion.div>
           <motion.p
             variants={CHILD_RISE}
-            className="mt-16 font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground/70"
+            className="mt-12 font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground/70"
           >
             {CONSTELLATION.totalSatellites} satellites &nbsp;·&nbsp;{" "}
             {CONSTELLATION.altitudeKm} km &nbsp;·&nbsp;{" "}
@@ -424,8 +397,8 @@ export default function Home() {
           </header>
 
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.6fr)_minmax(360px,1fr)]">
-            <div className="relative min-h-[60vh] overflow-hidden rounded-2xl border border-border bg-deep-space">
-              <Globe interactive autoRotate={false} />
+            <div className="relative aspect-[2/1] min-h-[420px] overflow-hidden rounded-2xl border border-border bg-deep-space">
+              <FlatMap />
               <div className="pointer-events-none absolute left-4 top-4 z-20 inline-flex items-center gap-2 rounded-full border border-gold/30 bg-background/75 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground backdrop-blur-md">
                 <MousePointerClick className="h-3 w-3 text-gold" />
                 Tap a satellite or AOI to inspect
@@ -493,16 +466,41 @@ export default function Home() {
             </aside>
           </div>
 
-          {/* Media gallery: orbital cinematic + 3 reference photos */}
-          <div className="grid gap-4 md:grid-cols-2">
+          {/* Media gallery: ground-tracks family (video + zoom video +
+              still) - the zoom comes from inside the ground-tracks
+              run, so we present them as a triptych. The orbital
+              cinematic lives in the methodology modal already, so it
+              doesn't need a second slot here. */}
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             <figure className="overflow-hidden rounded-lg border border-border bg-card">
               <MissionVideo
-                videoId="cover_orbit_cinematic"
+                videoId="ground_tracks_flat"
                 className="aspect-video"
-                ariaLabel="Constellation orbital cinematic"
+                ariaLabel="22 SAR ground tracks over MENA"
               />
               <figcaption className="px-4 py-3 text-xs text-muted-foreground">
-                Orbital cinematic · 22 SAR · 350 km · 38°.
+                Ground tracks · 22 SAR over MENA, full daily envelope.
+              </figcaption>
+            </figure>
+            <figure className="overflow-hidden rounded-lg border border-border bg-card">
+              <MissionVideo
+                videoId="aoi_iran_zoom"
+                className="aspect-video"
+                ariaLabel="AOI zoom into Iran from the same ground-tracks run"
+              />
+              <figcaption className="px-4 py-3 text-xs text-muted-foreground">
+                AOI zoom · Iran segment of the same run.
+              </figcaption>
+            </figure>
+            <figure className="overflow-hidden rounded-lg border border-border bg-card">
+              <Photo
+                src="/photos/iran_zoom.jpg"
+                alt="Iran AOI zoom still"
+                aspect="aspect-video"
+                placeholderLabel="Iran zoom still"
+              />
+              <figcaption className="px-4 py-3 text-xs text-muted-foreground">
+                Iran zoom · still frame from the same run.
               </figcaption>
             </figure>
             <figure className="overflow-hidden rounded-lg border border-border bg-card">
@@ -514,17 +512,6 @@ export default function Home() {
               />
               <figcaption className="px-4 py-3 text-xs text-muted-foreground">
                 Payload reference · ±30° off-nadir slew.
-              </figcaption>
-            </figure>
-            <figure className="overflow-hidden rounded-lg border border-border bg-card">
-              <Photo
-                src="/photos/iran_zoom.jpg"
-                alt="Iran AOI zoom reference"
-                aspect="aspect-video"
-                placeholderLabel="Iran zoom"
-              />
-              <figcaption className="px-4 py-3 text-xs text-muted-foreground">
-                AOI zoom · Iran reference.
               </figcaption>
             </figure>
             <figure className="overflow-hidden rounded-lg border border-border bg-card">

@@ -177,7 +177,7 @@ export function Timeline27({ mode = "scratch" }: Timeline27Props) {
             pointerEvents: "none",
           }}
         >
-          <NowWindow svgH={svgH} axisY={axisY} />
+          <NowWindow axisY={axisY} svgH={svgH} />
         </g>
       </svg>
     </div>
@@ -283,15 +283,15 @@ export function Timeline27({ mode = "scratch" }: Timeline27Props) {
   }
 }
 
-function NowWindow({ svgH, axisY }: { svgH: number; axisY: number }) {
+function NowWindow({ axisY }: { svgH: number; axisY: number }) {
   const xL = monthToX(NOW_WINDOW.startMonth);
   const xR = monthToX(NOW_WINDOW.endMonth);
   const yT = PAD_TOP - 8;
   const yB = axisY + 6;
-  // Place the vertical border labels in the upper half of the
-  // rectangle, well above the bright Mission Execution rows so the
-  // text never overlaps a bar.
-  const labelMidY = yT + (yB - yT) * 0.22;
+  // Border labels sit OUTSIDE the rectangle, parallel to each border
+  // and roughly halfway down so they read like axis annotations - not
+  // overlapping any of the dimmed or bright phase rows behind them.
+  const labelMidY = yT + (yB - yT) * 0.5;
 
   return (
     <g>
@@ -310,8 +310,7 @@ function NowWindow({ svgH, axisY }: { svgH: number; axisY: number }) {
       />
 
       {/* Top caption: short enough to fit above the M14-M20 span even
-          when the chart container is narrow. The previous "partner
-          build already in flight" copy overflowed when scaled down. */}
+          when the chart container is narrow. */}
       <text
         x={(xL + xR) / 2}
         y={yT - 26}
@@ -335,59 +334,34 @@ function NowWindow({ svgH, axisY }: { svgH: number; axisY: number }) {
         deposit today → first light in 6 months
       </text>
 
-      {/* LEFT BORDER label: vertical text reading bottom-up, anchored
-          to the inside of the dashed line in the upper portion of the
-          rectangle. Avoids the bright execution bars in the middle. */}
-      <g transform={`translate(${xL + 14}, ${labelMidY}) rotate(-90)`}>
+      {/* LEFT BORDER label: vertical text OUTSIDE the rectangle on the
+          left, reading bottom-up. Anchored to the rectangle midline so
+          it visually attaches to the border. */}
+      <g transform={`translate(${xL - 12}, ${labelMidY}) rotate(-90)`}>
         <text
           textAnchor="middle"
           fontFamily="ui-monospace, Menlo, monospace"
-          fontSize="11"
+          fontSize="12"
           fontWeight="700"
           fill={palette.accentGold}
         >
-          WE ARE NOW
+          WE ARE HERE
         </text>
       </g>
 
-      {/* RIGHT BORDER label: vertical text reading top-down inside the
-          right border. */}
-      <g transform={`translate(${xR - 14}, ${labelMidY}) rotate(90)`}>
+      {/* RIGHT BORDER label: vertical text OUTSIDE the rectangle on
+          the right, reading top-down. */}
+      <g transform={`translate(${xR + 12}, ${labelMidY}) rotate(90)`}>
         <text
           textAnchor="middle"
           fontFamily="ui-monospace, Menlo, monospace"
-          fontSize="11"
+          fontSize="12"
           fontWeight="700"
           fill={palette.accentGold}
         >
           SATELLITE FLYING
         </text>
       </g>
-
-      {/* Bottom subcaptions: one centred under each border so they
-          can't collide. Sit below the M-month axis labels. */}
-      <text
-        x={xL}
-        y={svgH - 6}
-        textAnchor="middle"
-        fontFamily="ui-monospace, Menlo, monospace"
-        fontSize="9"
-        fill={palette.accentGold}
-        opacity="0.9"
-      >
-        deposit locks the slot
-      </text>
-      <text
-        x={xR}
-        y={svgH - 6}
-        textAnchor="middle"
-        fontFamily="ui-monospace, Menlo, monospace"
-        fontSize="9"
-        fill={palette.accentGold}
-        opacity="0.9"
-      >
-        first light · sovereign data
-      </text>
     </g>
   );
 }
