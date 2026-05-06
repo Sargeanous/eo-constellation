@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
@@ -15,7 +16,6 @@ import {
   Shuffle,
   X,
 } from "lucide-react";
-import { FlatMap } from "@/components/constellation/FlatMap";
 import {
   Card,
   CardContent,
@@ -23,7 +23,22 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { CHILD_RISE, STAGGER_CHILDREN } from "@/components/motion/variants";
-import { MissionRunner } from "@/components/timeline/MissionRunner";
+
+// Heavy below-the-fold components are dynamically imported with
+// ssr:false so their JS doesn't ship in the initial cover-screen
+// payload. The flat map pulls a 1.3 MB Earth texture + projection
+// math; MissionRunner pulls three.js for the Step-2 globe inset.
+// Both render lazy placeholders until they hydrate, which is what
+// the operator was feeling as page slowness.
+const FlatMap = dynamic(
+  () => import("@/components/constellation/FlatMap").then((m) => m.FlatMap),
+  { ssr: false, loading: () => <div className="h-full w-full bg-deep-space" /> },
+);
+const MissionRunner = dynamic(
+  () =>
+    import("@/components/timeline/MissionRunner").then((m) => m.MissionRunner),
+  { ssr: false, loading: () => <div className="min-h-[420px]" /> },
+);
 import { CostWaterfall } from "@/components/investment/CostWaterfall";
 import {
   Timeline27,
