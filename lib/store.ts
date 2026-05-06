@@ -1,5 +1,7 @@
 import { create } from "zustand";
 
+export type Theme = "dark" | "light";
+
 export type MissionPhase =
   | "idle"
   | "tasking"
@@ -20,6 +22,11 @@ interface DemoState {
    *  a refresh keeps the user's choice. Default OFF (PRD §13.2). */
   audioEnabled: boolean;
   setAudioEnabled: (v: boolean) => void;
+
+  /** Visual theme. Defaults to dark (Sovereign Black). Persisted to
+   *  localStorage so a refresh keeps the operator's choice. */
+  theme: Theme;
+  setTheme: (t: Theme) => void;
 
   /** Mission animation timeline state. */
   missionPhase: MissionPhase;
@@ -50,6 +57,13 @@ interface DemoState {
 }
 
 const AUDIO_KEY = "eoc.audioEnabled.v1";
+const THEME_KEY = "eoc.theme.v1";
+
+function readTheme(): Theme {
+  if (typeof window === "undefined") return "dark";
+  const v = localStorage.getItem(THEME_KEY);
+  return v === "light" ? "light" : "dark";
+}
 
 export const useDemoStore = create<DemoState>((set) => ({
   screenIndex: 0,
@@ -64,6 +78,16 @@ export const useDemoStore = create<DemoState>((set) => ({
       /* ignore */
     }
     set({ audioEnabled: v });
+  },
+
+  theme: readTheme(),
+  setTheme: (t) => {
+    try {
+      localStorage.setItem(THEME_KEY, t);
+    } catch {
+      /* ignore */
+    }
+    set({ theme: t });
   },
 
   missionPhase: "idle",

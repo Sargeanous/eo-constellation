@@ -111,6 +111,39 @@ body {
     --radius: 0.875rem;
   }
 
+  /* Sovereign Light: paired counterpart to the dark palette. Same
+     gold / sky / amber / red / green accents (they read fine on both
+     surfaces); only the bg / ink / border tokens flip. The "deep
+     space" surface used behind the globe stays dark by intent - the
+     Earth render needs the dark backdrop regardless of theme. */
+  .light {
+    --bg-deep: 210 40% 98%;
+    --bg-panel: 0 0% 100%;
+    --bg-raised: 214 32% 91%;
+    --ink-50: 222 47% 11%;
+    --ink-400: 215 16% 47%;
+
+    --background: var(--bg-deep);
+    --foreground: var(--ink-50);
+    --card: var(--bg-panel);
+    --card-foreground: var(--ink-50);
+    --popover: var(--bg-panel);
+    --popover-foreground: var(--ink-50);
+    --primary: var(--gold-500);
+    --primary-foreground: 222 47% 11%;
+    --secondary: var(--bg-raised);
+    --secondary-foreground: var(--ink-50);
+    --muted: var(--bg-raised);
+    --muted-foreground: var(--ink-400);
+    --accent: var(--sky-500);
+    --accent-foreground: 222 47% 11%;
+    --destructive: var(--red-500);
+    --destructive-foreground: 0 0% 100%;
+    --border: 214 32% 88%;
+    --input: 214 32% 88%;
+    --ring: var(--gold-500);
+  }
+
   * {
     @apply border-border;
   }

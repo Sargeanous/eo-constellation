@@ -5,6 +5,9 @@ import { Dock } from "@/components/shell/Dock";
 import { OrientationGate } from "@/components/shell/OrientationGate";
 import { PageTransition } from "@/components/motion/PageTransition";
 import { DebugMenu } from "@/components/shell/DebugMenu";
+import { ThemeApplier } from "@/components/shell/ThemeApplier";
+import { BrandLogo } from "@/components/shell/BrandLogo";
+import { ThemeToggle } from "@/components/shell/ThemeToggle";
 import { Toaster } from "@/components/ui/sonner";
 
 const display = Space_Grotesk({
@@ -54,7 +57,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`dark ${display.variable} ${sans.variable} ${mono.variable}`}
     >
       <body className="bg-background text-foreground antialiased font-sans">
+        <ThemeApplier />
         <OrientationGate>
+          <BrandLogo />
+          <ThemeToggle />
           <PageTransition>{children}</PageTransition>
           <Dock />
           <DebugMenu />
