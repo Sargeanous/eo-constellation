@@ -65,7 +65,7 @@ export function SatelliteTooltip() {
           <Row label="Altitude" value={`${CONSTELLATION.altitudeKm} km`} />
           <Row
             label="Inclination"
-            value={`${CONSTELLATION.inclinationDeg}° ±${CONSTELLATION.inclinationToleranceDeg}°`}
+            value={`${CONSTELLATION.inclinationDeg}° +${CONSTELLATION.inclinationToleranceDeg}°`}
           />
           <Row
             label="Sub-sat point"

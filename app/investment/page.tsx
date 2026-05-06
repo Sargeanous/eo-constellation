@@ -19,7 +19,7 @@ import { Timeline27 } from "@/components/investment/Timeline27";
 
 export default function InvestmentPage() {
   return (
-    <main className="min-h-screen px-8 py-16 pb-32">
+    <main className="min-h-screen px-8 py-10 pb-28">
       <motion.div
         variants={STAGGER_CHILDREN}
         initial="hidden"

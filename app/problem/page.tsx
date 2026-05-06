@@ -46,7 +46,7 @@ export default function ProblemPage() {
   const svgH = SVG_BAR_GAP * 3 + SVG_BAR_H * totalRows + 40;
 
   return (
-    <main className="min-h-screen px-8 py-16 pb-32">
+    <main className="min-h-screen px-8 py-10 pb-28">
       <motion.div
         variants={STAGGER_CHILDREN}
         initial="hidden"

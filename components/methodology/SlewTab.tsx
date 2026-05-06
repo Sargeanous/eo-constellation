@@ -233,9 +233,11 @@ export function SlewTab() {
         </p>
         <p className="text-xs italic">
           Imaging modes: {SATELLITE_CAPABILITY.imagingModes.join(" · ")}.
-          Polarization: {SATELLITE_CAPABILITY.polarization}. Swath:{" "}
-          {SATELLITE_CAPABILITY.swathKm.spotlight ?? "-"} km spotlight ·{" "}
-          {SATELLITE_CAPABILITY.swathKm.stripmap ?? "-"} km stripmap.
+          Polarization: {SATELLITE_CAPABILITY.polarization}.
+          {SATELLITE_CAPABILITY.swathKm.spotlight !== null &&
+          SATELLITE_CAPABILITY.swathKm.stripmap !== null
+            ? ` Swath: ${SATELLITE_CAPABILITY.swathKm.spotlight} km spotlight · ${SATELLITE_CAPABILITY.swathKm.stripmap} km stripmap.`
+            : ""}
         </p>
       </figcaption>
     </div>

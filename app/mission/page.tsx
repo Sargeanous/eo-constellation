@@ -7,7 +7,7 @@ import { CHILD_RISE, STAGGER_CHILDREN } from "@/components/motion/variants";
 
 export default function MissionPage() {
   return (
-    <main className="min-h-screen px-8 py-16 pb-32">
+    <main className="min-h-screen px-8 py-10 pb-28">
       <motion.div
         variants={STAGGER_CHILDREN}
         initial="hidden"

@@ -20,7 +20,7 @@ const ICON_MAP = {
 
 export default function DecisionPage() {
   return (
-    <main className="min-h-screen px-8 py-16 pb-32">
+    <main className="min-h-screen px-8 py-10 pb-28">
       <motion.div
         variants={STAGGER_CHILDREN}
         initial="hidden"

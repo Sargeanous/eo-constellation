@@ -182,7 +182,7 @@ export function OrbitTab() {
               RAAN spacing: {ascendingNodeSpacingDeg.toFixed(2)}°
             </text>
             <text x={20} y={446}>
-              Inclination: {CONSTELLATION.inclinationDeg}° ±
+              Inclination: {CONSTELLATION.inclinationDeg}° +
               {CONSTELLATION.inclinationToleranceDeg}°
             </text>
             <text x={20} y={432}>

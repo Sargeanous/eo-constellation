@@ -27,8 +27,10 @@ export function Dock() {
           >
             <span
               className={[
-                "block h-2 rounded-full transition-all duration-300",
-                active ? "w-10 bg-gold" : "w-2 bg-muted-foreground/40",
+                "block rounded-full transition-all duration-300",
+                active
+                  ? "h-2.5 w-12 bg-gold shadow-[0_0_14px_-2px_hsl(var(--gold-500))]"
+                  : "h-2 w-2 bg-muted-foreground/40",
               ].join(" ")}
             />
           </Link>

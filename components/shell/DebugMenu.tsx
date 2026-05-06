@@ -79,14 +79,13 @@ export function DebugMenu() {
             <h3 className="text-xs uppercase tracking-widest text-muted-foreground">
               Navigate
             </h3>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-2 gap-2">
               {SCREENS.map((s) => (
                 <Button
                   key={s.id}
                   variant="outline"
-                  size="sm"
                   onClick={() => router.push(s.href)}
-                  className="justify-start text-xs"
+                  className="h-12 justify-start text-xs"
                 >
                   <span className="mr-2 font-mono text-muted-foreground">
                     {s.index + 1}
@@ -105,9 +104,8 @@ export function DebugMenu() {
             </h3>
             <Button
               variant="outline"
-              size="sm"
               onClick={resetMission}
-              className="w-full"
+              className="h-12 w-full"
             >
               Reset
             </Button>
@@ -152,10 +150,9 @@ export function DebugMenu() {
           <section className="space-y-3">
             <Button
               variant="outline"
-              size="sm"
               onClick={preWarm}
               disabled={preWarming}
-              className="w-full"
+              className="h-12 w-full"
             >
               {preWarming ? "Pre-warming…" : "Pre-warm globe textures"}
             </Button>

@@ -89,15 +89,9 @@ export function AOIPanel() {
             </section>
 
             <section className="space-y-3 border-t border-border bg-card/30 px-6 py-5">
-              <div className="flex items-center justify-between">
-                <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
-                  Pass simulation
-                </p>
-                <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-muted-foreground">
-                  <span className="mr-1.5 text-gold">●</span>
-                  STAR.VISION
-                </p>
-              </div>
+              <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+                Pass simulation
+              </p>
               <div className="overflow-hidden rounded-md border border-border bg-deep-space">
                 <div className="relative aspect-video">
                   {AOI_VIDEO_MAP[aoi.id] ? (
@@ -105,8 +99,6 @@ export function AOIPanel() {
                       videoId={AOI_VIDEO_MAP[aoi.id]!}
                       preload="metadata"
                       className="!absolute inset-0 h-full w-full"
-                      attribution="STAR.VISION simulation"
-                      attributionPlacement="bottom-right"
                     />
                   ) : (
                     <div className="flex h-full items-center justify-center font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
@@ -116,9 +108,8 @@ export function AOIPanel() {
                 </div>
               </div>
               <p className="text-[11px] text-muted-foreground">
-                Partner reference · pre-dates the canonical 22 SAR / 350 km
-                / 38° configuration. Daily-pass count above is computed from
-                the canonical config, not the clip.
+                Daily-pass count above is computed from the canonical 22 SAR
+                / 350 km / 38° configuration.
               </p>
             </section>
           </>

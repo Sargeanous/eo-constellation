@@ -39,6 +39,14 @@ export default function GlobeScene({
   const dayMap = useTexture("/textures/earth-day.jpg");
   // sRGB so the Blue Marble doesn't render flat in linear space.
   dayMap.colorSpace = THREE.SRGBColorSpace;
+  // CRITICAL: TextureLoader defaults flipY=true. With a standard
+  // north-up Blue Marble JPG that uploads the rows reversed, so
+  // sphere +Y (top of view) samples the IMAGE's bottom row -
+  // Antarctica content rendered where the north pole should be,
+  // and the operator-reported "always Greenland / Antarctica"
+  // framing was the visible result. flipY=false aligns the texture
+  // with sphere V mapping (v=0 north pole at top of image).
+  dayMap.flipY = false;
   const showFps = useDemoStore((s) => s.debug.showFps);
 
   // Slow auto-rotation: roughly one revolution per ~6 minutes so MENA

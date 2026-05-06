@@ -398,8 +398,8 @@ export const DIFFERENTIATORS: Differentiator[] = [
   },
   {
     id: "tactica_synergy",
-    title: "Synergy with TACTICA",
-    body: "TACTICA is the brain. EO-CONSTELLATION is the actuator. The two together close the OODA loop in under an hour.",
+    title: "Closed-loop sovereign C2",
+    body: "Decision-grade C2 inside the same sovereign perimeter. Intel cue, tasking, capture, analysis, and report close the OODA loop in under an hour without leaving the room.",
     icon: "link",
   },
 ];

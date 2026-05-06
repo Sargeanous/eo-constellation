@@ -45,11 +45,26 @@
 
 html {
   -webkit-tap-highlight-color: transparent;
+  /* iPad / iOS Safari: suppress the long-press callout (Save Image,
+     share sheet) so partner-attribution images and the
+     selectable report can't be siphoned out via long-press. */
+  -webkit-touch-callout: none;
 }
 body {
   overscroll-behavior-y: contain;
   /* iPad: no body pinch-zoom; the only pinch belongs to the Three.js globe. */
   touch-action: pan-y;
+  -webkit-touch-callout: none;
+}
+
+/* Hide native scrollbars across the platform. iPad safari still
+   allows scroll via touch / two-finger but the chrome stays clean.
+   Cinematic surfaces shouldn't show scrollbars. */
+* {
+  scrollbar-width: none;
+}
+*::-webkit-scrollbar {
+  display: none;
 }
 
 @layer base {

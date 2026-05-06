@@ -1,14 +1,17 @@
 "use client";
 import { useMemo, useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
+import { Html } from "@react-three/drei";
 import * as THREE from "three";
 import { palette } from "@/lib/data";
 import { AOI_VECTORS } from "@/lib/orbit";
 import { useDemoStore } from "@/lib/store";
 
 // Pulsing markers at the 4 AOIs. The halo breathes on a 2.4s cycle so
-// the markers visibly invite a tap. Selected AOI gets a brighter,
-// larger gold halo on top of the breath.
+// the markers visibly invite a tap. Each marker has a gold text
+// label floating just off-axis so MoD can see WHAT'S TAPPABLE without
+// a tooltip - the audit flagged the markers as not visibly identified.
+// Selected AOI gets a brighter, larger gold halo on top of the breath.
 
 export function AOIMarkers() {
   const goldColor = useMemo(() => new THREE.Color(palette.accentGold), []);
@@ -27,6 +30,7 @@ export function AOIMarkers() {
           <AOIMarker
             key={a.id}
             position={liftedPos}
+            label={a.name}
             color={goldColor}
             selected={isSelected}
             hovered={isHovered}
@@ -56,6 +60,7 @@ const HIT_RADIUS = DOT_RADIUS * 4;
 
 interface AOIMarkerProps {
   position: THREE.Vector3;
+  label: string;
   color: THREE.Color;
   selected: boolean;
   hovered: boolean;
@@ -66,6 +71,7 @@ interface AOIMarkerProps {
 
 function AOIMarker({
   position,
+  label,
   color,
   selected,
   hovered,
@@ -133,6 +139,25 @@ function AOIMarker({
         <sphereGeometry args={[HIT_RADIUS, 6, 6]} />
         <meshBasicMaterial transparent opacity={0} />
       </mesh>
+      {/* Floating label - reads as a tap target. occlude=blending hides
+          the label when the marker is on the back hemisphere so labels
+          don't show through the Earth. */}
+      <Html
+        position={[0, 0, 0]}
+        center
+        occlude="blending"
+        zIndexRange={[60, 0]}
+        style={{ pointerEvents: "none" }}
+      >
+        <span
+          className="cinematic-surface inline-block translate-x-3 translate-y-2 whitespace-nowrap rounded-full border border-gold/40 bg-background/80 px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.18em] text-gold backdrop-blur-md"
+          style={{
+            opacity: selected ? 1 : 0.85,
+          }}
+        >
+          {label}
+        </span>
+      </Html>
     </group>
   );
 }
