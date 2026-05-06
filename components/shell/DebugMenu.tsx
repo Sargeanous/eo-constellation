@@ -16,9 +16,12 @@ import { useDemoStore } from "@/lib/store";
 import { enableAudio } from "@/lib/audio";
 import { SCREENS } from "@/lib/data";
 
-// Rehearsal-only menu. PRD §9 lists: reset stopwatch, skip-to-screen,
-// FPS toggle, pre-warm globe textures. We add: audio toggle (§13.2)
-// and CTA mode swap (§13.4).
+// Operator menu. The trigger is a generic hamburger top-right with no
+// label that reads as "debug" - if MoD glances over the operator's
+// shoulder mid-meeting, nothing in the sheet betrays that this is a
+// rehearsal-only surface. The functions inside are all reasonable
+// things an operator might do during a live demo (skip to a screen,
+// reset the mission timer, toggle audio).
 
 export function DebugMenu() {
   const router = useRouter();
@@ -28,8 +31,6 @@ export function DebugMenu() {
   const setAudioEnabled = useDemoStore((s) => s.setAudioEnabled);
   const showFps = useDemoStore((s) => s.debug.showFps);
   const setDebug = useDemoStore((s) => s.setDebug);
-  const ctaMode = useDemoStore((s) => s.ctaMode);
-  const setCtaMode = useDemoStore((s) => s.setCtaMode);
   const resetMission = useDemoStore((s) => s.resetMission);
 
   async function onAudioToggle(v: boolean) {
@@ -64,7 +65,7 @@ export function DebugMenu() {
     <Sheet>
       <SheetTrigger asChild>
         <button
-          aria-label="Rehearsal menu"
+          aria-label="Menu"
           className="cinematic-surface fixed right-4 top-4 z-50 grid h-11 w-11 place-items-center rounded-full
                      border border-border bg-background/60 text-muted-foreground backdrop-blur-md
                      hover:text-foreground"
@@ -73,24 +74,10 @@ export function DebugMenu() {
         </button>
       </SheetTrigger>
       <SheetContent side="right" className="w-[360px] sm:w-[400px]">
-        <div className="space-y-6 pt-6">
-          <header>
-            <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
-              Rehearsal
-            </p>
-            <h2 className="mt-1 font-display text-xl font-semibold">
-              Debug menu
-            </h2>
-            <p className="mt-2 text-xs text-muted-foreground">
-              Operator-only. Hidden from MoD on the day.
-            </p>
-          </header>
-
-          <Separator />
-
-          <section className="space-y-4">
+        <div className="space-y-6 pt-10">
+          <section className="space-y-3">
             <h3 className="text-xs uppercase tracking-widest text-muted-foreground">
-              Skip to screen
+              Navigate
             </h3>
             <div className="grid grid-cols-3 gap-2">
               {SCREENS.map((s) => (
@@ -114,7 +101,7 @@ export function DebugMenu() {
 
           <section className="space-y-3">
             <h3 className="text-xs uppercase tracking-widest text-muted-foreground">
-              Mission animation
+              Mission timer
             </h3>
             <Button
               variant="outline"
@@ -122,7 +109,7 @@ export function DebugMenu() {
               onClick={resetMission}
               className="w-full"
             >
-              Reset stopwatch
+              Reset
             </Button>
           </section>
 
@@ -130,13 +117,13 @@ export function DebugMenu() {
 
           <section className="space-y-3">
             <h3 className="text-xs uppercase tracking-widest text-muted-foreground">
-              Toggles
+              Settings
             </h3>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm">Audio</p>
                 <p className="text-xs text-muted-foreground">
-                  Chime + ambient. Default OFF.
+                  Chime on mission complete.
                 </p>
               </div>
               <Switch
@@ -149,7 +136,7 @@ export function DebugMenu() {
               <div>
                 <p className="text-sm">FPS overlay</p>
                 <p className="text-xs text-muted-foreground">
-                  Performance check during rehearsal.
+                  Performance check.
                 </p>
               </div>
               <Switch
@@ -158,30 +145,11 @@ export function DebugMenu() {
                 aria-label="FPS overlay"
               />
             </div>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm">Decision CTA</p>
-                <p className="text-xs text-muted-foreground">
-                  Theatrical: <em>Approve & Begin Mobilization</em>. Neutral:{" "}
-                  <em>Begin Conversation</em>.
-                </p>
-              </div>
-              <Switch
-                checked={ctaMode === "theatrical"}
-                onCheckedChange={(v) =>
-                  setCtaMode(v ? "theatrical" : "neutral")
-                }
-                aria-label="CTA mode"
-              />
-            </div>
           </section>
 
           <Separator />
 
           <section className="space-y-3">
-            <h3 className="text-xs uppercase tracking-widest text-muted-foreground">
-              Pre-flight
-            </h3>
             <Button
               variant="outline"
               size="sm"

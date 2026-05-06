@@ -8,12 +8,8 @@ export type MissionPhase =
   | "downlink"
   | "delivered";
 
-export type CtaMode = "theatrical" | "neutral";
-
 interface DemoState {
-  /** Index into the 6-screen flow (0 = intro, 5 = decision). The
-   *  persistent dock at the bottom of every page reads this to highlight
-   *  the active step and to fan out next/prev affordances. */
+  /** Index into the 6-screen flow (0 = intro, 5 = decision). */
   screenIndex: number;
   setScreenIndex: (i: number) => void;
 
@@ -23,20 +19,12 @@ interface DemoState {
   audioEnabled: boolean;
   setAudioEnabled: (v: boolean) => void;
 
-  /** Mission animation timeline state. The 60-second Run Mission
-   *  animation broadcasts here so multiple components (stopwatch,
-   *  globe markers, timeline rail) can subscribe to the same clock. */
+  /** Mission animation timeline state. */
   missionPhase: MissionPhase;
   missionElapsedMs: number;
   setMissionPhase: (p: MissionPhase) => void;
   tickMission: (deltaMs: number) => void;
   resetMission: () => void;
-
-  /** /decision CTA copy. Theatrical default ("Approve & Begin
-   *  Mobilization"); the rehearsal hamburger swaps to neutral
-   *  ("Begin Conversation"). Persisted (PRD §13.4). */
-  ctaMode: CtaMode;
-  setCtaMode: (m: CtaMode) => void;
 
   /** /constellation tap-to-inspect selection. Null when nothing is
    *  selected. Setting one clears the other so the satellite tooltip
@@ -46,7 +34,7 @@ interface DemoState {
   setSelectedSat: (id: string | null) => void;
   setSelectedAOI: (id: string | null) => void;
 
-  /** Debug flags surfaced via the rehearsal hamburger. */
+  /** Debug flags. */
   debug: {
     showFps: boolean;
   };
@@ -54,13 +42,6 @@ interface DemoState {
 }
 
 const AUDIO_KEY = "eoc.audioEnabled.v1";
-const CTA_KEY = "eoc.ctaMode.v1";
-
-function readCtaMode(): CtaMode {
-  if (typeof window === "undefined") return "theatrical";
-  const v = localStorage.getItem(CTA_KEY);
-  return v === "neutral" ? "neutral" : "theatrical";
-}
 
 export const useDemoStore = create<DemoState>((set) => ({
   screenIndex: 0,
@@ -83,16 +64,6 @@ export const useDemoStore = create<DemoState>((set) => ({
   tickMission: (deltaMs) =>
     set((s) => ({ missionElapsedMs: s.missionElapsedMs + deltaMs })),
   resetMission: () => set({ missionPhase: "idle", missionElapsedMs: 0 }),
-
-  ctaMode: readCtaMode(),
-  setCtaMode: (m) => {
-    try {
-      localStorage.setItem(CTA_KEY, m);
-    } catch {
-      /* ignore */
-    }
-    set({ ctaMode: m });
-  },
 
   selectedSatId: null,
   selectedAOIId: null,

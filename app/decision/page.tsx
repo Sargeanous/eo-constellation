@@ -1,18 +1,15 @@
 "use client";
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { Shield, Shuffle, Cpu, Link2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { CHILD_RISE, STAGGER_CHILDREN } from "@/components/motion/variants";
 import { DIFFERENTIATORS } from "@/lib/data";
-import { useDemoStore } from "@/lib/store";
 import { Card, CardContent } from "@/components/ui/card";
-import { DecisionModal } from "@/components/decision/DecisionModal";
 
-const CTA_LABELS: Record<"theatrical" | "neutral", string> = {
-  theatrical: "Approve & Begin Mobilization",
-  neutral: "Begin Conversation",
-};
+// /decision is the closing beat. No CTA button: a Chairman doesn't tap
+// "Approve & Begin Mobilization" in front of MoD; that decision is made
+// in conversation, not via a tap target. The four differentiator tiles
+// + the headline are the closing argument; the dock + rehearsal menu
+// remain available for navigation.
 
 const ICON_MAP = {
   shield: Shield,
@@ -22,9 +19,6 @@ const ICON_MAP = {
 } as const;
 
 export default function DecisionPage() {
-  const ctaMode = useDemoStore((s) => s.ctaMode);
-  const [modalOpen, setModalOpen] = useState(false);
-
   return (
     <main className="min-h-screen px-8 py-16 pb-32">
       <motion.div
@@ -49,7 +43,7 @@ export default function DecisionPage() {
           variants={CHILD_RISE}
           className="mt-6 max-w-2xl text-lg text-muted-foreground"
         >
-          This is yours. Approve and we begin mobilization tomorrow.
+          The decision is yours.
         </motion.p>
 
         <motion.div
@@ -77,22 +71,7 @@ export default function DecisionPage() {
             );
           })}
         </motion.div>
-
-        <motion.div variants={CHILD_RISE} className="mt-10">
-          <Button
-            size="lg"
-            className="bg-gold px-10 text-primary-foreground hover:bg-gold/90"
-            onClick={() => setModalOpen(true)}
-          >
-            {CTA_LABELS[ctaMode]}
-          </Button>
-          {/* "Restart" intentionally absent: in front of MoD, the close
-              should be the only path forward. The rehearsal hamburger
-              still has Skip-to-screen for resetting between rooms. */}
-        </motion.div>
       </motion.div>
-
-      <DecisionModal open={modalOpen} onOpenChange={setModalOpen} />
     </main>
   );
 }
