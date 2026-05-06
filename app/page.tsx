@@ -31,8 +31,11 @@ export default function IntroPage() {
       {/* Cover frames platform identity, not partner footage. Per
           confirmed §4 override: partner video is supporting evidence,
           never a platform feature, so it does not belong behind the
-          cover. The 3D globe carries the cover. */}
-      <Globe autoRotate interactive={false} bloom={false} />
+          cover. The 3D globe carries the cover. AutoRotate is OFF
+          on the cover so MENA stays framed - operator-reported the
+          rotating Earth was scrolling MENA out of view and ending
+          on Atlantic / Greenland-area framings. */}
+      <Globe autoRotate={false} interactive={false} bloom={false} />
 
       {/* Vignette so the typography reads against the Earth. */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-deepspace/30 via-transparent to-deepspace" />
