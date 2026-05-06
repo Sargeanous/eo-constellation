@@ -57,7 +57,7 @@ export const SCREENS: Screen[] = [
     id: "investment",
     index: 4,
     title: "The Cost & Timeline",
-    subtitle: "$225.7M. 27 months to first light.",
+    subtitle: "$225.7M. 20 months to first light.",
     href: "/investment",
   },
   {
@@ -441,24 +441,24 @@ export const TIMELINE_PHASES: TimelinePhase[] = [
   {
     id: "execution",
     name: "Mission Execution",
-    durationMonths: 17.5,
+    durationMonths: 11,
     startMonth: 9,
     tasks: [
-      { name: "Satellite Manufacturing", months: [9, 26] },
-      { name: "Ground Segment Development", months: [9, 19] },
-      { name: "Testing & Validation", months: [22, 26] },
-      { name: "Launch Execution", months: [26, 27] },
+      { name: "Satellite Manufacturing", months: [9, 19] },
+      { name: "Ground Segment Development", months: [9, 17] },
+      { name: "Testing & Validation", months: [16, 19] },
+      { name: "Launch Execution", months: [19, 20] },
     ],
   },
   {
     id: "operations",
     name: "Operations & Control",
     durationMonths: null,
-    startMonth: 27,
+    startMonth: 20,
     tasks: [
-      { name: "Transition to Operations", months: [27, 28.5] },
-      { name: "Data Management on Defense Cloud", months: [27, 29] },
-      { name: "Maintenance & Upgrades", months: [29, null] },
+      { name: "Transition to Operations", months: [20, 21] },
+      { name: "Data Management on Defense Cloud", months: [20, 22] },
+      { name: "Maintenance & Upgrades", months: [22, null] },
     ],
   },
 ];

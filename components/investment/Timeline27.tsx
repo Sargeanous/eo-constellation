@@ -1,11 +1,13 @@
 "use client";
 import { TIMELINE_PHASES, palette } from "@/lib/data";
 
-// 27-month implementation Gantt. All sub-tasks are visible at a
+// 20-month implementation Gantt. After M20 the constellation is on
+// orbit and the engagement is mainly operations - that's why the
+// chart axis stops short of YEAR 2. All sub-tasks are visible at a
 // glance: each phase header sits above its own grouped sub-task rows.
-// No expand-collapse. PRD §7 + operator feedback (2026-05-06).
+// No expand-collapse. PRD §7 + operator feedback (2026-05-06, 06-07).
 
-const TOTAL_MONTHS = 30; // Year 1 + Year 2 + 3 month ops runoff
+const TOTAL_MONTHS = 24; // 20 months to launch + 4 months ops runoff
 const W = 880;
 const PAD_LEFT = 240; // wide left gutter for task labels
 const PAD_RIGHT = 24;
@@ -59,11 +61,11 @@ export function Timeline27() {
         viewBox={`0 0 ${W} ${svgH}`}
         className="w-full"
         role="img"
-        aria-label="27-month implementation timeline"
+        aria-label="20-month implementation timeline"
       >
         {/* Vertical month axis lines */}
-        {[0, 6, 12, 18, 24, 27].map((m) => {
-          const isYear = m % 12 === 0;
+        {[0, 6, 12, 18, 20].map((m) => {
+          const isYear = m % 12 === 0 || m === 20;
           return (
             <line
               key={m}
@@ -87,10 +89,10 @@ export function Timeline27() {
           <text x={monthToX(6)} y={PAD_TOP - 18} textAnchor="middle">
             YEAR 1
           </text>
-          <text x={monthToX(18)} y={PAD_TOP - 18} textAnchor="middle">
+          <text x={monthToX(16)} y={PAD_TOP - 18} textAnchor="middle">
             YEAR 2
           </text>
-          <text x={monthToX(28.5)} y={PAD_TOP - 18} textAnchor="middle">
+          <text x={monthToX(22)} y={PAD_TOP - 18} textAnchor="middle">
             OPS
           </text>
         </g>
@@ -202,7 +204,7 @@ export function Timeline27() {
         })}
 
         {/* Month axis labels at the bottom */}
-        {[0, 6, 12, 18, 24, 27].map((m) => (
+        {[0, 6, 12, 18, 20].map((m) => (
           <text
             key={`axis-${m}`}
             x={monthToX(m)}

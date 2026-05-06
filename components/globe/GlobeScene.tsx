@@ -41,12 +41,12 @@ export default function GlobeScene({
   dayMap.colorSpace = THREE.SRGBColorSpace;
   const showFps = useDemoStore((s) => s.debug.showFps);
 
-  // Slow auto-rotation: Apple-flavoured, never instant. Roughly one
-  // revolution per 80 seconds. Disabled when interactive (so OrbitControls
-  // can drive rotation manually).
+  // Slow auto-rotation: roughly one revolution per ~6 minutes so MENA
+  // stays framed throughout a typical cover-screen dwell. Disabled
+  // when interactive (so OrbitControls can drive rotation manually).
   useFrame((_state, delta) => {
     if (autoRotate && earthRef.current) {
-      earthRef.current.rotation.y += delta * 0.04;
+      earthRef.current.rotation.y += delta * 0.018;
     }
   });
 
@@ -114,17 +114,15 @@ export default function GlobeScene({
 function computeMenaYaw(): number {
   const m = MENA_CENTRE; // unit vector in orbit frame
   // After the parent's rotation [-π/2, 0, 0] applied to Three.js axes,
-  // points on the Earth's surface are seen from +Z. We rotate around Y
-  // so that the point's projection lands on +Z (camera-facing).
-  // In the inner group's local frame, the surface point is (m.x, m.z, -m.y).
-  // We want the rotation θ around Y such that:
-  //     [cos θ, 0, sin θ]  · [x] = +Z component max.
-  //     [0,    1, 0     ]    [y]
-  //     [-sin θ,0, cos θ]    [z]
-  // So θ = atan2(x, z) of the inner-frame coordinates.
+  // the point's projection in the inner-group local frame is
+  // (m.x, m.z, -m.y). We rotate around Y so that point lands on +Z
+  // (camera-facing). The rotation that brings the point TO +Z is the
+  // negative of atan2(x, z) - the previous code returned the angle
+  // that brought +Z TO the point, which is the wrong direction
+  // (operator-reported: globe was framing Greenland instead of MENA).
   const x = m.x;
   const z = -m.y;
-  return Math.atan2(x, z);
+  return -Math.atan2(x, z);
 }
 
 export function GlobeBloom() {

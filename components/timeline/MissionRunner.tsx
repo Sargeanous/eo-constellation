@@ -83,7 +83,7 @@ export function MissionRunner() {
   // store phase is what gates the RAF loop and the dock highlights.
   // We also fire a soft Tone tick on each NEW step entry so the audio
   // has rhythm beyond the single closing chime (only audible if the
-  // rehearsal hamburger has armed audio).
+  // operator menu has armed audio).
   useEffect(() => {
     if (phase === "idle") {
       tickedStepRef.current = null;

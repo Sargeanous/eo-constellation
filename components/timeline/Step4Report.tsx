@@ -2,12 +2,15 @@
 import { motion } from "framer-motion";
 import { REPORT_HEADER, REPORT_FOOTER, FINAL_MISSION_TIME } from "@/lib/data";
 import { SARScene, SAR_VESSELS } from "./SARScene";
+import { BaseerPill } from "./BaseerPill";
 
 // Step 4: Report on Desk/Screen. PRD §4.
 // 1-page A-aspect preview slides up. Header + cover image + summary +
 // recommended action + footer. Branded per §13.3 (locked):
 //   header: "EDGE Sovereign EO Constellation: Mission Report"
 //   footer: "Powered by Origen | A TACTICA Capability"
+// BASEER pill alongside: the report lands back in the BASEER intel
+// platform.
 
 export function Step4Report() {
   const date = "5 May 2026";
@@ -19,8 +22,9 @@ export function Step4Report() {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
-      className="flex w-full justify-center"
+      className="relative flex w-full justify-center"
     >
+      <BaseerPill role="report" />
       <div className="relative w-full max-w-[480px]">
         {/* Stacked-paper shadow */}
         <div className="absolute inset-x-3 top-3 bottom-0 rounded-md bg-black/40 blur-sm" />

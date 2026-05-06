@@ -1,10 +1,13 @@
 "use client";
 import { motion } from "framer-motion";
 import { AlertTriangle, Cpu, MapPin } from "lucide-react";
+import { BaseerPill } from "./BaseerPill";
 
 // Step 1: Situation Awareness & Intel Generation. PRD §4.
 // Alert card slides in, AI agent icon pulses processing, caption
 // reads "OSINT + GEOINT fusion. AI agent classifies and prioritizes."
+// BASEER pill in the corner: the cued alert originates in BASEER,
+// our existing partner intel platform.
 
 export function Step1Intel() {
   return (
@@ -14,8 +17,9 @@ export function Step1Intel() {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
-      className="grid w-full gap-6 md:grid-cols-[1.4fr_1fr]"
+      className="relative grid w-full gap-6 md:grid-cols-[1.4fr_1fr]"
     >
+      <BaseerPill role="intel" />
       {/* Alert card */}
       <motion.div
         initial={{ x: -40, opacity: 0 }}

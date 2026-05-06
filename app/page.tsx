@@ -12,7 +12,7 @@ export default function IntroPage() {
   const setAudioEnabled = useDemoStore((s) => s.setAudioEnabled);
   const audioEnabled = useDemoStore((s) => s.audioEnabled);
 
-  // PRD §13.2: audio defaults OFF and only arms after rehearsal toggle.
+  // PRD §13.2: audio defaults OFF and only arms after the audio toggle.
   // The cover-screen Begin tap counts as the user gesture Tone needs to
   // start its AudioContext IF audio is enabled, but it never enables it
   // for the user.
@@ -56,12 +56,6 @@ export default function IntroPage() {
         >
           {CONSTELLATION.name}
         </motion.h1>
-        <motion.p
-          variants={CHILD_RISE}
-          className="mt-6 max-w-xl text-xl text-muted-foreground md:text-2xl"
-        >
-          Sovereign by design. AI-native. Built for MENA.
-        </motion.p>
 
         <motion.div variants={CHILD_RISE} className="mt-12">
           <Button

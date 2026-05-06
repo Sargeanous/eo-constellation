@@ -19,7 +19,7 @@ import { SCREENS } from "@/lib/data";
 // Operator menu. The trigger is a generic hamburger top-right with no
 // label that reads as "debug" - if MoD glances over the operator's
 // shoulder mid-meeting, nothing in the sheet betrays that this is a
-// rehearsal-only surface. The functions inside are all reasonable
+// operator-only surface. The functions inside are all reasonable
 // things an operator might do during a live demo (skip to a screen,
 // reset the mission timer, toggle audio).
 

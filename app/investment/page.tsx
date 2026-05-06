@@ -13,9 +13,9 @@ import { CHILD_RISE, STAGGER_CHILDREN } from "@/components/motion/variants";
 import { CostWaterfall } from "@/components/investment/CostWaterfall";
 import { Timeline27 } from "@/components/investment/Timeline27";
 
-// PRD §7. Cost waterfall + 27-month timeline. Both rendered in plain
-// SVG so we get exact control over labels and tappable phases without
-// pulling Recharts into either component.
+// PRD §7. Cost waterfall + 20-month implementation timeline. Both
+// rendered in plain SVG so we get exact control over labels and the
+// per-phase rows without pulling Recharts into either component.
 
 export default function InvestmentPage() {
   return (
@@ -33,7 +33,7 @@ export default function InvestmentPage() {
           <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
             ${(COST_USD.grandTotal / 1_000_000).toFixed(1)}M.{" "}
             <span className="text-muted-foreground">
-              27 months to first light.
+              20 months to first light.
             </span>
           </h1>
           <p className="mt-4 max-w-3xl text-lg text-muted-foreground">
@@ -55,13 +55,14 @@ export default function InvestmentPage() {
         <motion.div variants={CHILD_RISE}>
           <Card>
             <CardHeader>
-              <CardTitle>27-month implementation</CardTitle>
+              <CardTitle>20-month implementation</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <Timeline27 />
               <p className="rounded-md border border-border bg-card/40 px-4 py-3 text-xs italic text-muted-foreground">
                 Critical-path risks: regulatory licensing (M5-M9) and
-                launch-window slippage (M26-M27). Mitigation owned by
+                launch-window slippage (M19-M20). After M20 the
+                engagement is mainly operations. Mitigation owned by
                 Phase 1 risk plan.
               </p>
             </CardContent>

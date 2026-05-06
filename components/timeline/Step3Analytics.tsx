@@ -2,10 +2,12 @@
 import { motion } from "framer-motion";
 import { Cpu, ShieldCheck } from "lucide-react";
 import { SARScene, SAR_VESSELS } from "./SARScene";
+import { BaseerPill } from "./BaseerPill";
 
 // Step 3: Automated Analytics & Validation. PRD §4.
 // Bounding boxes around each detected vessel, classifications appear,
 // caption: "Onboard CV models. No human in the loop. No foreign cloud."
+// BASEER pill in the corner: detections feed back into BASEER.
 
 export function Step3Analytics() {
   return (
@@ -15,8 +17,9 @@ export function Step3Analytics() {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
-      className="grid w-full gap-6 md:grid-cols-[1.4fr_1fr]"
+      className="relative grid w-full gap-6 md:grid-cols-[1.4fr_1fr]"
     >
+      <BaseerPill role="analytics" />
       <div className="relative">
         <SARScene steady />
         {/* Bounding boxes overlay: viewBox 600x400 in scene units; we

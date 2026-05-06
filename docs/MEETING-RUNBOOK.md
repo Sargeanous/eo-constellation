@@ -50,7 +50,7 @@ Deploy options:
 
 ---
 
-## T-24 hours: dress rehearsal
+## T-24 hours: pre-flight check
 
 ### Hardware
 
@@ -77,7 +77,7 @@ Deploy options:
 
 Once installed:
 
-1. Tap the rehearsal hamburger (top-right) → **Pre-warm globe textures**.
+1. Tap the operator menu (top-right) → **Pre-warm globe textures**.
    Wait for the toast confirmation.
 2. Walk through every dock dot once so each route compiles + caches.
 3. Open the methodology modal (gold "How was this designed?" on
@@ -104,20 +104,21 @@ re-deploy, re-install on the iPad. Serwist will re-precache.
 
 - Default OFF. If you want the closing chime on completion of the
   Run Mission animation:
-  - Open the rehearsal hamburger → flip **Audio** ON.
-  - Tap Run Mission once in rehearsal to confirm the chime fires
+  - Open the operator menu → flip **Audio** ON.
+  - Tap Run Mission once to confirm the chime fires
     (Tone.js needs the user gesture to start its AudioContext, so
     the toggle alone is insufficient: a tap arms it).
   - iPad ringer must not be on silent.
 - Vibration: iPad Safari does not implement `navigator.vibrate`;
   the haptic on Run Mission is a no-op there. Expected.
 
-### Decision CTA
+### BASEER bridge
 
-- Default: **theatrical** ("Approve & Begin Mobilization").
-- If the room reads as more reserved, swap via the rehearsal
-  hamburger → **Decision CTA** toggle → neutral
-  ("Begin Conversation"). The DecisionModal copy adjusts to match.
+- /decision ends with a "Go to intel platform BASEER" button that
+  opens https://gsa.origen.ae/ in a new tab. If the iPad is offline
+  in a SCIF, the button does nothing - that's expected; the bridge
+  is for the moment after the meeting when the conversation moves
+  back to the existing intel platform.
 
 ---
 
@@ -130,7 +131,7 @@ re-deploy, re-install on the iPad. Serwist will re-precache.
   - iPad in landscape; OrientationGate refuses portrait.
   - Home-screen-launched, not Safari-launched (no URL bar visible).
   - Notifications silenced (Focus mode > Do Not Disturb).
-- Reset the mission stopwatch from the rehearsal hamburger so the
+- Reset the mission stopwatch from the operator menu so the
   first tap of Run Mission starts from 0:00.
 - Land on `/` cover. Begin button should pulse gold. Globe rotating.
 
