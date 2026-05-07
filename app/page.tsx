@@ -48,7 +48,6 @@ import { BrandMark } from "@/components/shell/BrandMark";
 import { MethodologyModal } from "@/components/methodology/MethodologyModal";
 import { SimulationComparison } from "@/components/constellation/SimulationComparison";
 import { AOIPanel } from "@/components/constellation/AOIPanel";
-import { Photo } from "@/components/media/Photo";
 import { MissionVideo } from "@/components/video/MissionVideo";
 import { useDemoStore } from "@/lib/store";
 import {
@@ -473,11 +472,11 @@ export default function Home() {
             </aside>
           </div>
 
-          {/* Media gallery: ground-tracks family (video + zoom video +
-              still) - the zoom comes from inside the ground-tracks
-              run, so we present them as a triptych. The orbital
-              cinematic lives in the methodology modal already, so it
-              doesn't need a second slot here. */}
+          {/* Media gallery: ground-tracks video pair. The AOI zoom is
+              the same run as the ground-tracks render, so they sit
+              side-by-side as a family. The orbital cinematic lives
+              in the methodology modal already so it doesn't need a
+              second slot here. */}
           <div className="grid gap-4 md:grid-cols-2">
             <figure className="overflow-hidden rounded-lg border border-border bg-card">
               <MissionVideo
@@ -497,28 +496,6 @@ export default function Home() {
               />
               <figcaption className="px-4 py-3 text-xs text-muted-foreground">
                 AOI zoom · Iran segment of the same run.
-              </figcaption>
-            </figure>
-            <figure className="overflow-hidden rounded-lg border border-border bg-card">
-              <Photo
-                src="/photos/payload_slewing.jpg"
-                alt="SAR payload slewing reference"
-                aspect="aspect-video"
-                placeholderLabel="Payload reference"
-              />
-              <figcaption className="px-4 py-3 text-xs text-muted-foreground">
-                Payload reference · ±30° off-nadir slew.
-              </figcaption>
-            </figure>
-            <figure className="overflow-hidden rounded-lg border border-border bg-card">
-              <Photo
-                src="/photos/middle_east_target.jpg"
-                alt="Middle East target overview"
-                aspect="aspect-video"
-                placeholderLabel="Middle East target"
-              />
-              <figcaption className="px-4 py-3 text-xs text-muted-foreground">
-                Middle East target · daily-pass envelope.
               </figcaption>
             </figure>
           </div>
