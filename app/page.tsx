@@ -240,7 +240,7 @@ export default function Home() {
                   y={-4}
                   fontSize="10"
                   fontFamily="ui-monospace, monospace"
-                  fill={palette.accentGold}
+                  fill={palette.accentGreen}
                   opacity="0.85"
                 >
                   EO-CONSTELLATION · UNDER 1 HOUR
