@@ -1,10 +1,6 @@
 "use client";
 import { useDemoStore } from "@/lib/store";
-import {
-  SLA_STEPS,
-  MISSION_TOTAL_DEMO_MS,
-  FINAL_MISSION_TIME,
-} from "@/lib/data";
+import { SLA_STEPS, MISSION_TOTAL_DEMO_MS } from "@/lib/data";
 
 // Stopwatch with a thin gold progress ring.
 //
@@ -16,9 +12,11 @@ import {
 // That variable pace is the visual point: the Chairman sees the
 // clock fast-forward through the wait that historically took days.
 //
-// At completion, the digits are replaced by "< 1 hour": we don't
-// manufacture a precise minute:second number for a demo with no
-// real run behind it.
+// At completion the digits land on the precise final mission time
+// (the sum of every step's mission window). The "< 1 hour" framing
+// is messaging - it lives on the FinalBeat headline, not on this
+// instrument: the stopwatch is a numeric reading, so it shows the
+// real number the run clocked.
 
 interface StopwatchProps {
   /** Diameter in px. Default 180; final-beat instances pass larger. */
@@ -67,9 +65,7 @@ export function Stopwatch({ size = 180, forceDisplay }: StopwatchProps) {
   const finished = phase === "delivered";
 
   const missionSec = computeMissionSec(elapsed);
-  const liveDisplay = formatMmSs(missionSec);
-  const display =
-    forceDisplay ?? (finished ? FINAL_MISSION_TIME : liveDisplay);
+  const display = forceDisplay ?? formatMmSs(missionSec);
 
   const progress = Math.min(1, elapsed / MISSION_TOTAL_DEMO_MS);
 
@@ -77,11 +73,7 @@ export function Stopwatch({ size = 180, forceDisplay }: StopwatchProps) {
   const r = size / 2 - 6;
   const circumference = 2 * Math.PI * r;
   const offset = circumference * (1 - progress);
-  // Final phrase ("< 1 hour") is wider than digits; scale down so it
-  // fits the same ring.
-  const fontSize = finished
-    ? Math.round(size * 0.16)
-    : Math.round(size * 0.22);
+  const fontSize = Math.round(size * 0.22);
 
   return (
     <div
