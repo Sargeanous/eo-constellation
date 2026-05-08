@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
-// Renders the EDGE logo from /photos/logoedge.{png,jpg,jpeg,webp,svg}.
+// Renders the EDGE brand mark from /photos/favicon.{png,jpg,jpeg,webp,svg}.
 // Uses an Image() preloader to test each candidate in order; only swaps
 // from the wordmark fallback to the <img> once a candidate has fired
 // onload. This is more robust than chained <img onError> retries: it
@@ -15,11 +15,11 @@ import { cn } from "@/lib/utils";
 //   "hero" - large, used as the cover-screen brand mark
 
 const CANDIDATES = [
-  "/photos/logoedge.png",
-  "/photos/logoedge.jpg",
-  "/photos/logoedge.jpeg",
-  "/photos/logoedge.webp",
-  "/photos/logoedge.svg",
+  "/photos/favicon.png",
+  "/photos/favicon.jpg",
+  "/photos/favicon.jpeg",
+  "/photos/favicon.webp",
+  "/photos/favicon.svg",
 ];
 
 interface BrandMarkProps {

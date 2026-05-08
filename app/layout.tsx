@@ -38,10 +38,10 @@ export const metadata: Metadata = {
   icons: {
     apple: "/icons/apple-touch-icon-180.png",
     icon: [
-      { url: "/photos/logoedge.png", type: "image/png" },
-      { url: "/photos/logoedge.svg", type: "image/svg+xml" },
+      { url: "/photos/favicon.png", type: "image/png" },
+      { url: "/photos/favicon.svg", type: "image/svg+xml" },
     ],
-    shortcut: "/photos/logoedge.png",
+    shortcut: "/photos/favicon.png",
   },
   formatDetection: { telephone: false },
 };
