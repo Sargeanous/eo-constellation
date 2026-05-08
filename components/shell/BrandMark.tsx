@@ -14,12 +14,21 @@ import { cn } from "@/lib/utils";
 //   "chip" - small, used inside the persistent top-left BrandLogo button
 //   "hero" - large, used as the cover-screen brand mark
 
+// Walks favicon.{png,jpg,jpeg,webp,svg} first, then falls back to the
+// older logoedge.* basename. Either filename works without a code
+// change, which means the operator can drop the asset under the name
+// they have to hand and not have to chase a rename round-trip.
 const CANDIDATES = [
   "/photos/favicon.png",
   "/photos/favicon.jpg",
   "/photos/favicon.jpeg",
   "/photos/favicon.webp",
   "/photos/favicon.svg",
+  "/photos/logoedge.png",
+  "/photos/logoedge.jpg",
+  "/photos/logoedge.jpeg",
+  "/photos/logoedge.webp",
+  "/photos/logoedge.svg",
 ];
 
 interface BrandMarkProps {
