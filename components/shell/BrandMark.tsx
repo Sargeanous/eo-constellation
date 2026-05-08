@@ -25,15 +25,16 @@ const CANDIDATES = [
 interface BrandMarkProps {
   size: "chip" | "hero";
   className?: string;
+  /** Wordmark used as the fallback when the logo image isn't on disk
+   *  yet. Kept short by intent so it doesn't compete with the page's
+   *  own headline copy on the cover. */
   fallbackTitle?: string;
-  fallbackEyebrow?: string;
 }
 
 export function BrandMark({
   size,
   className,
   fallbackTitle = "EDGE",
-  fallbackEyebrow,
 }: BrandMarkProps) {
   const [resolvedSrc, setResolvedSrc] = useState<string | null>(null);
 
@@ -68,29 +69,22 @@ export function BrandMark({
     );
   }
 
-  if (size === "chip") {
-    return (
-      <span
-        className={cn(
-          "font-display text-sm font-semibold tracking-[0.2em] text-foreground",
-          className,
-        )}
-      >
-        {fallbackTitle}
-      </span>
-    );
-  }
-
+  // Fallback wordmark - small for chip, slightly larger for hero, but
+  // never trying to be the page headline. The cover screen renders
+  // its own "Sovereign EO Constellation" h2 below this slot, so a
+  // big eyebrow + h1 fallback here ended up reading as three redundant
+  // titles stacked on top of each other.
   return (
-    <div className={cn("flex flex-col items-center", className)}>
-      {fallbackEyebrow && (
-        <p className="mb-4 text-xs uppercase tracking-[0.5em] text-gold">
-          {fallbackEyebrow}
-        </p>
+    <span
+      className={cn(
+        "font-display font-semibold text-foreground",
+        size === "chip"
+          ? "text-sm tracking-[0.2em]"
+          : "text-3xl tracking-[0.4em]",
+        className,
       )}
-      <p className="font-display text-5xl font-semibold tracking-tight md:text-7xl">
-        {fallbackTitle}
-      </p>
-    </div>
+    >
+      {fallbackTitle}
+    </span>
   );
 }

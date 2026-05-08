@@ -120,11 +120,7 @@ export default function Home() {
           className="relative z-10 flex flex-col items-center"
         >
           <motion.div variants={CHILD_RISE} className="mb-10">
-            <BrandMark
-              size="hero"
-              fallbackTitle={CONSTELLATION.name}
-              fallbackEyebrow="Sovereign EO Constellation"
-            />
+            <BrandMark size="hero" fallbackTitle="EDGE" />
           </motion.div>
           <motion.p
             variants={CHILD_RISE}
