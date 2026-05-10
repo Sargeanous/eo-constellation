@@ -398,8 +398,14 @@ export default function Home() {
             </p>
           </header>
 
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.6fr)_minmax(360px,1fr)]">
-            <div className="relative aspect-[2/1] min-h-[420px] overflow-hidden rounded-2xl border border-border bg-deep-space">
+          {/* Two-column grid kicks in only at xl (1280px+). iPad
+              landscape sits at 1024-1180px - putting the map in a
+              cramped left column there made aspect-ratio + min-height
+              fight, with the map overflowing into the config cards.
+              At iPad widths the map gets full bleed and the cards
+              stack underneath. */}
+          <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.6fr)_minmax(360px,1fr)]">
+            <div className="relative min-h-[420px] overflow-hidden rounded-2xl border border-border bg-deep-space xl:aspect-[2/1]">
               <FlatMap />
               <div className="pointer-events-none absolute left-4 top-4 z-20 inline-flex items-center gap-2 rounded-full border border-gold/30 bg-background/75 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground backdrop-blur-md">
                 <MousePointerClick className="h-3 w-3 text-gold" />
